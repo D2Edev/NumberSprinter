@@ -52,20 +52,20 @@ public class MyListNameScoreAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         if (view==null){
             view=inflater.inflate(R.layout.item_list_element,null, false);
-            holder.checkedTextView = (CheckedTextView) view.findViewById(R.id.ctvName);
-            holder.textView= (TextView) view.findViewById(R.id.tvScore);
+            holder.ctvName = (CheckedTextView) view.findViewById(R.id.ctvName);
+            holder.ctvScore= (CheckedTextView) view.findViewById(R.id.ctvScore);
             view.setTag(holder);
         }else{
             holder= (ViewHolder) view.getTag();
         }
         person = (Person) getItem(position);
-        holder.checkedTextView.setText(person.getName());
-        holder.textView.setText(Integer.toString(person.getScore()));
+        holder.ctvName.setText(person.getName());
+        holder.ctvScore.setText(Integer.toString(person.getScore()));
         return view;
     }
 
     private class ViewHolder{
-        CheckedTextView checkedTextView;
-        TextView textView;
+        CheckedTextView ctvName;
+        CheckedTextView ctvScore;
     }
 }

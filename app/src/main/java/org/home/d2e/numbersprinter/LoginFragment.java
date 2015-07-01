@@ -10,15 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.Person;
+import org.home.d2e.numbersprinter.adapter.MyListNameScoreAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "TAG_LoginListFragment_";
     OnFragmentListener listener;
+    private List<Person> persons;
+    private Person person;
+
     private String[] names = {"Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
             "Костя", "Игорь", "Анна", "Денис", "Андрей"};
     private ListView lvPlayerList;
@@ -33,11 +43,27 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        persons = new ArrayList<>();
+        persons.add(new Person("Cat", 45));
+        persons.add(new Person("Voivod", 22));
+        persons.add(new Person("James", 47));
+        persons.add(new Person("God", 5000));
+        persons.add(new Person("Slayer", 1000));
+        persons.add(new Person("Saddam", 24));
+        persons.add(new Person("Horse", 87));
+        persons.add(new Person("Jack", 122));
+        persons.add(new Person("Johnny", 65));
+        persons.add(new Person("Dima", 38));
+        persons.add(new Person("Chippy", 83));
+        persons.add(new Person("Sad", 345));
+        persons.add(new Person("George", 122));
+        persons.add(new Person("Happy", 129));
         lvPlayerList = (ListView) view.findViewById(R.id.lvPlayers);
         // создаем адаптер
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, names);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, names);
+        BaseAdapter baseAdapter = new MyListNameScoreAdapter(view.getContext(), persons);
         // присваиваем адаптер списку
-        lvPlayerList.setAdapter(adapter);
+        lvPlayerList.setAdapter(baseAdapter);
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
         btnOK.setOnClickListener(LoginFragment.this);

@@ -22,9 +22,7 @@ import java.util.List;
 public class ResultListFragment extends Fragment {
     private final String TAG = "TAG_ResultListFragemnt ";
     private ListView lvAchievers;
-    private List<String> names;
     private List<Person> persons;
-    private String itemName;
     private Person person;
 
 
@@ -44,7 +42,6 @@ public class ResultListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        names = new ArrayList<>();
         persons = new ArrayList<>();
         persons.add(new Person("Cat", 45));
         persons.add(new Person("Voivod", 22));
@@ -70,8 +67,7 @@ public class ResultListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 person = (Person) parent.getItemAtPosition(position);
-                itemName=person.getName();
-                Toast.makeText(parent.getContext(), "Click to " + itemName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(), "Click to " + person.getName(), Toast.LENGTH_SHORT).show();
             }
         });
     }

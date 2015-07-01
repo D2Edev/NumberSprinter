@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="horizontal"
+    android:orientation="vertical"
 
     >
 
@@ -16,23 +16,19 @@
         android:id="@+id/ctvName"
         android:checked="false"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/tvScore"
-        android:layout_toStartOf="@+id/tvScore"
         android:textSize="20sp"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/ctvScore" />
 
-    <TextView
-        android:layout_width="100dp"
+    <CheckedTextView
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/tvScore"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/ctvName"
+        android:id="@+id/ctvScore"
+        android:checked="false"
         android:textSize="20sp"
-        android:clickable="true" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -10,7 +10,13 @@ public class Person {
         private String name;
         private int score;
 
-        public Person (String name, int score) {
+    public Person (String name) {
+
+        this.name = name;
+    }
+
+
+    public Person (String name, int score) {
             this.name = name;
             this.score = score;
         }
