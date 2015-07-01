@@ -1,8 +1,8 @@
 package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.Core.ScoreComparator;
-import org.home.d2e.numbersprinter.adapter.MyListAdapter;
 import org.home.d2e.numbersprinter.adapter.MyListNameScoreAdapter;
 
 import java.util.ArrayList;
@@ -28,17 +27,9 @@ public class ResultListFragment extends Fragment {
     private Person person;
 
 
-
     public ResultListFragment() {
         // Required empty public constructor
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
 
 
     @Override
@@ -63,7 +54,7 @@ public class ResultListFragment extends Fragment {
         Collections.reverse(persons);
         lvAchievers = (ListView) view.findViewById(R.id.lvAchievers);
         // создаем адаптер
-        BaseAdapter baseAdapter=new MyListNameScoreAdapter(view.getContext(), persons);
+        BaseAdapter baseAdapter = new MyListNameScoreAdapter(view.getContext(), persons);
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, imena);
         // присваиваем адаптер списку
 
@@ -96,9 +87,6 @@ public class ResultListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-
-
 
 
     /**

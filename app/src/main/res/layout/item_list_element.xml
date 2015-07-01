@@ -3,27 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-
-    >
+    android:orientation="vertical">
 
 
     <!-- TODO: Update blank fragment layout -->
 
-    <CheckedTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ctvName"
         android:checked="false"
         android:layout_gravity="center_vertical"
         android:textSize="20sp"
-        android:textIsSelectable="true"
-        android:layout_centerVertical="true"
+         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/ctvScore"
-        android:layout_toLeftOf="@+id/ctvScore"
-        />
+        android:layout_toLeftOf="@+id/ctvScore"  />
 
-    <CheckedTextView
+    <TextView
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:id="@+id/ctvScore"
