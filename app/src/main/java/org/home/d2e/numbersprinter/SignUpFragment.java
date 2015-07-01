@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+
 
 public class SignUpFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "TAG_SignUpFragment_";

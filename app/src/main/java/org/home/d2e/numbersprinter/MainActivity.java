@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
     private final String tag = "TAG_MainActivity ";
 
@@ -84,6 +86,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         transaction.commit();
     }
 
+    private void showGameGridFragment() {
+        FragmentManager manager = getFragmentManager();
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_dn, new GameGridFragment());
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -130,4 +142,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
         showStartFragment();
     }
+
+    @Override
+    public void startGridFragment() {
+
+        showGameGridFragment();
+    }
+
 }

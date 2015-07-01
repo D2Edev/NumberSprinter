@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+
 
 public class StartFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "TAG_StartFragment_";
@@ -18,6 +20,8 @@ public class StartFragment extends Fragment implements View.OnClickListener{
     private Button btnRules;
     private Button btnLogin;
     private Button btnResult;
+    private Button btnPlay;
+
 
 
     public StartFragment() {
@@ -74,10 +78,13 @@ public class StartFragment extends Fragment implements View.OnClickListener{
         btnRules = (Button) view.findViewById(R.id.btnRules);
         btnLogin = (Button) view.findViewById(R.id.btnLogin);
         btnResult = (Button) view.findViewById(R.id.btnResults);
+        btnPlay = (Button) view.findViewById(R.id.btnPlay);
+
         //setting listeners on buttons
         btnRules.setOnClickListener(StartFragment.this);
         btnLogin.setOnClickListener(StartFragment.this);
         btnResult.setOnClickListener(StartFragment.this);
+        btnPlay.setOnClickListener(StartFragment.this);
         Log.d(TAG, "onViewCreated");
     }
 
@@ -91,7 +98,15 @@ public class StartFragment extends Fragment implements View.OnClickListener{
                 listener.startLoginFragment();
                 break;
             case R.id.btnResults:
+                //listener.startGridFragment();
                 listener.startResultsFragment();
+                break;
+            case  R.id.btnPlay:
+                listener.startGridFragment();
+                break;
+            default:
+                Toast.makeText(v.getContext(), getString(R.string.wtf), Toast.LENGTH_LONG).show();
+                break;
 
         }
 

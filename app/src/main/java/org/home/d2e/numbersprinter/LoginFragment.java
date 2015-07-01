@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.NameComparator;
+import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.adapter.MyListNameScoreAdapter;
 
@@ -31,8 +32,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private List<Person> persons;
     private Person person;
 
-    private String[] names = {"Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
-            "Костя", "Игорь", "Анна", "Денис", "Андрей"};
     private ListView lvPlayerList;
     EditText etPass;
     Button btnOK;
@@ -45,6 +44,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG,"onViewCreated");
         persons = new ArrayList<>();
         persons.add(new Person("Cat", 45));
         persons.add(new Person("Voivod", 22));
@@ -68,6 +68,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         BaseAdapter baseAdapter = new MyListNameScoreAdapter(view.getContext(), persons);
         // присваиваем адаптер списку
         lvPlayerList.setAdapter(baseAdapter);
+        lvPlayerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                person = (Person) parent.getItemAtPosition(position);
+                Toast.makeText(parent.getContext(), "Click to " + person.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        lvPlayerList.setAdapter(baseAdapter);
+
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
         btnOK.setOnClickListener(LoginFragment.this);

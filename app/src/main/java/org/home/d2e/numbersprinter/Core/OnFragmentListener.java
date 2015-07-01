@@ -1,4 +1,4 @@
-package org.home.d2e.numbersprinter;
+package org.home.d2e.numbersprinter.Core;
 
 /**
  * Created by druzhyni on 24.06.2015.
@@ -8,5 +8,6 @@ public interface OnFragmentListener {
     void startResultsFragment();
     void startSignUpFragment();
     void startStartFragment();
+    void startGridFragment();
 
 }
