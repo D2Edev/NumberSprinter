@@ -32,6 +32,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/ctvName"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:clickable="true" />
 
 </RelativeLayout>

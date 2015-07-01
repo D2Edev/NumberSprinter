@@ -59,7 +59,7 @@ public class MyListNameScoreAdapter extends BaseAdapter {
             holder= (ViewHolder) view.getTag();
         }
         person = (Person) getItem(position);
-        holder.checkedTextView.setText((CharSequence) person.getName());
+        holder.checkedTextView.setText(person.getName());
         holder.textView.setText(Integer.toString(person.getScore()));
         return view;
     }

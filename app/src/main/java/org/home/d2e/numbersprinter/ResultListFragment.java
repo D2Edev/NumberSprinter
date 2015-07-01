@@ -60,9 +60,6 @@ public class ResultListFragment extends Fragment {
         persons.add(new Person("Sad", 345));
         persons.add(new Person("George", 122));
         persons.add(new Person("Happy", 129));
-
-
-
         lvAchievers = (ListView) view.findViewById(R.id.lvAchievers);
         // создаем адаптер
         BaseAdapter baseAdapter=new MyListNameScoreAdapter(view.getContext(), persons);
