@@ -19,7 +19,9 @@
         android:textSize="20sp"
         android:textIsSelectable="true"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/ctvScore" />
+        android:layout_toStartOf="@+id/ctvScore"
+        android:layout_toLeftOf="@+id/ctvScore"
+        />
 
     <CheckedTextView
         android:layout_width="70dp"

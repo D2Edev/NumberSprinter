@@ -16,10 +16,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.NameComparator;
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.adapter.MyListNameScoreAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -58,6 +60,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         persons.add(new Person("Sad", 345));
         persons.add(new Person("George", 122));
         persons.add(new Person("Happy", 129));
+        Collections.sort(persons,new NameComparator());
+
         lvPlayerList = (ListView) view.findViewById(R.id.lvPlayers);
         // создаем адаптер
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, names);
