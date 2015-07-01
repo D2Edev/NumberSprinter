@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="org.home.d2e.numbersprinter.PlayerActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/tSelectPlayer"
+        android:id="@+id/txtv_PlsSelectPlayer"
+        android:layout_marginTop="34dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tPrsNewToEnterNew"
+        android:id="@+id/txtv_PrsNewToEnterNew"
+        android:layout_below="@+id/txtv_PlsSelectPlayer"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnNewPlr"
+        android:id="@+id/btn_NewPlr"
+        android:layout_marginBottom="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/txtv_PrsNewToEnterNew"
+        android:layout_alignStart="@+id/txtv_PrsNewToEnterNew" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnPlay"
+        android:id="@+id/btn_Start"
+        android:layout_alignTop="@+id/btn_NewPlr"
+        android:layout_alignRight="@+id/txtv_PrsNewToEnterNew"
+        android:layout_alignEnd="@+id/txtv_PrsNewToEnterNew" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/tSelected"
+        android:id="@+id/txtv_Selected"
+        android:layout_above="@+id/btn_NewPlr"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
