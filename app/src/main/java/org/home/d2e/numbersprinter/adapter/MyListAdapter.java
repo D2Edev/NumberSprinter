@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import org.home.d2e.numbersprinter.R;
 
@@ -50,17 +51,17 @@ public class MyListAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         if (view==null){
             view=inflater.inflate(R.layout.item_list_element,null, false);
-            holder.checkedTextView = (CheckedTextView) view.findViewById(R.id.ctvName);
+            holder.textView = (TextView) view.findViewById(R.id.ctvName);
             view.setTag(holder);
         }else{
             holder= (ViewHolder) view.getTag();
         }
         item = (String) getItem(position);
-        holder.checkedTextView.setText(item);
+        holder.textView.setText(item);
         return view;
     }
 
     private class ViewHolder{
-        CheckedTextView checkedTextView;
+        TextView textView;
     }
 }

@@ -1,7 +1,9 @@
 package org.home.d2e.numbersprinter.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,11 @@ public class MyFieldAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
     private int gameField;
+    private int clr_r;
+    private int clr_g;
+    private int clr_b;
+    private String TAG = "TAG_MyFieldAdapter_";
+
 
     public MyFieldAdapter(Context context, @NonNull List<Integer> gameFields){
         this.context=context;
@@ -58,7 +65,12 @@ public class MyFieldAdapter extends BaseAdapter {
         }
         gameField = (int) getItem(position);
         holder.TextView.setText(Integer.toString(gameField));
-        holder.TextView.setBackgroundColor(context.getResources().getColor(R.color.game_field_yellow));
+        //holder.TextView.setBackgroundColor(context.getResources().getColor(R.color.game_field_yellow));
+        clr_r = (int)(Math.random()*235+20);
+        clr_g = (int)(Math.random()*235+20);
+        clr_b = (int)(Math.random()*235+20);
+        holder.TextView.setBackgroundColor(Color.rgb(clr_r,clr_g, clr_b));
+        Log.d(TAG,"" + clr_r + " "+ clr_g + " " + clr_b);
         return view;
     }
 

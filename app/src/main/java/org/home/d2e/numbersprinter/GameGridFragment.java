@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.adapter.MyFieldAdapter;
@@ -25,6 +28,7 @@ public class GameGridFragment extends Fragment {
     private GridView gvGameField;
     private List<Integer> gameFields;
     private int gameField;
+    private TextView fieldItem;
 
     public GameGridFragment() {
         // Required empty public constructor
@@ -60,6 +64,13 @@ public class GameGridFragment extends Fragment {
 
         gvGameField= (GridView) view.findViewById(R.id.gvGameField);
         gvGameField.setAdapter(new MyFieldAdapter(view.getContext(),gameFields));
+        gvGameField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gameField= (int) parent.getItemAtPosition(position);
+                Toast.makeText(parent.getContext(), "Click to " + gameField, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

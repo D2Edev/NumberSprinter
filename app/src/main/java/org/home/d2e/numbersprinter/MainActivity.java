@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(tag, "onCreate");
         if (savedInstanceState==null){showStartFragment();};
 
     }
@@ -113,7 +114,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             getFragmentManager().popBackStack();
         }else{
             super.onBackPressed();
+            Log.d(tag, "onBackPressed");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        Log.d(tag, "onDestroy");
     }
 
     @Override
@@ -130,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     @Override
     public void startSignUpFragment(){
-        showSignUpFragment();
 
+        showSignUpFragment();
 
     }
 
