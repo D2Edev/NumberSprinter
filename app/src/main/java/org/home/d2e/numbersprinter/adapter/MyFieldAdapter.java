@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import org.home.d2e.numbersprinter.Core.GameField;
+import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.R;
 
 import java.util.List;
@@ -20,17 +22,16 @@ import java.util.List;
  */
 public class MyFieldAdapter extends BaseAdapter {
 
-    private List<Integer> gameFields;
+    private List<GameField> gameFields;
     private LayoutInflater inflater;
     private Context context;
-    private int gameField;
-    private int clr_r;
-    private int clr_g;
-    private int clr_b;
+    private GameField gameField;
+
+
     private String TAG = "TAG_MyFieldAdapter_";
 
 
-    public MyFieldAdapter(Context context, @NonNull List<Integer> gameFields){
+    public MyFieldAdapter(Context context, @NonNull List<GameField> gameFields){
         this.context=context;
         this.gameFields=gameFields;
         this.inflater=LayoutInflater.from(context);
@@ -63,14 +64,14 @@ public class MyFieldAdapter extends BaseAdapter {
         }else{
             holder= (ViewHolder) view.getTag();
         }
-        gameField = (int) getItem(position);
-        holder.TextView.setText(Integer.toString(gameField));
+        gameField = (GameField) getItem(position);
+        holder.TextView.setText(Integer.toString(gameField.getFieldNumber()));
         //holder.TextView.setBackgroundColor(context.getResources().getColor(R.color.game_field_yellow));
-        clr_r = (int)(Math.random()*235+20);
-        clr_g = (int)(Math.random()*235+20);
-        clr_b = (int)(Math.random()*235+20);
-        holder.TextView.setBackgroundColor(Color.rgb(clr_r,clr_g, clr_b));
-        Log.d(TAG,"" + clr_r + " "+ clr_g + " " + clr_b);
+
+        //holder.TextView.setBackgroundColor(Color.rgb(clr_r,clr_g, clr_b));
+        holder.TextView.setBackgroundColor(gameField.getFieldColor());
+
+
         return view;
     }
 

@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.home.d2e.numbersprinter.Core.GridRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
     private final String tag = "TAG_MainActivity ";
+    private GridRetainFragment gridRetainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     private void showGameGridFragment() {
         FragmentManager manager = getFragmentManager();
         //begin opening fragment
+        gridRetainFragment = (GridRetainFragment) manager.findFragmentByTag("retain");
         FragmentTransaction transaction = manager.beginTransaction();
+        if (gridRetainFragment==null){
+            gridRetainFragment= new GridRetainFragment();
+            transaction.add(gridRetainFragment,"retain");
+        }
         transaction.replace(R.id.container_dn, new GameGridFragment());
         transaction.addToBackStack("main");
         //end opening fragment
