@@ -20,7 +20,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
     OnFragmentListener listener;
     private Button btSignUp;
     private EditText etName;
-    private EditText etEmail;
+    private EditText etPassCheck;
     private EditText etPass;
 
     public SignUpFragment() {
@@ -34,7 +34,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
         btSignUp = (Button) view.findViewById(R.id.btSignup);
         etName= (EditText) view.findViewById(R.id.etName);
         etPass= (EditText) view.findViewById(R.id.etPass);
-        etEmail= (EditText) view.findViewById(R.id.etEmail);
+        etPassCheck = (EditText) view.findViewById(R.id.etPassCheck);
         btSignUp.setOnClickListener(SignUpFragment.this);
     }
 
@@ -52,7 +52,7 @@ switch (v.getId()){
     private void validateCredentials(View v) {
         Editable name = etName.getText();
         Editable pass = etPass.getText();
-        Editable email = etEmail.getText();
+        Editable email = etPassCheck.getText();
 
         if (TextUtils.isEmpty(name)){
 
@@ -71,8 +71,8 @@ switch (v.getId()){
 
         }else if (TextUtils.isEmpty(email)){
 
-            Toast.makeText(v.getContext(),getString(R.string.tEmptyEmail),Toast.LENGTH_SHORT).show();
-            etEmail.setError(getString(R.string.tError));
+            Toast.makeText(v.getContext(),getString(R.string.tPlsRetypePass),Toast.LENGTH_SHORT).show();
+            etPassCheck.setError(getString(R.string.tError));
 
         }else{
 

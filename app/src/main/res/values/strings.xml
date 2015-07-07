@@ -14,7 +14,7 @@
     <string name="tEnterNewPlayer">Enter NEW Player:</string>
     <string name="tNewName">Your NAME here</string>
     <string name="tEmptyName">Name can\'t be empty!</string>
-    <string name="tEmptyEmail">E-Mail can\'t be empty!</string>
+    <string name="tPlsRetypePass">Please retype password!</string>
     <string name="tEmptyPass">Password can\'t be empty!</string>
     <string name="tShortPass">Password should be 6 chars min!</string>
     <string name="tLoginOK">Login OK!</string>
@@ -43,7 +43,7 @@
     <string name="tPlsSelectPlayer">Pls select player from list and press OK or press NEW to enter new one. You\'ll be asked for password</string>
     <string name="tPasss">Your password here</string>
     <string name="tEnterPassword">Enter PASSWORD</string>
-    <string name="tEmail">Enter your e-mail</string>
+    <string name="tRetypePassword">Retype PASSWORD</string>
     <string name="tError">Error!</string>
     <string name="btnSignup">SIGN UP</string>
 </resources>

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import org.home.d2e.numbersprinter.Core.Person;
@@ -52,15 +51,15 @@ public class MyListNameScoreAdapter extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         if (view==null){
             view=inflater.inflate(R.layout.item_list_element,null, false);
-            holder.ctvName = (TextView) view.findViewById(R.id.ctvName);
-            holder.ctvScore = (TextView) view.findViewById(R.id.ctvScore);
+            holder.ctvName = (TextView) view.findViewById(R.id.tvNameInList);
+            holder.ctvScore = (TextView) view.findViewById(R.id.tvScoreInList);
             view.setTag(holder);
         }else{
             holder= (ViewHolder) view.getTag();
         }
         person = (Person) getItem(position);
         holder.ctvName.setText(person.getName());
-        holder.ctvScore.setText(Integer.toString(person.getScore()));
+        holder.ctvScore.setText(Integer.toString(person.getScoreTotal()));
         return view;
     }
 

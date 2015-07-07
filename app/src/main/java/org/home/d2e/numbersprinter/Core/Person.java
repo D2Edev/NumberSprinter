@@ -1,31 +1,58 @@
 package org.home.d2e.numbersprinter.Core;
 
-import android.support.annotation.Nullable;
-
 /**
  * Created by druzhyni on 30.06.2015.
  */
 public class Person {
 
-        private String name;
-        private int score;
+    private String name;
+    private String password;
+    private int scoreLast;
+    private int scoreTotal;
+    private int gamesPlayed;
 
-    public Person (String name) {
+    public Person(String name) {
 
         this.name = name;
+        this.password="";
+        this.scoreLast=0;
+        this.scoreTotal=0;
+        this.gamesPlayed=0;
     }
 
+    public Person(String name, int scoreTotal) {
 
-    public Person (String name, int score) {
-            this.name = name;
-            this.score = score;
-        }
+        this.name = name;
+        this.scoreTotal = scoreTotal;
+
+    }
+
+    public Person(String name, String password, int scoreLast, int scoreTotal, int gamesPlayed) {
+        this.name = name;
+        this.password = password;
+        this.scoreLast = scoreLast;
+        this.scoreTotal = scoreTotal;
+        this.gamesPlayed = gamesPlayed;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getScoreLast() {
+        return scoreLast;
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
 
     public String getName() {
         return name;
     }
 
-    public int getScore() {
-        return score;
+    public int getScoreTotal() {
+        return scoreTotal;
     }
 }

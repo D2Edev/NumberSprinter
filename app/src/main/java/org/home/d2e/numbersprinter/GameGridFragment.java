@@ -1,9 +1,7 @@
 package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -11,16 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.GameField;
 import org.home.d2e.numbersprinter.Core.GridRetainFragment;
-import org.home.d2e.numbersprinter.Core.Person;
-import org.home.d2e.numbersprinter.adapter.MyFieldAdapter;
+import org.home.d2e.numbersprinter.adapter.GameFieldAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +79,7 @@ public class GameGridFragment extends Fragment {
         Log.d(TAG, "onViewCreated");
 
         gvGameField= (GridView) view.findViewById(R.id.gvGameField);
-        gvGameField.setAdapter(new MyFieldAdapter(view.getContext(),gameFields));
+        gvGameField.setAdapter(new GameFieldAdapter(view.getContext(),gameFields));
         //gvGameField.setAdapter(new ArrayAdapter<Integer>(view.getContext(),R.layout.item_grid_element, gameFields));
         gvGameField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -11,18 +11,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ctvName"
+        android:id="@+id/tvNameInList"
         android:checked="false"
         android:layout_gravity="center_vertical"
         android:textSize="20sp"
          android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/ctvScore"
-        android:layout_toLeftOf="@+id/ctvScore"  />
+        android:layout_toStartOf="@+id/tvScoreInList"
+        android:layout_toLeftOf="@+id/tvScoreInList"  />
 
     <TextView
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:id="@+id/ctvScore"
+        android:id="@+id/tvScoreInList"
         android:checked="false"
         android:textSize="20sp"
         android:layout_centerVertical="true"

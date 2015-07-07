@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by druzhyni on 29.06.2015.
  */
-public class MyFieldAdapter extends BaseAdapter {
+public class GameFieldAdapter extends BaseAdapter {
 
     private List<GameField> gameFields;
     private LayoutInflater inflater;
@@ -31,7 +31,7 @@ public class MyFieldAdapter extends BaseAdapter {
     private String TAG = "TAG_MyFieldAdapter_";
 
 
-    public MyFieldAdapter(Context context, @NonNull List<GameField> gameFields){
+    public GameFieldAdapter(Context context, @NonNull List<GameField> gameFields){
         this.context=context;
         this.gameFields=gameFields;
         this.inflater=LayoutInflater.from(context);
@@ -66,12 +66,7 @@ public class MyFieldAdapter extends BaseAdapter {
         }
         gameField = (GameField) getItem(position);
         holder.TextView.setText(Integer.toString(gameField.getFieldNumber()));
-        //holder.TextView.setBackgroundColor(context.getResources().getColor(R.color.game_field_yellow));
-
-        //holder.TextView.setBackgroundColor(Color.rgb(clr_r,clr_g, clr_b));
         holder.TextView.setBackgroundColor(gameField.getFieldColor());
-
-
         return view;
     }
 
