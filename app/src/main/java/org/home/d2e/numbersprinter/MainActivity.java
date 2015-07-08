@@ -12,103 +12,30 @@ import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
     private final String tag = "TAG_MainActivity ";
     private GridRetainFragment gridRetainFragment;
+    private FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(tag, "onCreate");
-        if (savedInstanceState==null){showStartFragment();};
+        manager = getFragmentManager();
 
-    }
-
-    private void showStartFragment() {
-        FragmentManager manager = getFragmentManager();
-        StartFragment stF = (StartFragment) manager.findFragmentByTag("start");
-        //checking if fragment has been created already
-                if(stF==null||stF.isInLayout()){
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.add(R.id.container_dn, new StartFragment(), "start");
-                    transaction.add(R.id.container_up, new LogoFragment());
-                    transaction.commit();
-
-                }else {
-
-                    //begin opening fragment
-                    Log.d(tag,"Start Fragment exists");
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.container_dn, stF);
-                    transaction.addToBackStack("main");
-                    transaction.commit();
-                }
-
-        //transaction2.commit();
-        //end opening fragment
-
-    }
-
-    private void showResultListFragment() {
-        FragmentManager manager = getFragmentManager();
-        //begin opening fragment
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new ResultListFragment());
-        transaction.addToBackStack("main");
-        //end opening fragment
-        transaction.commit();
-
-    }
-
-    private void showLoginFragment() {
-        FragmentManager manager = getFragmentManager();
-        LoginFragment lgF = (LoginFragment) manager.findFragmentByTag("login");
-        if (lgF==null || lgF.isInLayout()){
-            //begin opening fragment
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_dn, new LoginFragment(),"login");
-            transaction.addToBackStack("main");
-            //end opening fragment
-            transaction.commit();
-        }else{
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_dn, lgF,"login");
-            transaction.addToBackStack("main");
-            //end opening fragment
-            transaction.commit();
+        if (savedInstanceState == null) {
+            startStartFragment();
+            startLogoFragment();
         }
-
-
-    }
-
-    private void showSignUpFragment() {
-        FragmentManager manager = getFragmentManager();
-        //begin opening fragment
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new SignUpFragment());
-        transaction.addToBackStack("main");
-        //end opening fragment
-        transaction.commit();
-    }
-
-    private void showGameGridFragment() {
-        FragmentManager manager = getFragmentManager();
-        //begin opening fragment
-        gridRetainFragment = (GridRetainFragment) manager.findFragmentByTag("retain");
-        FragmentTransaction transaction = manager.beginTransaction();
-        if (gridRetainFragment==null){
-            gridRetainFragment= new GridRetainFragment();
-            transaction.add(gridRetainFragment,"retain");
-        }
-        transaction.replace(R.id.container_dn, new GameGridFragment());
-        transaction.addToBackStack("main");
-        //end opening fragment
-        transaction.commit();
+        ;
 
     }
+
+
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(tag, "onStart");
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -117,13 +44,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount()>0){
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-        }else{
+        } else {
             super.onBackPressed();
             Log.d(tag, "onBackPressed");
         }
     }
+
 
     @Override
     protected void onDestroy() {
@@ -135,34 +63,108 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     @Override
     public void startLoginFragment() {
 
-        showLoginFragment();
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_dn, new LoginControlsFragment(), "login_ctrl");
+        transaction.replace(R.id.container_up, new LoginListFragment(), "login_list");
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
+
+
     }
 
     @Override
     public void startResultsFragment() {
 
-        showResultListFragment();
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_dn, new ResultsFragment());
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
     }
 
     @Override
-    public void startSignUpFragment(){
+    public void startSignUpFragment() {
 
-        showSignUpFragment();
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_dn, new SignUpFragment());
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
 
     }
-
 
 
     @Override
     public void startStartFragment() {
 
-        showStartFragment();
+        StartFragment stF = (StartFragment) manager.findFragmentByTag("start");
+        //checking if fragment has been created already
+        if (stF == null || !stF.isInLayout()) {
+            //if exists
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.container_dn, new StartFragment(), "start");
+            transaction.commit();
+
+        } else {
+
+            //if not
+            Log.d(tag, "Start Fragment exists");
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.container_dn, stF);
+            transaction.addToBackStack("main");
+            transaction.commit();
+        }
+    }
+
+    public void startLogoFragment() {
+
+        LogoFragment lgF = (LogoFragment) manager.findFragmentByTag("logo");
+        //checking if fragment has been created already
+        if (lgF == null || !lgF.isInLayout()) {
+            //if not exists
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.container_up, new LogoFragment(), "logo");
+            transaction.commit();
+
+        } else {
+
+            //if exists
+            Log.d(tag, "Logo Fragment exists");
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.container_up, lgF);
+            transaction.addToBackStack("main");
+            transaction.commit();
+        }
     }
 
     @Override
     public void startGridFragment() {
 
-        showGameGridFragment();
+        //begin opening fragment
+        gridRetainFragment = (GridRetainFragment) manager.findFragmentByTag("retain");
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (gridRetainFragment == null) {
+            gridRetainFragment = new GridRetainFragment();
+            transaction.add(gridRetainFragment, "retain");
+        }
+        transaction.replace(R.id.container_dn, new GameGridFragment());
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
+    }
+
+    @Override
+    public void startRulesFragment() {
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_dn, new RulesFragment(), "rules");
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
     }
 
 }

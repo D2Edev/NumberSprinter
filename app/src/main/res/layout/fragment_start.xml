@@ -14,14 +14,6 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/btnRules"
-        android:id="@+id/btnRules"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp" />
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
         android:text="@string/btnPlay"
         android:id="@+id/btnPlay"
         android:layout_gravity="center_horizontal"
@@ -30,8 +22,8 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/tSelectPlayer"
-        android:id="@+id/btnLogin"
+        android:text="@string/btnRules"
+        android:id="@+id/btnRules"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp" />
 

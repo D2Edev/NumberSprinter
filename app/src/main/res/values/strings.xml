@@ -9,8 +9,8 @@
     <string name="title_activity_new_player">Enter new player!</string>
     <string name="tWelcome">Welcome to the GAME!</string>
     <string name="tRules">Rules are simple: You\'ll get numbers from 1 to 25 located randomly in 5x5 matrix. Your target is to to select them in acsending order. Upon completion your time is fixed. The one with smallest time is the winner!!! (Hard level: numbers and background will be ramdomly coloured as well). Good luck!</string>
-    <string name="btnPlay">Try yourself</string>
-    <string name="btnResults">See results</string>
+    <string name="btnPlay">Play</string>
+    <string name="btnResults">Results</string>
     <string name="tEnterNewPlayer">Enter NEW Player:</string>
     <string name="tNewName">Your NAME here</string>
     <string name="tEmptyName">Name can\'t be empty!</string>
@@ -31,7 +31,7 @@
     <string name="btnNewGame">New Game</string>
     <string name="btnGoMainScreen">Main Screen</string>
     <string name="btnStop">STOP</string>
-    <string name="btnRules">See rules</string>
+    <string name="btnRules">Rules</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="tLetsStart">Let\'s start!</string>
@@ -46,4 +46,5 @@
     <string name="tRetypePassword">Retype PASSWORD</string>
     <string name="tError">Error!</string>
     <string name="btnSignup">SIGN UP</string>
+    <string name="tHardMode">Play hard mode</string>
 </resources>

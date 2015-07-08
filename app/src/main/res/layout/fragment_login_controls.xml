@@ -3,31 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.home.d2e.numbersprinter.LoginFragment"
+    tools:context="org.home.d2e.numbersprinter.LoginControlsFragment"
     android:gravity="center"
     android:orientation="vertical"
     >
 
     <!-- TODO: Update blank fragment layout -->
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tHardMode"
+        android:id="@+id/cbHard"
+        android:layout_gravity="center_horizontal"
+        android:checked="false" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/tPlsSelectPlayer"
-        android:id="@+id/tvSelectPlayer"
-        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvSelectedPlayer"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/lvPlayers"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="5dp" />
 
     <EditText
         android:layout_width="match_parent"

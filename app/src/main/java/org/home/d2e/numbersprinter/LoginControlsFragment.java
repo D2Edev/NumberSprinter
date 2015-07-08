@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginControlsFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "TAG_LoginListFragment_";
     OnFragmentListener listener;
     private List<Person> persons;
@@ -37,7 +37,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     Button btnOK;
     Button btnNew;
 
-    public LoginFragment() {
+    public LoginControlsFragment() {
         // Required empty public constructor
     }
 
@@ -45,42 +45,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG,"onViewCreated");
-        persons = new ArrayList<>();
-        persons.add(new Person("Cat", 45));
-        persons.add(new Person("Voivod", 22));
-        persons.add(new Person("James", 47));
-        persons.add(new Person("God", 5000));
-        persons.add(new Person("Slayer", 1000));
-        persons.add(new Person("Saddam", 24));
-        persons.add(new Person("Horse", 87));
-        persons.add(new Person("Jack", 122));
-        persons.add(new Person("Johnny", 65));
-        persons.add(new Person("Dima", 38));
-        persons.add(new Person("Chippy", 83));
-        persons.add(new Person("Sad", 345));
-        persons.add(new Person("George", 122));
-        persons.add(new Person("Happy", 129));
-        Collections.sort(persons,new NameComparator());
 
-        lvPlayerList = (ListView) view.findViewById(R.id.lvPlayers);
-        // создаем адаптер
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, names);
-        BaseAdapter baseAdapter = new MyListNameScoreAdapter(view.getContext(), persons);
-        // присваиваем адаптер списку
-        lvPlayerList.setAdapter(baseAdapter);
-        lvPlayerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                person = (Person) parent.getItemAtPosition(position);
-                Toast.makeText(parent.getContext(), "Click to " + person.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        lvPlayerList.setAdapter(baseAdapter);
 
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
-        btnOK.setOnClickListener(LoginFragment.this);
-        btnNew.setOnClickListener(LoginFragment.this);
+        btnOK.setOnClickListener(LoginControlsFragment.this);
+        btnNew.setOnClickListener(LoginControlsFragment.this);
         etPass= (EditText) view.findViewById(R.id.etPass);
 
     }
@@ -102,7 +72,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_login_controls, container, false);
     }
 
     @Override
