@@ -11,6 +11,14 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/ivLogo"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/penguins01"
+        android:layout_margin="10dp" />
+
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"

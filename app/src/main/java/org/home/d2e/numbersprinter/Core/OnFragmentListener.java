@@ -9,7 +9,7 @@ public interface OnFragmentListener {
     void startResultsFragment();
     void startSignUpFragment();
     void startStartFragment();
-    void startGridFragment();
+    void startGameFragment();
     void startRulesFragment();
 
 }

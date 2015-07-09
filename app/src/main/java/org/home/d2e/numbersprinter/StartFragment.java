@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StartFragment extends Fragment implements View.OnClickListener{
+public class StartFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "TAG_StartFragment_";
     OnFragmentListener listener;
     private Button btnRules;
@@ -31,7 +31,6 @@ public class StartFragment extends Fragment implements View.OnClickListener{
     private List<Person> persons;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-
 
 
     public StartFragment() {
@@ -96,23 +95,19 @@ public class StartFragment extends Fragment implements View.OnClickListener{
         Log.d(TAG, "onViewCreated");
     }
 
-//processing clicks
+    //processing clicks
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnRules:
                 listener.startRulesFragment();
-                dbHelper = new DBHelper(getActivity());
-                db = dbHelper.getWritableDatabase();
-                db.execSQL("DELETE FROM " + UserTable.TABLE);
-                db.close();
                 break;
             case R.id.btnResults:
-                //listener.startGridFragment();
+                //listener.startGameFragment();
                 listener.startResultsFragment();
                 break;
-            case  R.id.btnPlay:
+            case R.id.btnPlay:
                 listener.startLoginFragment();
-                dbStub();
+                //dbStub();
                 break;
             default:
                 Toast.makeText(v.getContext(), getString(R.string.wtf), Toast.LENGTH_LONG).show();
@@ -123,33 +118,5 @@ public class StartFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private void dbStub(){
-        persons = new ArrayList<>();
-        persons.add(new Person("Cat", "Cat", 45, 45, 1));
-        persons.add(new Person("Voivod", "Cat", 22, 22, 1));
-        persons.add(new Person("James", "Cat", 47, 47, 1));
-        persons.add(new Person("God", "Cat", 118, 119, 27));
-        persons.add(new Person("Slayer", "Cat", 117, 118, 12));
-        persons.add(new Person("Saddam", "Cat", 24, 24, 1));
-        persons.add(new Person("Horse", "Cat", 87, 87, 1));
-        persons.add(new Person("Jack", "Cat", 62, 1119, 2));
-        persons.add(new Person("Johnny", "Cat", 65, 65, 1));
-        persons.add(new Person("Dima", "Cat", 38, 38, 1));
-        persons.add(new Person("Chippy", "Cat", 83, 83, 1));
-        persons.add(new Person("Sad", "Cat", 108, 45, 23));
-        persons.add(new Person("George", "Cat", 33, 33, 1));
-        persons.add(new Person("Happy", "Cat", 48, 48, 1));
-        dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getWritableDatabase();
-        for (Person person : persons) {
-            ContentValues cv = new ContentValues();
-            cv.put(UserTable.Columns.NAME,person.getName());
-            cv.put(UserTable.Columns.PASSWORD,person.getPassword());
-            cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
-            cv.put(UserTable.Columns.SCORE_LAST, person.getScoreLast());
-            cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
-            db.insert(UserTable.TABLE,null,cv);
-        }
-        db.close();
-    }
+
 }

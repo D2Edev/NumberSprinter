@@ -2,17 +2,25 @@ package org.home.d2e.numbersprinter;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.GridRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.UserTable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
     private final String tag = "TAG_MainActivity ";
     private GridRetainFragment gridRetainFragment;
     private FragmentManager manager;
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private Cursor userListCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
         if (savedInstanceState == null) {
             startStartFragment();
-            startLogoFragment();
+
         }
         ;
 
@@ -62,27 +70,32 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     @Override
     public void startLoginFragment() {
-
-        //begin opening fragment
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new LoginControlsFragment(), "login_ctrl");
-        transaction.replace(R.id.container_up, new LoginListFragment(), "login_list");
-        transaction.addToBackStack("main");
-        //end opening fragment
-        transaction.commit();
+        if (dbContainsData()) {
+            //begin opening fragment
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.container_main, new LoginFragment(), "login");
+            transaction.addToBackStack("main");
+            //end opening fragment
+            transaction.commit();
+        }else{
+            startSignUpFragment();
+        }
 
 
     }
 
     @Override
     public void startResultsFragment() {
-
-        //begin opening fragment
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new ResultsFragment());
-        transaction.addToBackStack("main");
-        //end opening fragment
-        transaction.commit();
+        if (dbContainsData()) {
+            //begin opening fragment
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.container_main, new ResultsFragment(), "results");
+            transaction.addToBackStack("main");
+            //end opening fragment
+            transaction.commit();
+        } else {
+            Toast.makeText(this, R.string.tNoRecords, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -90,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new SignUpFragment());
+        transaction.replace(R.id.container_main, new SignUpFragment(), "sign_up");
         transaction.addToBackStack("main");
         //end opening fragment
         transaction.commit();
@@ -106,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         if (stF == null || !stF.isInLayout()) {
             //if exists
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.add(R.id.container_dn, new StartFragment(), "start");
+            transaction.add(R.id.container_main, new StartFragment(), "start");
             transaction.commit();
 
         } else {
@@ -114,35 +127,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             //if not
             Log.d(tag, "Start Fragment exists");
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_dn, stF);
+            transaction.replace(R.id.container_main, stF);
             transaction.addToBackStack("main");
             transaction.commit();
         }
     }
 
-    public void startLogoFragment() {
-
-        LogoFragment lgF = (LogoFragment) manager.findFragmentByTag("logo");
-        //checking if fragment has been created already
-        if (lgF == null || !lgF.isInLayout()) {
-            //if not exists
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.add(R.id.container_up, new LogoFragment(), "logo");
-            transaction.commit();
-
-        } else {
-
-            //if exists
-            Log.d(tag, "Logo Fragment exists");
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_up, lgF);
-            transaction.addToBackStack("main");
-            transaction.commit();
-        }
-    }
 
     @Override
-    public void startGridFragment() {
+    public void startGameFragment() {
 
         //begin opening fragment
         gridRetainFragment = (GridRetainFragment) manager.findFragmentByTag("retain");
@@ -151,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             gridRetainFragment = new GridRetainFragment();
             transaction.add(gridRetainFragment, "retain");
         }
-        transaction.replace(R.id.container_dn, new GameGridFragment());
+        transaction.replace(R.id.container_main, new GameFragment());
         transaction.addToBackStack("main");
         //end opening fragment
         transaction.commit();
@@ -161,10 +154,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public void startRulesFragment() {
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_dn, new RulesFragment(), "rules");
+        transaction.replace(R.id.container_main, new RulesFragment(), "rules");
         transaction.addToBackStack("main");
         //end opening fragment
         transaction.commit();
     }
 
+    private boolean dbContainsData() {
+        boolean dbContainsData = false;
+        dbHelper = new DBHelper(this);
+        db = dbHelper.getReadableDatabase();
+        userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.SCORE_TOTAL + " DESC;");
+        if (userListCursor.getCount() > 0) {
+            dbContainsData = true;
+        }
+        return dbContainsData;
+    }
 }

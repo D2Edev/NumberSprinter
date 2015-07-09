@@ -1,10 +1,13 @@
 package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.UserTable;
 
 
 public class SignUpFragment extends Fragment implements View.OnClickListener{
@@ -52,7 +57,8 @@ switch (v.getId()){
     private void validateCredentials(View v) {
         Editable name = etName.getText();
         Editable pass = etPass.getText();
-        Editable email = etPassCheck.getText();
+        Editable passCheck = etPassCheck.getText();
+
 
         if (TextUtils.isEmpty(name)){
 
@@ -69,19 +75,40 @@ switch (v.getId()){
             Toast.makeText(v.getContext(),getString(R.string.tShortPass),Toast.LENGTH_SHORT).show();
             etPass.setError(getString(R.string.tError));
 
-        }else if (TextUtils.isEmpty(email)){
+        }else if (TextUtils.isEmpty(passCheck)){
 
             Toast.makeText(v.getContext(),getString(R.string.tPlsRetypePass),Toast.LENGTH_SHORT).show();
             etPassCheck.setError(getString(R.string.tError));
 
+        }else if(!String.valueOf(etPass.getText()).equals(String.valueOf(etPassCheck.getText()))){
+
+            Log.d(TAG, "pass- " + pass+" passcheck- " + passCheck + " " + (etPass.getText()!=etPassCheck.getText()));
+            Toast.makeText(v.getContext(),getString(R.string.tPassMisMatch),Toast.LENGTH_SHORT).show();
+            etPassCheck.setError(getString(R.string.tError));
         }else{
 
+            addUser();
             Toast.makeText(v.getContext(),getString(R.string.btnSignup)+ " "+ getString(R.string.tOK),Toast.LENGTH_SHORT).show();
             listener.startLoginFragment();
 
         }
 
 
+    }
+
+    private void addUser() {
+        DBHelper dbHelper;
+        SQLiteDatabase db;
+        dbHelper = new DBHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(UserTable.Columns.NAME, String.valueOf(etName.getText()));
+        cv.put(UserTable.Columns.PASSWORD, String.valueOf(etPass.getText()));
+        cv.put(UserTable.Columns.SCORE_TOTAL, 0);
+        cv.put(UserTable.Columns.SCORE_LAST, 0);
+        cv.put(UserTable.Columns.GAMES_PLAYED, 0);
+        db.insert(UserTable.TABLE, null, cv);
+        db.close();
     }
 
     @Override

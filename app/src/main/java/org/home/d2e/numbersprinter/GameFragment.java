@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class GameGridFragment extends Fragment {
+public class GameFragment extends Fragment {
     private final String TAG = "TAG_GameGridFragment ";
     private GridView gvGameField;
     private List<GameField> gameFields;
@@ -34,7 +34,7 @@ public class GameGridFragment extends Fragment {
     private int clr_b;
     private GridRetainFragment gridRetainFragment;
 
-    public GameGridFragment() {
+    public GameFragment() {
         // Required empty public constructor
     }
 
@@ -44,7 +44,7 @@ public class GameGridFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView");
-        return inflater.inflate(R.layout.fragment_game_grid, container, false);
+        return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
 
