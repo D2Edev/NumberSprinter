@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.Core.UserTable;
 import org.home.d2e.numbersprinter.adapter.UserCursorAdapter;
 
@@ -39,6 +40,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private SQLiteDatabase db;
     private Cursor userListCursor;
     private UserCursorAdapter userCursorAdapter;
+    private Person person;
+    private DataRetainFragment dataRetainFragment;
 
     OnFragmentListener listener;
 
@@ -61,7 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getReadableDatabase();
         userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.NAME);
-
+        person = new Person();
         // создаем адаптер
         if (userListCursor.getCount() > 0) {
             // build adapter
@@ -75,7 +78,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //on click - getting info from cursor
                     Cursor cursor = (Cursor) lvPlayers.getItemAtPosition(position);
-                    tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
+                    person.setName(cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
+                    person.setPassword(cursor.getString(cursor.getColumnIndex(UserTable.Columns.PASSWORD)));
+                    person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
+                    person.setScoreLast(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_LAST)));
+                    person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
+                    tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + person.getName());
+
                 }
             });
         }
@@ -86,13 +95,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlayerOK:
-                validatePass(v);
+                if (passOK(v, person)) {
+                    retainUserData();
+                    listener.startGameFragment();
+                }
                 break;
             case R.id.btnPlayerNew:
                 listener.startSignUpFragment();
                 break;
         }
 
+    }
+
+    private void retainUserData() {
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag("retain");
+        dataRetainFragment.setPerson(person);
     }
 
     @Override
@@ -120,19 +137,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
     }
 
-    private void validatePass(View v) {
+    private boolean passOK(View v, Person person) {
+        this.person=person;
+        boolean passOK = false;
+
         Editable pass = etPass.getText();
-        if (TextUtils.isEmpty(pass)) {
-            Toast.makeText(v.getContext(), getString(R.string.tEmptyPass), Toast.LENGTH_SHORT).show();
-
-            etPass.setError("Error!");
-        } else if (pass.length() < 6) {
-            Toast.makeText(v.getContext(), getString(R.string.tShortPass), Toast.LENGTH_SHORT).show();
-
-            etPass.setError("Error!");
+        Log.d(TAG, String.valueOf(person.getPassword()) + " " + String.valueOf(pass));
+        if (!String.valueOf(person.getPassword()).equals(String.valueOf(pass))) {
+            Toast.makeText(v.getContext(), getString(R.string.tPassWrong), Toast.LENGTH_SHORT).show();
+            //etPass.setError("Error!");
         } else {
-            Toast.makeText(v.getContext(), getString(R.string.tLoginOK), Toast.LENGTH_SHORT).show();
-            listener.startGameFragment();
+            //Toast.makeText(v.getContext(), getString(R.string.tLoginOK), Toast.LENGTH_SHORT).show();
+            passOK = true;
+
         }
+        return passOK;
     }
 }

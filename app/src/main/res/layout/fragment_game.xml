@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvPlayer"
-            android:text="Current Player: Vasya"
             android:gravity="center"
             android:layout_margin="10dp" />
 

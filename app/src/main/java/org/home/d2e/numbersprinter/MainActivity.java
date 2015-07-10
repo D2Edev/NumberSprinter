@@ -10,13 +10,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
-import org.home.d2e.numbersprinter.Core.GridRetainFragment;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
     private final String tag = "TAG_MainActivity ";
-    private GridRetainFragment gridRetainFragment;
+    private DataRetainFragment dataRetainFragment;
     private FragmentManager manager;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         setContentView(R.layout.activity_main);
         Log.d(tag, "onCreate");
         manager = getFragmentManager();
-
+        startRetainFragment();
         if (savedInstanceState == null) {
             startStartFragment();
 
@@ -52,11 +52,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     @Override
     public void onBackPressed() {
+        Log.d(tag, "onBackPressed");
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
-            Log.d(tag, "onBackPressed");
+
         }
     }
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(tag, "onDestroy");
     }
 
-    @Override
+
     public void startLoginFragment() {
         if (dbContainsData()) {
             //begin opening fragment
@@ -77,14 +78,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             transaction.addToBackStack("main");
             //end opening fragment
             transaction.commit();
-        }else{
+        } else {
             startSignUpFragment();
         }
 
 
     }
 
-    @Override
+
     public void startResultsFragment() {
         if (dbContainsData()) {
             //begin opening fragment
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         }
     }
 
-    @Override
+
     public void startSignUpFragment() {
 
         //begin opening fragment
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     }
 
 
-    @Override
     public void startStartFragment() {
 
         StartFragment stF = (StartFragment) manager.findFragmentByTag("start");
@@ -133,24 +133,28 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         }
     }
 
+    public void startRetainFragment() {
+        dataRetainFragment = (DataRetainFragment) manager.findFragmentByTag("retain");
+        if (dataRetainFragment == null) {
+            FragmentTransaction transaction = manager.beginTransaction();
+            dataRetainFragment = new DataRetainFragment();
+            transaction.add(dataRetainFragment, "retain");
+            transaction.commit();
+        }
+    }
 
-    @Override
     public void startGameFragment() {
 
         //begin opening fragment
-        gridRetainFragment = (GridRetainFragment) manager.findFragmentByTag("retain");
+
         FragmentTransaction transaction = manager.beginTransaction();
-        if (gridRetainFragment == null) {
-            gridRetainFragment = new GridRetainFragment();
-            transaction.add(gridRetainFragment, "retain");
-        }
         transaction.replace(R.id.container_main, new GameFragment());
         transaction.addToBackStack("main");
         //end opening fragment
         transaction.commit();
     }
 
-    @Override
+
     public void startRulesFragment() {
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();

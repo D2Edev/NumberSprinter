@@ -82,20 +82,20 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
     private void dbStub() {
         List<Person> persons;
         persons = new ArrayList<>();
-        persons.add(new Person("Cat", "Cat", 45, 45, 1));
-        persons.add(new Person("Voivod", "Cat", 22, 22, 1));
-        persons.add(new Person("James", "Cat", 47, 47, 1));
-        persons.add(new Person("God", "Cat", 118, 119, 27));
-        persons.add(new Person("Slayer", "Cat", 117, 118, 12));
-        persons.add(new Person("Saddam", "Cat", 24, 24, 1));
-        persons.add(new Person("Horse", "Cat", 87, 87, 1));
-        persons.add(new Person("Jack", "Cat", 62, 1119, 2));
-        persons.add(new Person("Johnny", "Cat", 65, 65, 1));
-        persons.add(new Person("Dima", "Cat", 38, 38, 1));
-        persons.add(new Person("Chippy", "Cat", 83, 83, 1));
-        persons.add(new Person("Sad", "Cat", 108, 45, 23));
-        persons.add(new Person("George", "Cat", 33, 33, 1));
-        persons.add(new Person("Happy", "Cat", 48, 48, 1));
+        persons.add(new Person("Cat", "gggggg", 45, 45, 1));
+        persons.add(new Person("Voivod", "gggggg", 22, 22, 1));
+        persons.add(new Person("James", "gggggg", 47, 47, 1));
+        persons.add(new Person("God", "gggggg", 118, 119, 27));
+        persons.add(new Person("Slayer", "gggggg", 117, 118, 12));
+        persons.add(new Person("Saddam", "gggggg", 24, 24, 1));
+        persons.add(new Person("Horse", "gggggg", 87, 87, 1));
+        persons.add(new Person("Jack", "gggggg", 62, 119, 2));
+        persons.add(new Person("Johnny", "gggggg", 65, 65, 1));
+        persons.add(new Person("Dima", "gggggg", 38, 38, 1));
+        persons.add(new Person("Chippy", "gggggg", 83, 83, 1));
+        persons.add(new Person("Sad", "gggggg", 108, 45, 23));
+        persons.add(new Person("George", "gggggg", 33, 33, 1));
+        persons.add(new Person("Happy", "gggggg", 48, 48, 1));
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getWritableDatabase();
         for (Person person : persons) {

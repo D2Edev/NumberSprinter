@@ -88,7 +88,7 @@ switch (v.getId()){
         }else{
 
             addUser();
-            Toast.makeText(v.getContext(),getString(R.string.btnSignup)+ " "+ getString(R.string.tOK),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(v.getContext(),getString(R.string.btnSignup)+ " "+ getString(R.string.tOK),Toast.LENGTH_SHORT).show();
             listener.startLoginFragment();
 
         }
@@ -134,7 +134,6 @@ switch (v.getId()){
 
 
     }
-
 
 
 }

@@ -49,4 +49,6 @@
     <string name="btnSignup">SIGN UP</string>
     <string name="tHardMode">Play hard mode</string>
     <string name="tPassMisMatch">Passwords doesn\'t match!</string>
+    <string name="tPassWrong">Wrong password. Please try again.</string>
+    <string name="tCurrentPlayer">Player:</string>
 </resources>

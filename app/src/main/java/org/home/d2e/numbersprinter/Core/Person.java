@@ -11,6 +11,30 @@ public class Person {
     private int scoreTotal;
     private int gamesPlayed;
 
+    public Person() {
+
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setScoreLast(int scoreLast) {
+        this.scoreLast = scoreLast;
+    }
+
+    public void setScoreTotal(int scoreTotal) {
+        this.scoreTotal = scoreTotal;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
+    }
+
     public Person(String name) {
 
         this.name = name;

@@ -8,9 +8,24 @@ import java.util.List;
 /**
  * Created by druzhyni on 05.07.2015.
  */
-public class GridRetainFragment extends Fragment {
+public class DataRetainFragment extends Fragment {
+
+    // data object we want to retain
+
+    private List<GameField> gameFields;
+    private Person person;
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Person getPerson() {
+
+        return person;
+    }
 
     public void setGameFields(List<GameField> gameFields) {
+
         this.gameFields = gameFields;
     }
 
@@ -19,8 +34,8 @@ public class GridRetainFragment extends Fragment {
         return gameFields;
     }
 
-    // data object we want to retain
-    private List<GameField> gameFields;
+
+
 
     // this method is only called once for this fragment
     @Override
