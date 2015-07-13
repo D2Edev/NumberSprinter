@@ -1,6 +1,7 @@
 package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.GameField;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
+import org.home.d2e.numbersprinter.Core.MyApp;
 import org.home.d2e.numbersprinter.Core.Person;
+import org.home.d2e.numbersprinter.Core.TickerService;
 import org.home.d2e.numbersprinter.adapter.GameFieldAdapter;
 
 import java.util.ArrayList;
@@ -34,6 +37,10 @@ public class GameFragment extends Fragment {
     private DataRetainFragment dataRetainFragment;
     private Person person;
     private TextView tvPlayer;
+    private TextView tvElapsedTime;
+    private Intent intentStartTickerService;
+    MyApp.OnStopTickListener onStopTickListener;
+
 
     public GameFragment() {
         // Required empty public constructor
@@ -80,16 +87,39 @@ public class GameFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
+        ((MyApp)getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
+            @Override
+            public void onNextTick(final int counter) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvElapsedTime.setText(getString(R.string.tElapsedTime) + counter);
+                    }
+                });
+
+            }
+        });
+        intentStartTickerService = new Intent(getActivity().getApplication(), TickerService.class);
+        getActivity().startService(intentStartTickerService);
+
+        Log.d(TAG, "onStopTickListener " + onStopTickListener);
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
+        tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
         //gvGameField.setAdapter(new ArrayAdapter<Integer>(view.getContext(),R.layout.item_grid_element, gameFields));
+
+        //startService(intentStartTickerService);
         gvGameField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 gameField = (GameField) parent.getItemAtPosition(position);
                 Toast.makeText(parent.getContext(), "Click to " + gameField.getFieldNumber(), Toast.LENGTH_SHORT).show();
+                if (gameField.getFieldNumber() == 1) {
+                    onStopTickListener= ((MyApp)getActivity().getApplication()).getOnStopTickListener();
+                    onStopTickListener.onStopTick(true);
+                }
             }
         });
 
@@ -102,5 +132,17 @@ public class GameFragment extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        onStopTickListener= ((MyApp)getActivity().getApplication()).getOnStopTickListener();
+        onStopTickListener.onStopTick(true);
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+
+    }
 }

@@ -22,7 +22,7 @@
     <string name="tOK">OK!</string>
     <string name="tAchievers">Achievers:</string>
     <string name="tSelectPlayer">Select player</string>
-    <string name="tElapsedTime">Elapsed Time: 12.34s</string>
+    <string name="tElapsedTime">Elapsed Time: </string>
     <string name="tPrsNewToEnterNew">(press New Player to enter new one)</string>
     <string name="tSelected">Selected:</string>
     <string name="btnNewPlr">New</string>

@@ -22,7 +22,7 @@ public class UserTable {
             + TABLE + " ("
             + Columns.ID + " integer primary key autoincrement, "
             + Columns.NAME + " text, "
-            + Columns.PASSWORD + " text, "
+            + Columns.PASSWORD + " integer, "
             + Columns.SCORE_TOTAL + " integer, "
             + Columns.SCORE_LAST + " integer, "
             + Columns.GAMES_PLAYED + " integer)";

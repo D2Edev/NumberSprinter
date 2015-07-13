@@ -55,6 +55,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onViewCreated");
 
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
+        btnOK.setEnabled(false);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
         btnOK.setOnClickListener(LoginFragment.this);
         btnNew.setOnClickListener(LoginFragment.this);
@@ -79,11 +80,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     //on click - getting info from cursor
                     Cursor cursor = (Cursor) lvPlayers.getItemAtPosition(position);
                     person.setName(cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
-                    person.setPassword(cursor.getString(cursor.getColumnIndex(UserTable.Columns.PASSWORD)));
+                    person.setPassword(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.PASSWORD)));
                     person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
                     person.setScoreLast(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_LAST)));
                     person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
                     tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + person.getName());
+                    btnOK.setEnabled(true);
 
                 }
             });
@@ -142,8 +144,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         boolean passOK = false;
 
         Editable pass = etPass.getText();
-        Log.d(TAG, String.valueOf(person.getPassword()) + " " + String.valueOf(pass));
-        if (!String.valueOf(person.getPassword()).equals(String.valueOf(pass))) {
+        Log.d(TAG, "" + person.getPassword() + " " + String.valueOf(pass).hashCode());
+        if (person.getPassword()!=String.valueOf(pass).hashCode()) {
             Toast.makeText(v.getContext(), getString(R.string.tPassWrong), Toast.LENGTH_SHORT).show();
             //etPass.setError("Error!");
         } else {

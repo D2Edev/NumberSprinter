@@ -27,6 +27,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener{
     private EditText etName;
     private EditText etPassCheck;
     private EditText etPass;
+    private int hashCodeOne;
+    private int hashCodeTwo;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -58,6 +60,8 @@ switch (v.getId()){
         Editable name = etName.getText();
         Editable pass = etPass.getText();
         Editable passCheck = etPassCheck.getText();
+        hashCodeOne=String.valueOf(etPass.getText()).hashCode();
+        hashCodeTwo=String.valueOf(etPassCheck.getText()).hashCode();
 
 
         if (TextUtils.isEmpty(name)){
@@ -80,9 +84,7 @@ switch (v.getId()){
             Toast.makeText(v.getContext(),getString(R.string.tPlsRetypePass),Toast.LENGTH_SHORT).show();
             etPassCheck.setError(getString(R.string.tError));
 
-        }else if(!String.valueOf(etPass.getText()).equals(String.valueOf(etPassCheck.getText()))){
-
-            Log.d(TAG, "pass- " + pass+" passcheck- " + passCheck + " " + (etPass.getText()!=etPassCheck.getText()));
+        }else if(String.valueOf(etPass.getText()).hashCode()!=String.valueOf(etPassCheck.getText()).hashCode()){
             Toast.makeText(v.getContext(),getString(R.string.tPassMisMatch),Toast.LENGTH_SHORT).show();
             etPassCheck.setError(getString(R.string.tError));
         }else{
