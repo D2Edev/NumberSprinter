@@ -39,7 +39,8 @@ public class GameFragment extends Fragment {
     private TextView tvPlayer;
     private TextView tvElapsedTime;
     private Intent intentStartTickerService;
-    MyApp.OnStopTickListener onStopTickListener;
+    MyApp.OnTickModeListener onTickModeListener;
+    private int fieldCounter;
 
 
     public GameFragment() {
@@ -60,6 +61,7 @@ public class GameFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Log.d(TAG, "onAttach");
+        //restore GameField from DataRetainFragment
         gameFields = new ArrayList<>();
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag("retain");
         if (dataRetainFragment == null) {
@@ -87,41 +89,49 @@ public class GameFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
-        ((MyApp)getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
-            @Override
-            public void onNextTick(final int counter) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tvElapsedTime.setText(getString(R.string.tElapsedTime) + counter);
-                    }
-                });
-
-            }
-        });
-        intentStartTickerService = new Intent(getActivity().getApplication(), TickerService.class);
-        getActivity().startService(intentStartTickerService);
-
-        Log.d(TAG, "onStopTickListener " + onStopTickListener);
+        //init variables and controls
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
-        //gvGameField.setAdapter(new ArrayAdapter<Integer>(view.getContext(),R.layout.item_grid_element, gameFields));
+        intentStartTickerService = new Intent(getActivity().getApplication(), TickerService.class);
+        getActivity().startService(intentStartTickerService);
+        fieldCounter = 1;
+        //call time refresh in textview
+        refreshTimeField();
 
-        //startService(intentStartTickerService);
+//set listener on gridview
         gvGameField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //get clicked game field datd
                 gameField = (GameField) parent.getItemAtPosition(position);
-                Toast.makeText(parent.getContext(), "Click to " + gameField.getFieldNumber(), Toast.LENGTH_SHORT).show();
-                if (gameField.getFieldNumber() == 1) {
-                    onStopTickListener= ((MyApp)getActivity().getApplication()).getOnStopTickListener();
-                    onStopTickListener.onStopTick(true);
+                //Toast.makeText(parent.getContext(), "Click to " + gameField.getFieldNumber(), Toast.LENGTH_SHORT).show();
+                //checking if correct game field is pressed and it's not the last
+                if (gameField.getFieldNumber() == fieldCounter && fieldCounter < 26) {
+
+                    Log.d(TAG, "gameField  " + gameField.getFieldNumber() + " color " + gameField.getFieldColor());
+                    //if condition ok - black the field
+                    gameField.setFieldColor(Color.rgb(0, 0, 0));
+                    Log.d(TAG, "gameField  " + gameField.getFieldNumber() + " color " + gameField.getFieldColor());
+                    Log.d(TAG, "from List: gameField  " + gameFields.get(fieldCounter - 1).getFieldNumber() + " color " + gameFields.get(fieldCounter - 1).getFieldColor());
+
+                    gameFields.set(position, gameField);
+                    gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
+                    //move check to next field
+                    fieldCounter++;
+                    if (fieldCounter == 25) {
+                        //if all fields processed - send STOP to chrono
+                        onTickModeListener = ((MyApp) getActivity().getApplication()).getOnTickModeListener();
+                        onTickModeListener.setTickMode(true, true);
+                    }
+
+
                 }
             }
         });
+
 
     }
 
@@ -135,8 +145,10 @@ public class GameFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        onStopTickListener= ((MyApp)getActivity().getApplication()).getOnStopTickListener();
-        onStopTickListener.onStopTick(true);
+        //if()
+        onTickModeListener = ((MyApp) getActivity().getApplication()).getOnTickModeListener();
+        onTickModeListener.setTickMode(true, true);
+
     }
 
     @Override
@@ -144,5 +156,22 @@ public class GameFragment extends Fragment {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
 
+    }
+
+    private void refreshTimeField() {
+        ((MyApp) getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
+            @Override
+            public void onNextTick(final int counter) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (tvElapsedTime != null) {
+                            tvElapsedTime.setText(getString(R.string.tElapsedTime) + counter);
+                        }
+                    }
+                });
+
+            }
+        });
     }
 }

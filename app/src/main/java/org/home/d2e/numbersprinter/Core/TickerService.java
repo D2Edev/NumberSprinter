@@ -13,14 +13,21 @@ public class TickerService extends IntentService {
      * param name Used to name the worker thread, important only for debugging.
      */
     public static final String TAG = "TAG_TickerService_ ";
-    private boolean stopTick;
+    volatile int counter;
+    public boolean isActive;
+
+
+    private boolean stopTickI;
+    private boolean stopSendTickI;
+
     public static final String TICK_UPDATE="TickerService.UPDATE";
     MyApp.OnTickListener onTickListener;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        stopTickI=false;
+        stopSendTickI=false;
 
 
     }
@@ -31,23 +38,25 @@ public class TickerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        stopTick=false;
+
         onTickListener = ((MyApp)getApplication()).getOnTickListener();
-        ((MyApp)getApplication()).setOnStopTickListener(new MyApp.OnStopTickListener() {
+        ((MyApp)getApplication()).setOnTickModeListener(new MyApp.OnTickModeListener() {
             @Override
-            public void onStopTick(boolean doStop) {
-                stopTick=doStop;
+            public void setTickMode(boolean stopTick, boolean stopSendTick) {
+                if (stopTick){stopSendTickI=stopTick;}//if we stop chrono, than we stop send chrono data as well
+                stopTickI=stopTick;
             }
-        });
-        int counter = 0;
-        while(!stopTick){
+
+       });
+        counter = 0;
+        while(!stopTickI){
             try {
                 Thread.sleep(100L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             counter++;
-            onTickListener.onNextTick(counter);
+            if(!stopSendTickI){onTickListener.onNextTick(counter);}
         }
 
     }

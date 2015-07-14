@@ -11,18 +11,18 @@ public class MyApp extends Application {
         super.onCreate();
     }
 
-   public interface OnStopTickListener{
-       void onStopTick (boolean doStop);
+   public interface OnTickModeListener {
+       void setTickMode(boolean stopTick, boolean stopSendTick);
    }
 
-    OnStopTickListener onStopTickListener;
+    OnTickModeListener onTickModeListener;
 
-    public OnStopTickListener getOnStopTickListener() {
-        return onStopTickListener;
+    public OnTickModeListener getOnTickModeListener() {
+        return onTickModeListener;
     }
 
-    public void setOnStopTickListener(OnStopTickListener onStopTickListener) {
-        this.onStopTickListener = onStopTickListener;
+    public void setOnTickModeListener(OnTickModeListener onTickModeListener) {
+        this.onTickModeListener = onTickModeListener;
     }
 
     public interface OnTickListener {
