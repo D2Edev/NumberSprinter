@@ -11,6 +11,7 @@ public interface OnFragmentListener {
     void startStartFragment();
     void startGameFragment();
     void startRulesFragment();
+    void startGameOverFragment();
 
 
 }

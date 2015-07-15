@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Mega">
+        <item name="android:textSize">70sp</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
 </resources>

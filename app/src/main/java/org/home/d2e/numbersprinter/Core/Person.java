@@ -7,7 +7,7 @@ public class Person {
 
     private String name;
     private int password;
-    private int scoreLast;
+    private int scoreMax;
     private int scoreTotal;
     private int gamesPlayed;
 
@@ -23,8 +23,8 @@ public class Person {
         this.password = password;
     }
 
-    public void setScoreLast(int scoreLast) {
-        this.scoreLast = scoreLast;
+    public void setScoreMax(int scoreMax) {
+        this.scoreMax = scoreMax;
     }
 
     public void setScoreTotal(int scoreTotal) {
@@ -39,7 +39,7 @@ public class Person {
 
         this.name = name;
         this.password=0;
-        this.scoreLast=0;
+        this.scoreMax =0;
         this.scoreTotal=0;
         this.gamesPlayed=0;
     }
@@ -51,10 +51,10 @@ public class Person {
 
     }
 
-    public Person(String name, int password, int scoreLast, int scoreTotal, int gamesPlayed) {
+    public Person(String name, int password, int scoreMax, int scoreTotal, int gamesPlayed) {
         this.name = name;
         this.password = password;
-        this.scoreLast = scoreLast;
+        this.scoreMax = scoreMax;
         this.scoreTotal = scoreTotal;
         this.gamesPlayed = gamesPlayed;
     }
@@ -63,8 +63,8 @@ public class Person {
         return password;
     }
 
-    public int getScoreLast() {
-        return scoreLast;
+    public int getScoreMax() {
+        return scoreMax;
     }
 
     public int getGamesPlayed() {

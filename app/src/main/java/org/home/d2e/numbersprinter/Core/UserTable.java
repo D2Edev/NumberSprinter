@@ -13,7 +13,7 @@ public class UserTable {
         public static final String NAME = "name";
         public static final String PASSWORD = "password";
         public static final String SCORE_TOTAL = "tscore";
-        public static final String SCORE_LAST = "lcsore";
+        public static final String SCORE_MAX = "lcsore";
         public static final String GAMES_PLAYED = "gplayed";
 
     }
@@ -24,7 +24,7 @@ public class UserTable {
             + Columns.NAME + " text, "
             + Columns.PASSWORD + " integer, "
             + Columns.SCORE_TOTAL + " integer, "
-            + Columns.SCORE_LAST + " integer, "
+            + Columns.SCORE_MAX + " integer, "
             + Columns.GAMES_PLAYED + " integer)";
 
     public static final String DROP_SQL = "Drop table " + TABLE;

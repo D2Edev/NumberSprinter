@@ -30,7 +30,7 @@
     <string name="tDefaultPlayer">Default Player</string>
     <string name="title_activity_game_end">Round Result</string>
     <string name="btnNewGame">New Game</string>
-    <string name="btnGoMainScreen">Main Screen</string>
+    <string name="btnGoMainScreen">Main Menu</string>
     <string name="btnStop">STOP</string>
     <string name="btnRules">Rules</string>
 
@@ -51,4 +51,8 @@
     <string name="tPassMisMatch">Passwords doesn\'t match!</string>
     <string name="tPassWrong">Wrong password. Please try again.</string>
     <string name="tCurrentPlayer">Player:</string>
+    <string name="tInstrGO">Press NEW GAME for a new round or press MAIN MENU for main screen.</string>
+    <string name="tRoundOver">Round is over!</string>
+    <string name="tScoreRecord">Your new record!!!!! Score is: </string>
+    <string name="tScore">Score is: </string>
 </resources>

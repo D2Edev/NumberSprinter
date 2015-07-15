@@ -65,6 +65,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getReadableDatabase();
         userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.NAME);
+
         person = new Person();
         // создаем адаптер
         if (userListCursor.getCount() > 0) {
@@ -82,7 +83,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     person.setName(cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
                     person.setPassword(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.PASSWORD)));
                     person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
-                    person.setScoreLast(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_LAST)));
+                    person.setScoreMax(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX)));
                     person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
                     tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + person.getName());
                     btnOK.setEnabled(true);
@@ -132,6 +133,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             throw new IllegalStateException("Activity not OnMainFragmentListener! ");
         }
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        etPass.setText("");
+        db.close();
     }
 
     @Override

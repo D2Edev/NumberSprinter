@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +106,7 @@ switch (v.getId()){
         cv.put(UserTable.Columns.NAME, String.valueOf(etName.getText()));
         cv.put(UserTable.Columns.PASSWORD, String.valueOf(etPass.getText()));
         cv.put(UserTable.Columns.SCORE_TOTAL, 0);
-        cv.put(UserTable.Columns.SCORE_LAST, 0);
+        cv.put(UserTable.Columns.SCORE_MAX, 0);
         cv.put(UserTable.Columns.GAMES_PLAYED, 0);
         db.insert(UserTable.TABLE, null, cv);
         db.close();

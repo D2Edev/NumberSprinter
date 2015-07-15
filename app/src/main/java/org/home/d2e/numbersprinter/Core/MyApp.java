@@ -12,7 +12,7 @@ public class MyApp extends Application {
     }
 
    public interface OnTickModeListener {
-       void setTickMode(boolean stopTick, boolean stopSendTick);
+       void doTickSend(boolean doTick, boolean doSendTick);
    }
 
     OnTickModeListener onTickModeListener;

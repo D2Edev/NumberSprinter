@@ -3,7 +3,6 @@ package org.home.d2e.numbersprinter;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -103,7 +102,7 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
             cv.put(UserTable.Columns.NAME, person.getName());
             cv.put(UserTable.Columns.PASSWORD, person.getPassword());
             cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
-            cv.put(UserTable.Columns.SCORE_LAST, person.getScoreLast());
+            cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
             cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
             db.insert(UserTable.TABLE, null, cv);
         }

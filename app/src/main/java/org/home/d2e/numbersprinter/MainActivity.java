@@ -2,33 +2,39 @@ package org.home.d2e.numbersprinter;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
+import org.home.d2e.numbersprinter.Core.OnBackPressedListener;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
-    private final String tag = "TAG_MainActivity ";
+    private final String TAG = "TAG_MainActivity ";
     private DataRetainFragment dataRetainFragment;
     private FragmentManager manager;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private Cursor userListCursor;
+    OnBackPressedListener onBackPressedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(tag, "onCreate");
+        Log.d(TAG, "onCreate");
         manager = getFragmentManager();
         startRetainFragment();
+
         if (savedInstanceState == null) {
             startStartFragment();
 
@@ -41,20 +47,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(tag, "onStart");
+
+        Log.d(TAG, "onStart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(tag, "onStop");
+        Log.d(TAG, "onStop");
     }
 
     @Override
     public void onBackPressed() {
-        Log.d(tag, "onBackPressed");
+        Log.d(TAG, "onBackPressed");
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
+            //pass event to listener
+            if (onBackPressedListener != null) {
+                onBackPressedListener.backIsPressed();
+            }
         } else {
             super.onBackPressed();
 
@@ -66,19 +77,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     protected void onDestroy() {
 
         super.onDestroy();
-        Log.d(tag, "onDestroy");
+        Log.d(TAG, "onDestroy");
     }
 
 
     public void startLoginFragment() {
+        //check if there's data in users table
         if (dbContainsData()) {
-            //begin opening fragment
+            //if yes - open login fragment
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.container_main, new LoginFragment(), "login");
             transaction.addToBackStack("main");
             //end opening fragment
             transaction.commit();
         } else {
+            //if not - open signup to add first user
             startSignUpFragment();
         }
 
@@ -125,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         } else {
 
             //if not
-            Log.d(tag, "Start Fragment exists");
+            Log.d(TAG, "Start Fragment exists");
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.container_main, stF);
             transaction.addToBackStack("main");
@@ -135,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     public void startRetainFragment() {
         dataRetainFragment = (DataRetainFragment) manager.findFragmentByTag("retain");
+        //if reatain fragment does not exist - create it
         if (dataRetainFragment == null) {
             FragmentTransaction transaction = manager.beginTransaction();
             dataRetainFragment = new DataRetainFragment();
@@ -164,6 +178,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         transaction.commit();
     }
 
+    @Override
+    public void startGameOverFragment() {
+        //begin opening fragment
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container_main, new GameOverFragment(), "game_over");
+        transaction.addToBackStack("main");
+        //end opening fragment
+        transaction.commit();
+    }
+
     private boolean dbContainsData() {
         boolean dbContainsData = false;
         dbHelper = new DBHelper(this);
@@ -173,5 +197,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             dbContainsData = true;
         }
         return dbContainsData;
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
     }
 }

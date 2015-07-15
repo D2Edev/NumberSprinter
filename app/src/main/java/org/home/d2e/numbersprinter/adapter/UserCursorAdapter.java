@@ -33,7 +33,7 @@ public class UserCursorAdapter extends CursorAdapter {
         INDEX_NAME=c.getColumnIndex(UserTable.Columns.NAME);
         INDEX_PASSWORD=c.getColumnIndex(UserTable.Columns.PASSWORD);
         INDEX_SCORE_TOTAL=c.getColumnIndex(UserTable.Columns.SCORE_TOTAL);
-        INDEX_SCORE_LAST=c.getColumnIndex(UserTable.Columns.SCORE_LAST);
+        INDEX_SCORE_LAST=c.getColumnIndex(UserTable.Columns.SCORE_MAX);
         INDEX_GAMES_PLAYED=c.getColumnIndex(UserTable.Columns.GAMES_PLAYED);
 
 
