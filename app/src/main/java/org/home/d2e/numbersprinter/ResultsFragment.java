@@ -47,7 +47,7 @@ public class ResultsFragment extends Fragment {
             lvAchievers = (ListView) view.findViewById(R.id.lvAchievers);
             // attach listview to adapter
             lvAchievers.setAdapter(userCursorAdapter);
-            //setting listener on item in listview
+            //setting onFragmentListener on item in listview
             lvAchievers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

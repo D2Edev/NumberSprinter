@@ -1,14 +1,17 @@
 package org.home.d2e.numbersprinter;
 
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
@@ -21,7 +24,7 @@ import org.home.d2e.numbersprinter.Core.UserTable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GameOverFragment extends Fragment {
+public class GameOverFragment extends Fragment implements View.OnClickListener{
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -29,18 +32,25 @@ public class GameOverFragment extends Fragment {
     private Cursor cursor;
     private DataRetainFragment dataRetainFragment;
     private int max_score;
-    TextView tvPlayer;
-    TextView tvTime;
-    TextView tvScoreHeader;
-    TextView tvScore;
-
-
-    OnFragmentListener listener;
+    private TextView tvTotalScore;
+    private TextView tvTime;
+    private TextView tvScoreHeader;
+    private TextView tvScore;
+    private TextView tvRoundOver;
+    private Button btnNewGame;
+    Button btnMain;
+    private final String TAG = "TAG_GameOverFragment_ ";
+     OnFragmentListener listener;
 
     public GameOverFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listener= (OnFragmentListener) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,27 +63,44 @@ public class GameOverFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvPlayer = (TextView) view.findViewById(R.id.tvPlayerGO);
+        tvTotalScore = (TextView) view.findViewById(R.id.tvTotalScoreGO);
         tvTime = (TextView) view.findViewById(R.id.tvTimeGO);
         tvScoreHeader = (TextView) view.findViewById(R.id.tvScoreHeaderGO);
         tvScore = (TextView) view.findViewById(R.id.tvScoreGO);
-        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag("retain");
+        tvRoundOver= (TextView) view.findViewById(R.id.tvRoundOverGO);
+        btnMain= (Button) view.findViewById(R.id.btnMainScreen);
+        btnNewGame= (Button) view.findViewById(R.id.btnNewGame);
+        btnMain.setOnClickListener(GameOverFragment.this);
+        btnNewGame.setOnClickListener(GameOverFragment.this);
+
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
 
         if (dataRetainFragment != null) {
             person = dataRetainFragment.getPerson();
         }
 
-        tvPlayer.setText(person.getName());
+        tvRoundOver.setText(person.getName()+ ", "+ getString(R.string.tRoundOver));
+        tvTotalScore.setText(getString(R.string.tTotalScore)+ person.getScoreTotal());
         tvTime.setText(Integer.toString(600 - person.getScoreMax()));
         tvScore.setText(Integer.toString(person.getScoreMax()));
 
         if (person != null) {
             dbHelper = new DBHelper(getActivity());
             db = dbHelper.getReadableDatabase();
-
+            String sql = "SELECT "
+                    +UserTable.Columns.SCORE_MAX+
+                    " FROM "
+                    +UserTable.TABLE+
+                    " WHERE "
+                    +UserTable.Columns.NAME+
+                    "="
+                    +person.getName();
+            //cursor = db.query(UserTable.TABLE, new String[]{UserTable.Columns.SCORE_MAX}, UserTable.Columns.NAME + " = ?",new String[]{person.getName()} , null, null, null);
             cursor = db.query(UserTable.TABLE, null, UserTable.Columns.NAME + " = ?",new String[]{person.getName()} , null, null, null);
 
             if (cursor.getCount() > 0) {
+                Log.d(TAG, "cursor count " + cursor.getCount());
+                cursor.moveToFirst();
                 max_score = cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX));
             }
             if (max_score < person.getScoreMax()) {
@@ -83,8 +110,9 @@ public class GameOverFragment extends Fragment {
                 tvScoreHeader.setText(getString(R.string.tScore));
             }
             person.setScoreMax(max_score);
+            Log.d(TAG, "" + person.getName() + " " + person.getPassword() + " " + person.getScoreMax() + " " + person.getGamesPlayed() + " " + person.getScoreTotal());
             db.close();
-            //saveUserToDB();
+            saveUserToDB();
         }
 
         if (dataRetainFragment != null) {
@@ -97,13 +125,26 @@ public class GameOverFragment extends Fragment {
     private void saveUserToDB() {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(UserTable.Columns.NAME, person.getName());
-        cv.put(UserTable.Columns.PASSWORD, person.getPassword());
-        cv.put(UserTable.Columns.SCORE_TOTAL, 0);
-        cv.put(UserTable.Columns.SCORE_MAX, 0);
-        cv.put(UserTable.Columns.GAMES_PLAYED, 0);
+        //cv.put(UserTable.Columns.NAME, person.getName());
+        //cv.put(UserTable.Columns.PASSWORD, person.getPassword());
+        cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
+        cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
+        cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
         //db.insert(UserTable.TABLE, null, cv);
-        db.replace(UserTable.TABLE, UserTable.Columns.NAME + "=" + person.getName(), cv);
+        db.update(UserTable.TABLE,cv,UserTable.Columns.NAME + " = ?",new String[]{person.getName()});
         db.close();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnMainScreen:
+                listener.startStartFragment();
+                break;
+            case R.id.btnNewGame:
+                listener.startGameFragment();
+                break;
+        }
+
     }
 }

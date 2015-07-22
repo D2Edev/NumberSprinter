@@ -67,6 +67,7 @@ public class GameFieldAdapter extends BaseAdapter {
         gameField = (GameField) getItem(position);
         holder.TextView.setText(Integer.toString(gameField.getFieldNumber()));
         holder.TextView.setBackgroundColor(gameField.getFieldColor());
+        holder.TextView.setTextColor(gameField.getFieldTextColor());
         return view;
     }
 

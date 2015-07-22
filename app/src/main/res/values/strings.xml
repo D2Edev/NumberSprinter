@@ -52,7 +52,9 @@
     <string name="tPassWrong">Wrong password. Please try again.</string>
     <string name="tCurrentPlayer">Player:</string>
     <string name="tInstrGO">Press NEW GAME for a new round or press MAIN MENU for main screen.</string>
-    <string name="tRoundOver">Round is over!</string>
-    <string name="tScoreRecord">Your new record!!!!! Score is: </string>
-    <string name="tScore">Score is: </string>
+    <string name="tRoundOver">round is over!</string>
+    <string name="tScoreRecord">Your new record!!!!! Round score is: </string>
+    <string name="tScore">Round score is: </string>
+    <string name="tTotalScore">Total score is:    </string>
+
 </resources>

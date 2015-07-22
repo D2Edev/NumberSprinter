@@ -2,6 +2,8 @@ package org.home.d2e.numbersprinter.Core;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 
 /**
@@ -15,61 +17,73 @@ public class TickerService extends IntentService {
      */
     public static final String TAG = "TAG_TickerService_ ";
     volatile int counter;
-    public boolean isActive;
-
-
-    private boolean doTickI;
-    private boolean doSendTickI;
-
-    public static final String TICK_UPDATE = "TickerService.UPDATE";
+    private boolean doTick = true;
+    private boolean doSendTick = true;
+    private final IBinder tickBinder =new TickBinder();
     MyApp.OnTickListener onTickListener;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        doTickI = true;
-        doSendTickI = true;
-
-
-    }
 
     public TickerService() {
         super("TickerService");
     }
 
     @Override
+    public IBinder onBind(Intent intent) {
+        doSendTick = true;
+        return tickBinder;
+    }
+
+
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        doSendTick = false;
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        doSendTick = true;
+        super.onRebind(intent);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        doTick = true;
+        doSendTick = true;
+    }
+
+
+    @Override
     protected void onHandleIntent(Intent intent) {
-
         onTickListener = ((MyApp) getApplication()).getOnTickListener();
-        ((MyApp) getApplication()).setOnTickModeListener(new MyApp.OnTickModeListener() {
-            @Override
-            public void doTickSend(boolean doTick, boolean doSendTick) {
-                Log.d(TAG, "received: " + doTick + " " + doSendTick);
-                if (!doTick) {
-                    doSendTickI = doTick;
-                }//if we stop chrono, than we must stop send chrono data as well
-                doTickI = doTick;
-
-            }
-
-        });
         counter = 0;
-        while (doTickI) {
+        int timeLimit= 6000;
+        while (doTick&&counter<timeLimit) {
             try {
                 Thread.sleep(100L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             counter++;
-            if (doSendTickI) {
+            if (doSendTick) {
+                Log.d(TAG, "in ticker: "+counter);
                 if (onTickListener != null) {
                     onTickListener.onNextTick(counter);
                 }
             }
-            Log.d(TAG, "in ticker: " + doTickI + " " + doSendTickI);
-        }
 
+        }
     }
 
+    public void stopTick() {
+        doTick = false;
+        Log.d(TAG, "stop received! ");
+    }
 
+    public class TickBinder extends Binder{
+        public TickerService getService(){
+            return TickerService.this;
+        }
+    }
 }

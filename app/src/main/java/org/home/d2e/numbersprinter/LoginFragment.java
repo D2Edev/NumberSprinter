@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ import org.home.d2e.numbersprinter.adapter.UserCursorAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "TAG_LogintFragment_";
     private ListView lvPlayers;
     private EditText etPass;
@@ -42,6 +44,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private UserCursorAdapter userCursorAdapter;
     private Person person;
     private DataRetainFragment dataRetainFragment;
+    private CheckBox cbHard;
 
     OnFragmentListener listener;
 
@@ -61,6 +64,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         btnNew.setOnClickListener(LoginFragment.this);
         etPass = (EditText) view.findViewById(R.id.etPass);
         tvSelectedPlayer = (TextView) view.findViewById(R.id.tvSelectedPlayer);
+        cbHard = (CheckBox) view.findViewById(R.id.cbHard);
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if(dataRetainFragment!=null){cbHard.setChecked(dataRetainFragment.getHardMode());}
+        cbHard.setOnCheckedChangeListener(LoginFragment.this);
 
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getReadableDatabase();
@@ -74,7 +81,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             lvPlayers = (ListView) view.findViewById(R.id.lvPlayers);
             // attach listview to adapter
             lvPlayers.setAdapter(userCursorAdapter);
-            //setting listener on item in listview
+            //setting onFragmentListener on item in listview
             lvPlayers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,8 +118,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void retainUserData() {
-        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag("retain");
-        dataRetainFragment.setPerson(person);
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if (dataRetainFragment != null) {
+            dataRetainFragment.setPerson(person);
+            dataRetainFragment.setHardMode(cbHard.isChecked());
+        }
     }
 
     @Override
@@ -148,12 +158,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean passOK(View v, Person person) {
-        this.person=person;
+        this.person = person;
         boolean passOK = false;
 
         Editable pass = etPass.getText();
         Log.d(TAG, "" + person.getPassword() + " " + String.valueOf(pass).hashCode());
-        if (person.getPassword()!=String.valueOf(pass).hashCode()) {
+        if (person.getPassword() != String.valueOf(pass).hashCode()) {
             Toast.makeText(v.getContext(), getString(R.string.tPassWrong), Toast.LENGTH_SHORT).show();
             //etPass.setError("Error!");
         } else {
@@ -163,4 +173,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
         return passOK;
     }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+dataRetainFragment.setHardMode(isChecked);
+    }
 }
+

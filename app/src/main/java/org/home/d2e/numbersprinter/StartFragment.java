@@ -102,7 +102,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 listener.startRulesFragment();
                 break;
             case R.id.btnResults:
-                //listener.startGameFragment();
+                //onFragmentListener.startGameFragment();
                 listener.startResultsFragment();
                 break;
             case R.id.btnPlay:

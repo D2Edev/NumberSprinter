@@ -6,18 +6,23 @@ package org.home.d2e.numbersprinter.Core;
 public class GameField {
     private int fieldNumber;
     private int fieldColor;
+    private int fieldTextColor;
+
 
     public void setFieldNumber(int fieldNumber) {
         this.fieldNumber = fieldNumber;
     }
 
+    public void setFieldTextColor(int fieldTextColor) { this.fieldTextColor = fieldTextColor; }
+
     public void setFieldColor(int fieldColor) {
         this.fieldColor = fieldColor;
     }
 
-    public GameField(int fieldNumber, int fieldColor) {
+    public GameField(int fieldNumber, int fieldColor, int fieldTextColor) {
         this.fieldNumber = fieldNumber;
         this.fieldColor = fieldColor;
+        this.fieldTextColor = fieldTextColor;
     }
 
     public int getFieldNumber() {
@@ -27,4 +32,6 @@ public class GameField {
     public int getFieldColor() {
         return fieldColor;
     }
+
+    public int getFieldTextColor() {return fieldTextColor; }
 }

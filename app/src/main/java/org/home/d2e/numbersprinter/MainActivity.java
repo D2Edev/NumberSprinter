@@ -1,8 +1,10 @@
 package org.home.d2e.numbersprinter;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnBackPressedListener;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.TickerService;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
@@ -25,6 +28,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private Cursor userListCursor;
+    private Fragment fragment;
+    private Intent intentStartTickerService;
+    public static final String GAME_FRAGMENT_TAG = "gf";
+    public static final String GAME_OVER_FRAGMENT_TAG = "gof";
+    public static final String LOGIN_FRAGMENT_TAG = "lf";
+    public static final String RESULTS_FRAGMENT_TAG = "rf";
+    public static final String RULES_FRAGMENT_TAG = "ruf";
+    public static final String START_FRAGMENT_TAG = "sf";
+    public static final String SIGN_UP_FRAGMENT_TAG = "suf";
+    public static final String RETAIN_FRAGMENT_TAG = "ref";
+    public static final String STACK_TAG = "main";
+
+
     OnBackPressedListener onBackPressedListener;
 
     @Override
@@ -34,11 +50,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(TAG, "onCreate");
         manager = getFragmentManager();
         startRetainFragment();
-
-        if (savedInstanceState == null) {
-            startStartFragment();
-
-        }
+        startStartFragment();
 
 
     }
@@ -60,12 +72,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
+        //pass event to onFragmentListener
+        if (onBackPressedListener != null) {
+            onBackPressedListener.backIsPressed();
+        }
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-            //pass event to listener
-            if (onBackPressedListener != null) {
-                onBackPressedListener.backIsPressed();
-            }
+
+
         } else {
             super.onBackPressed();
 
@@ -86,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         if (dbContainsData()) {
             //if yes - open login fragment
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_main, new LoginFragment(), "login");
-            transaction.addToBackStack("main");
+            transaction.replace(R.id.container_main, new LoginFragment(), LOGIN_FRAGMENT_TAG);
+            transaction.addToBackStack(STACK_TAG);
             //end opening fragment
             transaction.commit();
         } else {
@@ -103,22 +117,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         if (dbContainsData()) {
             //begin opening fragment
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_main, new ResultsFragment(), "results");
-            transaction.addToBackStack("main");
+            transaction.replace(R.id.container_main, new ResultsFragment(), RESULTS_FRAGMENT_TAG);
+            transaction.addToBackStack(STACK_TAG);
             //end opening fragment
             transaction.commit();
         } else {
-            Toast.makeText(this, R.string.tNoRecords, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.tNoRecords, Toast.LENGTH_LONG).show();
         }
     }
 
 
     public void startSignUpFragment() {
-
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_main, new SignUpFragment(), "sign_up");
-        transaction.addToBackStack("main");
+        transaction.replace(R.id.container_main, new SignUpFragment(), SIGN_UP_FRAGMENT_TAG);
+        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
 
@@ -127,43 +140,38 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     public void startStartFragment() {
 
-        StartFragment stF = (StartFragment) manager.findFragmentByTag("start");
+        fragment = manager.findFragmentByTag(START_FRAGMENT_TAG);
         //checking if fragment has been created already
-        if (stF == null || !stF.isInLayout()) {
+        FragmentTransaction transaction = manager.beginTransaction();
+        Log.d(TAG, "startStartFragment " + fragment);
+        if (fragment == null) {
             //if exists
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.add(R.id.container_main, new StartFragment(), "start");
-            transaction.commit();
-
+            transaction.add(R.id.container_main, new StartFragment(), START_FRAGMENT_TAG);
         } else {
-
             //if not
-            Log.d(TAG, "Start Fragment exists");
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.container_main, stF);
-            transaction.addToBackStack("main");
-            transaction.commit();
+            transaction.replace(R.id.container_main, fragment);
+            transaction.addToBackStack(STACK_TAG);
         }
+        transaction.commit();
     }
 
     public void startRetainFragment() {
-        dataRetainFragment = (DataRetainFragment) manager.findFragmentByTag("retain");
+        dataRetainFragment = (DataRetainFragment) manager.findFragmentByTag(RETAIN_FRAGMENT_TAG);
         //if reatain fragment does not exist - create it
         if (dataRetainFragment == null) {
             FragmentTransaction transaction = manager.beginTransaction();
             dataRetainFragment = new DataRetainFragment();
-            transaction.add(dataRetainFragment, "retain");
+            transaction.add(dataRetainFragment, RETAIN_FRAGMENT_TAG);
             transaction.commit();
+
         }
     }
 
     public void startGameFragment() {
-
         //begin opening fragment
-
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_main, new GameFragment());
-        transaction.addToBackStack("main");
+        transaction.replace(R.id.container_main, new GameFragment(), GAME_FRAGMENT_TAG);
+        //transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
     }
@@ -172,8 +180,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public void startRulesFragment() {
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_main, new RulesFragment(), "rules");
-        transaction.addToBackStack("main");
+        transaction.replace(R.id.container_main, new RulesFragment(), RULES_FRAGMENT_TAG);
+        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
     }
@@ -182,10 +190,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public void startGameOverFragment() {
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container_main, new GameOverFragment(), "game_over");
-        transaction.addToBackStack("main");
+        transaction.replace(R.id.container_main, new GameOverFragment(), GAME_OVER_FRAGMENT_TAG);
+        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
+
+
     }
 
     private boolean dbContainsData() {
