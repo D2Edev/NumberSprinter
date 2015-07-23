@@ -55,6 +55,6 @@
     <string name="tRoundOver">round is over!</string>
     <string name="tScoreRecord">Your new record!!!!! Round score is: </string>
     <string name="tScore">Round score is: </string>
-    <string name="tTotalScore">Total score is:    </string>
+    <string name="tTotalScore">Total score is: </string>
 
 </resources>

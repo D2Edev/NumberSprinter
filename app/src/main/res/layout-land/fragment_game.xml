@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvPlayer"
-            android:text="Current Player: Vasya"
             android:gravity="center"
             android:layout_margin="10dp" />
 
@@ -26,7 +25,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvElapsedTime"
-            android:text="Elapsed time: 1 min 23.46"
             android:gravity="center"
             android:layout_margin="10dp"
             android:layout_gravity="center_horizontal" />

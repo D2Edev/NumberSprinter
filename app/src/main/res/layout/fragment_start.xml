@@ -16,7 +16,7 @@
         android:layout_height="200dp"
         android:id="@+id/ivLogo"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/penguins01"
+        android:src="@drawable/logo01"
         android:layout_margin="10dp" />
 
     <Button

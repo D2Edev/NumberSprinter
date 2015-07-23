@@ -16,6 +16,15 @@ public class DataRetainFragment extends Fragment {
     private Person person;
     private boolean hardMode;
     private boolean tickerON;
+    private int counter;
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 
     public boolean isTickerON() {
         return tickerON;

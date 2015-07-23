@@ -51,6 +51,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     TickerService tickerService;
     MyApp.OnTickListener onTickListener;
     boolean isBound;
+    boolean saveData;
+    boolean isTickerON;
+    private int maxScore;
 
 
     public GameFragment() {
@@ -58,26 +61,94 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     }
 
     @Override
-    public void onStop() {
-        if (isBound) {
-            this.getActivity().unbindService(connection);
-            isBound = false;
-        }
-        super.onStop();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        Log.d(TAG, "onCreateView");
+        return inflater.inflate(R.layout.fragment_game, container, false);
     }
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "onViewCreated");
+        //set interface from main activity - informing fragment in Back was pressed
+        ((MainActivity) getActivity()).setOnBackPressedListener(this);
+        //call fragment keeping data
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+
+        if (getActivity() instanceof OnFragmentListener) {
+            //set interface to main activity - to call further actions
+            onFragmentListener = (OnFragmentListener) getActivity();
+
+        } else {
+            throw new IllegalStateException("Activity not OnMainFragmentListener! ");
+        }
+        //init  controls
+        tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
+        tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
+        gvGameField = (GridView) view.findViewById(R.id.gvGameField);
+        gameFields = getGameFields();
+        gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
+        //set listener on gridview
+        gvGameField.setOnItemClickListener(this);
+    }
+
 
     @Override
     public void onStart() {
         super.onStart();
+        //will save data if fragment closed? default=true
+        saveData = true;
+        //if flag for ticker is FALSE
         if (!dataRetainFragment.isTickerON()) {
+            //then start tick service
             Intent intentStartTickerService = new Intent(this.getActivity().getApplication(), TickerService.class);
             this.getActivity().startService(intentStartTickerService);
-            dataRetainFragment.setTickerON(true);
+            //set tick flag TRUE
+            isTickerON=true;
         }
+        //bind to tick service
         Intent intent = new Intent(this.getActivity(), TickerService.class);
         getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
 
+        //defime max possible score for game based on complexity
+        maxScore = 600;
+        if (dataRetainFragment.getHardMode()) {
+            maxScore = maxScore * 2;
+        }
+        // check if previously counter was used
+        fieldCounter = 1;
+        if (dataRetainFragment.getCounter() > 1) {
+            fieldCounter = dataRetainFragment.getCounter();
+        }
+
+        if (dataRetainFragment != null) {
+            person = dataRetainFragment.getPerson();
+            tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
+        }
+        // Log.d(TAG, "person" + person);
+        //call time refresh in textview
+        refreshTimeField();
     }
+
+    @Override
+    public void onStop() {
+        ((MyApp) getActivity().getApplication()).setOnTickListener(null);
+        this.getActivity().unbindService(connection);
+        dataRetainFragment.setTickerON(isTickerON);
+        //clear game fields data
+        dataRetainFragment.setGameFields(gameFields);
+        //clear counter data in fragment
+        dataRetainFragment.setCounter(fieldCounter);
+        //copy person data to retain fragment
+        dataRetainFragment.setPerson(person);
+        //release listener
+        ((MainActivity) getActivity()).setOnBackPressedListener(null);
+        super.onStop();
+    }
+
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -93,104 +164,24 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
     };
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Log.d(TAG, "onCreateView");
-        return inflater.inflate(R.layout.fragment_game, container, false);
-    }
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.d(TAG, "onAttach");
-
-        ((MainActivity) activity).setOnBackPressedListener(this);
-        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-
-        if (activity instanceof OnFragmentListener) {
-            onFragmentListener = (OnFragmentListener) activity;
-
-        } else {
-            throw new IllegalStateException("Activity not OnMainFragmentListener! ");
-        }
-
-
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated");
-        //init variables and controls
-        tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
-        tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
-        gvGameField = (GridView) view.findViewById(R.id.gvGameField);
-        gameFields = getGameFields();
-        gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
-        //start service
-
-        if (dataRetainFragment != null) {
-            person = dataRetainFragment.getPerson();
-            tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
-        }
-        Log.d(TAG, "person" + person);
-
-        //verify counter
-        fieldCounter = 1;
-        //call time refresh in textview
-        refreshTimeField();
-
-//set onFragmentListener on gridview
-
-        gvGameField.setOnItemClickListener(this);
-
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "onDetach");
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        //if
-        try {
-            Thread.sleep(100L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ;
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "onDestroyView");
-
-    }
 
     private void refreshTimeField() {
 
-        ((MyApp)getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
+        ((MyApp) getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
             @Override
             public void onNextTick(final int counter) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (tvElapsedTime != null) {
-                            tvElapsedTime.setText(getString(R.string.tElapsedTime) + counter);
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            tvElapsedTime.setText(getString(R.string.tElapsedTime) + timeNumToText(counter));
                             counterG = counter;
+
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 
@@ -199,55 +190,58 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     @Override
     public void backIsPressed() {
         Log.d(TAG, "backIsPressed");
-
-
+        //stop Chrono
         tickerService.stopTick();
-        dataRetainFragment.setTickerON(false);
-        if (dataRetainFragment != null) {
-            dataRetainFragment.setGameFields(null);
-        }
-        ((MainActivity) getActivity()).setOnBackPressedListener(null);
+        //set flag tick is stopped
+        isTickerON = false;
+        //clear game fields data
+        gameFields = null;
+        //increase number of games played
+        person.setGamesPlayed(person.getGamesPlayed() + 1);
+        //reset passed game field counter
+        fieldCounter = 1;
+
+        //onFragmentListener.startGameOverFragment();
 
 
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //get clicked game field datd
+        //get clicked game field data
         gameField = (GameField) parent.getItemAtPosition(position);
-        //Toast.makeText(parent.getContext(), "Click to " + gameField.getFieldNumber(), Toast.LENGTH_SHORT).show();
-        //checking if correct game field is pressed and it's not the last
-        if (gameField.getFieldNumber() == fieldCounter && fieldCounter < 26) {
-
-            Log.d(TAG, "gameField  " + gameField.getFieldNumber() + " color " + gameField.getFieldColor());
+        //check if correct game field is pressed
+        Log.d(TAG, "counter " + fieldCounter + " field " + gameField.getFieldNumber());
+        if (gameField.getFieldNumber() == fieldCounter) {
             //if condition ok - black the field
             gameField.setFieldColor(Color.rgb(0, 0, 0));
-            Log.d(TAG, "gameField  " + gameField.getFieldNumber() + " color " + gameField.getFieldColor());
-            Log.d(TAG, "from List: gameField  " + gameFields.get(fieldCounter - 1).getFieldNumber() + " color " + gameFields.get(fieldCounter - 1).getFieldColor());
-
+            gameField.setFieldTextColor(Color.rgb(0, 0, 0));
+            //insert updated field to data set
             gameFields.set(position, gameField);
+            //give new data to adapter
             gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
-            //move check to next field
-            fieldCounter++;
-            if (fieldCounter == 26) {
-                //if all fields processed - send STOP to chrono
+            //if the field is last
+            if (fieldCounter == 25) {
+                //send STOP to chrono
                 tickerService.stopTick();
-                dataRetainFragment.setTickerON(false);
-                dataRetainFragment.setGameFields(null);
-                dataRetainFragment.setListener(null);
-                saveUserData();
-                                onFragmentListener.startGameOverFragment();
-
-
+                //set flag ticker is stopped
+                isTickerON = false;
+                //clear game fields data
+                gameFields = null;
+                //clear counter data
+                fieldCounter = 1;
+                //increase number of games played
+                person.setGamesPlayed(person.getGamesPlayed() + 1);
+                //update calculated scores for person
+                person.setScoreTotal(person.getScoreTotal() + maxScore - counterG);
+                person.setScoreMax(maxScore - counterG);
+                //call GameOver fragment
+                onFragmentListener.startGameOverFragment();
+                return;
             }
+            //move to next field
+            fieldCounter++;
         }
-    }
-
-    private void saveUserData() {
-
-        person.setGamesPlayed(person.getGamesPlayed() + 1);
-        person.setScoreTotal(person.getScoreTotal() + 600 - counterG);
-        person.setScoreMax(600 - counterG);
     }
 
 
@@ -287,6 +281,20 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
         return tempGFs;
     }
+private String timeNumToText(int num){
+String timeNumToText;
+    int m;
+    int s;
+    int ms;
+    m=num/600;
+    timeNumToText=" "+Integer.toString(m)+"\" ";
+    s=(num-m*600)/10;
+    timeNumToText=timeNumToText+Integer.toString(s)+".";
+    Log.d(TAG,""+num);
+   ms=num-m*600-s*10;
+    timeNumToText=timeNumToText+ms+"'";
 
+    return timeNumToText;
+}
 
 }

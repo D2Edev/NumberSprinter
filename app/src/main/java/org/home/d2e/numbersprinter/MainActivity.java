@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(TAG, "onCreate");
         manager = getFragmentManager();
         startRetainFragment();
-        startStartFragment();
+        if (manager.getBackStackEntryCount()==0){
+        startStartFragment();}
 
 
     }
@@ -141,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public void startStartFragment() {
 
         fragment = manager.findFragmentByTag(START_FRAGMENT_TAG);
-        //checking if fragment has been created already
+         //checking if fragment has been created already
+        manager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
         FragmentTransaction transaction = manager.beginTransaction();
         Log.d(TAG, "startStartFragment " + fragment);
         if (fragment == null) {
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container_main, new GameFragment(), GAME_FRAGMENT_TAG);
-        //transaction.addToBackStack(STACK_TAG);
+        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
     }

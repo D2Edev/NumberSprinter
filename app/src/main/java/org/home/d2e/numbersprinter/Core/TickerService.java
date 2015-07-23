@@ -37,11 +37,13 @@ public class TickerService extends IntentService {
     @Override
     public boolean onUnbind(Intent intent) {
         doSendTick = false;
+        Log.d(TAG, "Unbound" + counter);
         return super.onUnbind(intent);
     }
 
     @Override
     public void onRebind(Intent intent) {
+        Log.d(TAG, "ReBound" + counter);
         doSendTick = true;
         super.onRebind(intent);
     }
@@ -67,7 +69,7 @@ public class TickerService extends IntentService {
             }
             counter++;
             if (doSendTick) {
-                Log.d(TAG, "in ticker: "+counter);
+                //Log.d(TAG, "in ticker: "+counter);
                 if (onTickListener != null) {
                     onTickListener.onNextTick(counter);
                 }
@@ -79,6 +81,10 @@ public class TickerService extends IntentService {
     public void stopTick() {
         doTick = false;
         Log.d(TAG, "stop received! ");
+    }
+
+    public int getCounter() {
+        return counter;
     }
 
     public class TickBinder extends Binder{

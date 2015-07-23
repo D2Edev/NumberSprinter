@@ -104,7 +104,7 @@ switch (v.getId()){
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(UserTable.Columns.NAME, String.valueOf(etName.getText()));
-        cv.put(UserTable.Columns.PASSWORD, String.valueOf(etPass.getText()));
+        cv.put(UserTable.Columns.PASSWORD, String.valueOf(etPass.getText()).hashCode());
         cv.put(UserTable.Columns.SCORE_TOTAL, 0);
         cv.put(UserTable.Columns.SCORE_MAX, 0);
         cv.put(UserTable.Columns.GAMES_PLAYED, 0);

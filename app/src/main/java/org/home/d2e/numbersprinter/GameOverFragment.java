@@ -81,7 +81,12 @@ public class GameOverFragment extends Fragment implements View.OnClickListener{
 
         tvRoundOver.setText(person.getName()+ ", "+ getString(R.string.tRoundOver));
         tvTotalScore.setText(getString(R.string.tTotalScore)+ person.getScoreTotal());
-        tvTime.setText(Integer.toString(600 - person.getScoreMax()));
+        if (dataRetainFragment.getHardMode()) {
+            tvTime.setText(getString(R.string.tElapsedTime)+timeNumToText(1200 - person.getScoreMax()));
+        }else {
+            tvTime.setText(getString(R.string.tElapsedTime)+timeNumToText(600 - person.getScoreMax()));
+        }
+
         tvScore.setText(Integer.toString(person.getScoreMax()));
 
         if (person != null) {
@@ -131,7 +136,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener{
         cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
         cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
         //db.insert(UserTable.TABLE, null, cv);
-        db.update(UserTable.TABLE,cv,UserTable.Columns.NAME + " = ?",new String[]{person.getName()});
+        db.update(UserTable.TABLE, cv, UserTable.Columns.NAME + " = ?", new String[]{person.getName()});
         db.close();
     }
 
@@ -146,5 +151,20 @@ public class GameOverFragment extends Fragment implements View.OnClickListener{
                 break;
         }
 
+    }
+    private String timeNumToText(int num){
+        String timeNumToText;
+        int m;
+        int s;
+        int ms;
+        m=num/600;
+        timeNumToText=" "+Integer.toString(m)+"\" ";
+        s=(num-m*600)/10;
+        timeNumToText=timeNumToText+Integer.toString(s)+".";
+        Log.d(TAG,""+num);
+        ms=num-m*600-s*10;
+        timeNumToText=timeNumToText+ms+"'";
+
+        return timeNumToText;
     }
 }
