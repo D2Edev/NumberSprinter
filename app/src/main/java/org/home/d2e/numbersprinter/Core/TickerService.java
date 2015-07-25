@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
@@ -16,11 +17,11 @@ public class TickerService extends IntentService {
      * param name Used to name the worker thread, important only for debugging.
      */
     public static final String TAG = "TAG_TickerService_ ";
-    volatile int counter;
+    private int counter;
     private boolean doTick = true;
     private boolean doSendTick = true;
     private final IBinder tickBinder =new TickBinder();
-    MyApp.OnTickListener onTickListener;
+    private int timeLimit= 6000;
 
     public TickerService() {
         super("TickerService");
@@ -28,39 +29,39 @@ public class TickerService extends IntentService {
 
     @Override
     public IBinder onBind(Intent intent) {
+
         doSendTick = true;
+        Log.d(TAG, "Bound");
         return tickBinder;
     }
 
 
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        doSendTick = false;
-        Log.d(TAG, "Unbound" + counter);
-        return super.onUnbind(intent);
-    }
-
-    @Override
-    public void onRebind(Intent intent) {
-        Log.d(TAG, "ReBound" + counter);
-        doSendTick = true;
-        super.onRebind(intent);
-    }
-
-    @Override
+     @Override
     public void onCreate() {
         super.onCreate();
         doTick = true;
         doSendTick = true;
     }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        doSendTick = false;
+        Log.d(TAG, "Unbound");
+        return true;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        doSendTick = true;
+        Log.d(TAG, "Rebound");
+        super.onRebind(intent);
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        onTickListener = ((MyApp) getApplication()).getOnTickListener();
         counter = 0;
-        int timeLimit= 6000;
+
         while (doTick&&counter<timeLimit) {
             try {
                 Thread.sleep(100L);
@@ -68,28 +69,32 @@ public class TickerService extends IntentService {
                 e.printStackTrace();
             }
             counter++;
-            if (doSendTick) {
-                //Log.d(TAG, "in ticker: "+counter);
-                if (onTickListener != null) {
-                    onTickListener.onNextTick(counter);
-                }
+            Log.d(TAG, "Tick generated");
+            if (doSendTick) {sendNewTick(counter);}
             }
 
         }
-    }
+
 
     public void stopTick() {
         doTick = false;
         Log.d(TAG, "stop received! ");
     }
 
-    public int getCounter() {
-        return counter;
-    }
+public void SendTick(boolean doSendTick){
+    this.doSendTick=doSendTick;
+}
 
     public class TickBinder extends Binder{
         public TickerService getService(){
             return TickerService.this;
         }
+    }
+
+    private void sendNewTick(int counter){
+        Intent intent = new Intent("new_tick");
+        intent.putExtra("counter", counter);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        Log.d(TAG, "Tick sent");
     }
 }

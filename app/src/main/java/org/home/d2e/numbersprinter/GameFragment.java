@@ -1,13 +1,17 @@
 package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +35,7 @@ import java.util.List;
 
 
 public class GameFragment extends Fragment implements OnBackPressedListener, AdapterView.OnItemClickListener {
-    private final String TAG = "TAG_GameGridFragment ";
+    private final String TAG = "TAG_GameFragment ";
     private GridView gvGameField;
     private List<GameField> gameFields;
     private GameField gameField;
@@ -49,7 +53,6 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private int fieldCounter;
     OnFragmentListener onFragmentListener;
     TickerService tickerService;
-    MyApp.OnTickListener onTickListener;
     boolean isBound;
     boolean saveData;
     boolean isTickerON;
@@ -95,10 +98,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         gvGameField.setOnItemClickListener(this);
     }
 
-
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         //will save data if fragment closed? default=true
         saveData = true;
         //if flag for ticker is FALSE
@@ -107,7 +109,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             Intent intentStartTickerService = new Intent(this.getActivity().getApplication(), TickerService.class);
             this.getActivity().startService(intentStartTickerService);
             //set tick flag TRUE
-            isTickerON=true;
+            isTickerON = true;
         }
         //bind to tick service
         Intent intent = new Intent(this.getActivity(), TickerService.class);
@@ -128,14 +130,17 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             person = dataRetainFragment.getPerson();
             tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
         }
-        // Log.d(TAG, "person" + person);
-        //call time refresh in textview
-        refreshTimeField();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
+        //resume transmitting ticks
+       // tickerService.SendTick(true);
+
+
     }
 
     @Override
-    public void onStop() {
-        ((MyApp) getActivity().getApplication()).setOnTickListener(null);
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(tickReceiver);
         this.getActivity().unbindService(connection);
         dataRetainFragment.setTickerON(isTickerON);
         //clear game fields data
@@ -146,9 +151,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         dataRetainFragment.setPerson(person);
         //release listener
         ((MainActivity) getActivity()).setOnBackPressedListener(null);
-        super.onStop();
     }
-
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -167,23 +170,6 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     private void refreshTimeField() {
 
-        ((MyApp) getActivity().getApplication()).setOnTickListener(new MyApp.OnTickListener() {
-            @Override
-            public void onNextTick(final int counter) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            tvElapsedTime.setText(getString(R.string.tElapsedTime) + timeNumToText(counter));
-                            counterG = counter;
-
-                        }
-                    });
-                }
-
-            }
-        });
 
     }
 
@@ -281,20 +267,27 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
         return tempGFs;
     }
-private String timeNumToText(int num){
-String timeNumToText;
-    int m;
-    int s;
-    int ms;
-    m=num/600;
-    timeNumToText=" "+Integer.toString(m)+"\" ";
-    s=(num-m*600)/10;
-    timeNumToText=timeNumToText+Integer.toString(s)+".";
-    Log.d(TAG,""+num);
-   ms=num-m*600-s*10;
-    timeNumToText=timeNumToText+ms+"'";
 
-    return timeNumToText;
-}
+    private String timeNumToText(int num) {
+        String timeNumToText;
+        int m;
+        int s;
+        int ms;
+        m = num / 600;
+        timeNumToText = " " + Integer.toString(m) + "\" ";
+        s = (num - m * 600) / 10;
+        timeNumToText = timeNumToText + Integer.toString(s) + ".";
+        //Log.d(TAG, "" + num);
+        ms = num - m * 600 - s * 10;
+        timeNumToText = timeNumToText + ms + "'";
+        return timeNumToText;
+    }
 
+    private BroadcastReceiver tickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            counterG = intent.getIntExtra("counter", 1);
+            tvElapsedTime.setText(timeNumToText(counterG));
+        }
+    };
 }

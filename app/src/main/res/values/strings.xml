@@ -56,5 +56,6 @@
     <string name="tScoreRecord">Your new record!!!!! Round score is: </string>
     <string name="tScore">Round score is: </string>
     <string name="tTotalScore">Total score is: </string>
+    <string name="tDubbedUser">User with this name already exists!</string>
 
 </resources>
