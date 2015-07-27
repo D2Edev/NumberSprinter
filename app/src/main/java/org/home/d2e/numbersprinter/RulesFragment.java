@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
@@ -26,6 +27,7 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
     private TextView tvRules;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+    DataRetainFragment dataRetainFragment;
 
     public RulesFragment() {
         // Required empty public constructor
@@ -46,6 +48,10 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
         tvRules = (TextView) view.findViewById(R.id.tvRules);
         ivLogo.setOnClickListener(RulesFragment.this);
         tvRules.setOnClickListener(RulesFragment.this);
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if(dataRetainFragment!=null){
+            dataRetainFragment.setCurrFragTag(MainActivity.RULES_FRAGMENT_TAG);
+        }
     }
 
     @Override

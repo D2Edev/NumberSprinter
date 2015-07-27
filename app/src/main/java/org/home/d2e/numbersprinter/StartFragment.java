@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.Person;
 import org.home.d2e.numbersprinter.Core.UserTable;
@@ -31,6 +32,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     private List<Person> persons;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+    DataRetainFragment dataRetainFragment;
 
 
     public StartFragment() {
@@ -93,6 +95,10 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         btnResult.setOnClickListener(StartFragment.this);
         btnPlay.setOnClickListener(StartFragment.this);
         Log.d(TAG, "onViewCreated");
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if(dataRetainFragment!=null){
+            dataRetainFragment.setCurrFragTag(MainActivity.START_FRAGMENT_TAG);
+        }
     }
 
     //processing clicks

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
@@ -38,6 +39,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private int recNumber;
+    DataRetainFragment dataRetainFragment;
 
 
     public SignUpFragment() {
@@ -68,6 +70,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 }
         }
         db.close();
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if(dataRetainFragment!=null){
+            dataRetainFragment.setCurrFragTag(MainActivity.SIGN_UP_FRAGMENT_TAG);
+        }
     }
 
 

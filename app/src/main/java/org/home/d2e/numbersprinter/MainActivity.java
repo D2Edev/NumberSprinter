@@ -30,15 +30,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     private Cursor userListCursor;
     private Fragment fragment;
     private Intent intentStartTickerService;
-    public static final String GAME_FRAGMENT_TAG = "gf";
-    public static final String GAME_OVER_FRAGMENT_TAG = "gof";
-    public static final String LOGIN_FRAGMENT_TAG = "lf";
-    public static final String RESULTS_FRAGMENT_TAG = "rf";
-    public static final String RULES_FRAGMENT_TAG = "ruf";
-    public static final String START_FRAGMENT_TAG = "sf";
-    public static final String SIGN_UP_FRAGMENT_TAG = "suf";
-    public static final String RETAIN_FRAGMENT_TAG = "ref";
-    public static final String STACK_TAG = "main";
+    public static final String GAME_FRAGMENT_TAG = "GAME_FRAGMENT";
+    public static final String GAME_OVER_FRAGMENT_TAG = "GAME_OVER_FRAGMENT";
+    public static final String LOGIN_FRAGMENT_TAG = "LOGIN_FRAGMENT";
+    public static final String RESULTS_FRAGMENT_TAG = "RESULTS_FRAGMENT";
+    public static final String RULES_FRAGMENT_TAG = "RULES_FRAGMENT";
+    public static final String START_FRAGMENT_TAG = "START_FRAGMENT";
+    public static final String SIGN_UP_FRAGMENT_TAG = "SIGN_UP_FRAGMENT";
+    public static final String RETAIN_FRAGMENT_TAG = "RETAIN_FRAGMENT";
+    public static final String STACK_TAG = "STACK";
 
 
     OnBackPressedListener onBackPressedListener;
@@ -50,18 +50,23 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(TAG, "onCreate");
         manager = getFragmentManager();
         startRetainFragment();
-        if (manager.getBackStackEntryCount()==0){
-        startStartFragment();}
+        firstStart();
+    }
 
-
+    private void firstStart() {
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (dataRetainFragment == null) {
+            transaction.add(R.id.container_main, new StartFragment(), START_FRAGMENT_TAG);
+        }
+        transaction.commit();
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-
         Log.d(TAG, "onStart");
+
     }
 
     @Override
@@ -77,14 +82,37 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         if (onBackPressedListener != null) {
             onBackPressedListener.backIsPressed();
         }
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-
-
+        if (dataRetainFragment != null) {
+            switch (dataRetainFragment.getCurrFragTag()) {
+                case GAME_FRAGMENT_TAG:
+                    startLoginFragment();
+                    break;
+                case GAME_OVER_FRAGMENT_TAG:
+                    startStartFragment();
+                    break;
+                case LOGIN_FRAGMENT_TAG:
+                    startStartFragment();
+                    break;
+                case RESULTS_FRAGMENT_TAG:
+                    startStartFragment();
+                    break;
+                case RULES_FRAGMENT_TAG:
+                    startStartFragment();
+                    break;
+                case SIGN_UP_FRAGMENT_TAG:
+                    if (dbContainsData()) {
+                        startLoginFragment();
+                    } else {
+                        startStartFragment();
+                    }
+                    break;
+                case START_FRAGMENT_TAG:
+                    super.onBackPressed();
+            }
         } else {
             super.onBackPressed();
-
         }
+
     }
 
 
@@ -102,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             //if yes - open login fragment
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.container_main, new LoginFragment(), LOGIN_FRAGMENT_TAG);
-            transaction.addToBackStack(STACK_TAG);
             //end opening fragment
             transaction.commit();
         } else {
@@ -119,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             //begin opening fragment
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.container_main, new ResultsFragment(), RESULTS_FRAGMENT_TAG);
-            transaction.addToBackStack(STACK_TAG);
             //end opening fragment
             transaction.commit();
         } else {
@@ -132,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container_main, new SignUpFragment(), SIGN_UP_FRAGMENT_TAG);
-        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
 
@@ -140,21 +165,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
 
     public void startStartFragment() {
-
-        fragment = manager.findFragmentByTag(START_FRAGMENT_TAG);
-         //checking if fragment has been created already
-        manager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
         FragmentTransaction transaction = manager.beginTransaction();
-        Log.d(TAG, "startStartFragment " + fragment);
-        if (fragment == null) {
-            //if exists
-            transaction.add(R.id.container_main, new StartFragment(), START_FRAGMENT_TAG);
-        } else {
-            //if not
-            transaction.replace(R.id.container_main, fragment);
-            transaction.addToBackStack(STACK_TAG);
-        }
+        transaction.replace(R.id.container_main, new StartFragment(), START_FRAGMENT_TAG);
         transaction.commit();
+
     }
 
     public void startRetainFragment() {
@@ -163,9 +177,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         if (dataRetainFragment == null) {
             FragmentTransaction transaction = manager.beginTransaction();
             dataRetainFragment = new DataRetainFragment();
+            //dataRetainFragment.setFirstLaunch(true);
             transaction.add(dataRetainFragment, RETAIN_FRAGMENT_TAG);
             transaction.commit();
-
+            dataRetainFragment = (DataRetainFragment) manager.findFragmentByTag(RETAIN_FRAGMENT_TAG);
+            Log.d(TAG, RETAIN_FRAGMENT_TAG + " " + dataRetainFragment);
         }
     }
 
@@ -173,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         //begin opening fragment
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container_main, new GameFragment(), GAME_FRAGMENT_TAG);
-        transaction.addToBackStack(STACK_TAG);
         //end opening fragment
         transaction.commit();
     }
@@ -204,10 +219,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         boolean dbContainsData = false;
         dbHelper = new DBHelper(this);
         db = dbHelper.getReadableDatabase();
-        userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.SCORE_TOTAL + " DESC;");
+        userListCursor = db.query(UserTable.TABLE, new String[]{UserTable.Columns.NAME}, null, null, null, null, null);
         if (userListCursor.getCount() > 0) {
             dbContainsData = true;
         }
+        db.close();
         return dbContainsData;
     }
 

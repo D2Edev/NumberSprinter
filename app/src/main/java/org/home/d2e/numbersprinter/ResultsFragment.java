@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.home.d2e.numbersprinter.Core.DBHelper;
+import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.UserTable;
 import org.home.d2e.numbersprinter.adapter.UserCursorAdapter;
 
@@ -25,6 +26,7 @@ public class ResultsFragment extends Fragment {
     private SQLiteDatabase db;
     private Cursor userListCursor;
     private UserCursorAdapter userCursorAdapter;
+    DataRetainFragment dataRetainFragment;
 
     public ResultsFragment() {
         // Required empty public constructor
@@ -60,6 +62,10 @@ public class ResultsFragment extends Fragment {
                 }
             });
 
+        }
+        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+        if(dataRetainFragment!=null){
+            dataRetainFragment.setCurrFragTag(MainActivity.RESULTS_FRAGMENT_TAG);
         }
     }
 

@@ -17,6 +17,25 @@ public class DataRetainFragment extends Fragment {
     private boolean hardMode;
     private boolean tickerON;
     private int counter;
+    private boolean firstLaunch = true;
+    private String currFragTag;
+
+    public boolean isFirstLaunch() {
+        return firstLaunch;
+    }
+
+    public void setFirstLaunch(boolean firstLaunch) {
+        this.firstLaunch = firstLaunch;
+    }
+
+    public String getCurrFragTag() {
+
+        return currFragTag;
+    }
+
+    public void setCurrFragTag(String currFragTag) {
+        this.currFragTag = currFragTag;
+    }
 
     public int getCounter() {
         return counter;

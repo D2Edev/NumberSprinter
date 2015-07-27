@@ -66,7 +66,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
         tvSelectedPlayer = (TextView) view.findViewById(R.id.tvSelectedPlayer);
         cbHard = (CheckBox) view.findViewById(R.id.cbHard);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){cbHard.setChecked(dataRetainFragment.getHardMode());}
+        if(dataRetainFragment!=null){
+            cbHard.setChecked(dataRetainFragment.getHardMode());
+            dataRetainFragment.setCurrFragTag(MainActivity.LOGIN_FRAGMENT_TAG);
+        }
         cbHard.setOnCheckedChangeListener(LoginFragment.this);
 
         dbHelper = new DBHelper(getActivity());
@@ -118,7 +121,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     }
 
     private void retainUserData() {
-        dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if (dataRetainFragment != null) {
             dataRetainFragment.setPerson(person);
             dataRetainFragment.setHardMode(cbHard.isChecked());

@@ -77,6 +77,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener{
 
         if (dataRetainFragment != null) {
             person = dataRetainFragment.getPerson();
+            dataRetainFragment.setCurrFragTag(MainActivity.GAME_OVER_FRAGMENT_TAG);
         }
 
         tvRoundOver.setText(person.getName()+ ", "+ getString(R.string.tRoundOver));

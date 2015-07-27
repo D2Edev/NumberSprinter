@@ -76,10 +76,10 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
-        //set interface from main activity - informing fragment in Back was pressed
-        ((MainActivity) getActivity()).setOnBackPressedListener(this);
+
         //call fragment keeping data
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
+
 
         if (getActivity() instanceof OnFragmentListener) {
             //set interface to main activity - to call further actions
@@ -100,7 +100,10 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     @Override
     public void onResume() {
+
         super.onResume();
+        //set interface from main activity - informing fragment in Back was pressed
+        ((MainActivity) getActivity()).setOnBackPressedListener(this);
         //will save data if fragment closed? default=true
         saveData = true;
         //if flag for ticker is FALSE
@@ -129,6 +132,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         if (dataRetainFragment != null) {
             person = dataRetainFragment.getPerson();
             tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
+            dataRetainFragment.setCurrFragTag(MainActivity.GAME_FRAGMENT_TAG);
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
         //resume transmitting ticks
@@ -167,11 +171,6 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
     };
 
-
-    private void refreshTimeField() {
-
-
-    }
 
     @Override
     public void backIsPressed() {
@@ -287,7 +286,13 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         @Override
         public void onReceive(Context context, Intent intent) {
             counterG = intent.getIntExtra("counter", 1);
-            tvElapsedTime.setText(timeNumToText(counterG));
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvElapsedTime.setText(getString(R.string.tElapsedTime)+timeNumToText(counterG));
+                }
+            });
+
         }
     };
 }
