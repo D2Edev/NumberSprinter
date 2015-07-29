@@ -19,6 +19,15 @@ public class DataRetainFragment extends Fragment {
     private int counter;
     private boolean firstLaunch = true;
     private String currFragTag;
+    private boolean doVibrate;
+
+    public boolean isDoVibrate() {
+        return doVibrate;
+    }
+
+    public void setDoVibrate(boolean doVibrate) {
+        this.doVibrate = doVibrate;
+    }
 
     public boolean isFirstLaunch() {
         return firstLaunch;

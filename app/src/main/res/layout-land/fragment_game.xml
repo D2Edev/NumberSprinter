@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.home.d2e.numbersprinter.GameFragment"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -10,15 +11,25 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvPlayer"
-            android:gravity="center"
-            android:layout_margin="10dp" />
+            android:layout_margin="15dp"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tElapsedTime"
+            android:id="@+id/tvElapsedTimeHeader"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="15dp"
+            android:gravity="center" />
 
         <TextView
             android:layout_width="match_parent"
@@ -26,15 +37,18 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvElapsedTime"
             android:gravity="center"
-            android:layout_margin="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            style="@style/Mega" />
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
         <GridView
             android:layout_width="match_parent"
@@ -43,7 +57,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:numColumns="5"
-            android:layout_margin="15dp" />
+            android:layout_margin="10dp" />
     </LinearLayout>
 
 </LinearLayout>

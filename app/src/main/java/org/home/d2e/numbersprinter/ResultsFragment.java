@@ -41,7 +41,6 @@ public class ResultsFragment extends Fragment {
         db = dbHelper.getReadableDatabase();
         //get user list from db
         userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.SCORE_TOTAL + " DESC;");
-        Log.d(TAG, "cursor count " + userListCursor.getCount());
         //if there are any users
         if (userListCursor.getCount() > 0) {
             // build adapter

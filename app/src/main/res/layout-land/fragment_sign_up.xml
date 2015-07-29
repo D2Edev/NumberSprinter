@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context="org.home.d2e.numbersprinter.SignUpFragment"
     android:gravity="center"
-    android:orientation="vertical">
+    android:baselineAligned="false"
+    android:orientation="horizontal">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -20,7 +21,8 @@
             android:layout_height="match_parent"
             android:id="@+id/imageView"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo01" />
+            android:src="@drawable/logo01"
+            android:padding="10dp" />
     </LinearLayout>
 
     <LinearLayout

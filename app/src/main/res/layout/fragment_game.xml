@@ -18,9 +18,21 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvPlayer"
             android:gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/tvElapsedTimeHeader"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/tElapsedTime" />
 
         <TextView
             android:layout_width="match_parent"
@@ -29,16 +41,20 @@
             android:id="@+id/tvElapsedTime"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            style="@style/Mega"
+            />
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
         <GridView
             android:layout_width="match_parent"
@@ -47,7 +63,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:numColumns="5"
-            android:layout_margin="15dp" />
+            android:layout_margin="10dp" />
     </LinearLayout>
 
 </LinearLayout>

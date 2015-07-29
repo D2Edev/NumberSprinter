@@ -1,5 +1,5 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <color name="game_field_yellow">#ffff00</color>
+    <color name="shadow_grey_10">#14141400</color>
 
 </resources>

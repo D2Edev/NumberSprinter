@@ -69,7 +69,7 @@ public class TickerService extends IntentService {
                 e.printStackTrace();
             }
             counter++;
-            Log.d(TAG, "Tick generated");
+            //Log.d(TAG, "Tick generated");
             if (doSendTick) {sendNewTick(counter);}
             }
 
@@ -95,6 +95,6 @@ public void SendTick(boolean doSendTick){
         Intent intent = new Intent("new_tick");
         intent.putExtra("counter", counter);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        Log.d(TAG, "Tick sent");
+        //Log.d(TAG, "Tick sent");
     }
 }

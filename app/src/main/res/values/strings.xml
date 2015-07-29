@@ -51,11 +51,26 @@
     <string name="tPassMisMatch">Passwords doesn\'t match!</string>
     <string name="tPassWrong">Wrong password. Please try again.</string>
     <string name="tCurrentPlayer">Player:</string>
-    <string name="tInstrGO">Press NEW GAME for a new round or press MAIN MENU for main screen.</string>
+    <string name="tInstrGO">Press NEW GAME for a new round or press back for main screen.</string>
     <string name="tRoundOver">round is over!</string>
     <string name="tScoreRecord">Your new record!!!!! Round score is: </string>
     <string name="tScore">Round score is: </string>
     <string name="tTotalScore">Total score is: </string>
     <string name="tDubbedUser">User with this name already exists!</string>
+    <string name="tCantChangeSettings">Can\'t change settings during the game!</string>
+    <string name="VIBRATE">vbr</string>
+    <string name="sVIBRATE">Should device vibrate at key game events</string>
+    <string name="tVIBRATE">Vibrate</string>
+    <string name="HARD_MODE">h_mode</string>
+    <string name="sHARD_MODE">Makes gaming harder</string>
+    <string name="tHARD_MODE">HARD mode</string>
+
+    <string name="CLR_NUMS">cnums</string>
+    <string name="sCLR_NUMS">Numbers will be randomly coloured</string>
+    <string name="tCLR_NUMS">Random NUMBER colors</string>
+    <string name="CLR_FLDS">cfields</string>
+    <string name="sCLR_FLDS">Fields will be randomly coloured</string>
+    <string name="tCLR_FLDS">Random FIELD colors</string>
+
 
 </resources>

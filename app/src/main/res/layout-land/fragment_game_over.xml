@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center"
+    android:baselineAligned="false"
     tools:context="org.home.d2e.numbersprinter.GameOverFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -95,12 +96,6 @@
             android:id="@+id/btnNewGame"
             android:text="@string/btnNewGame"
             android:layout_margin="10dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnMainScreen"
-            android:text="@string/btnGoMainScreen" />
 
     </LinearLayout>
 

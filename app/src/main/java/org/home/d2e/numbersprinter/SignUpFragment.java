@@ -2,10 +2,13 @@ package org.home.d2e.numbersprinter;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 
@@ -32,14 +36,13 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private EditText etName;
     private EditText etPassCheck;
     private EditText etPass;
-    private int hashCodeOne;
-    private int hashCodeTwo;
     private String[] names;
     private Cursor cursor;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private int recNumber;
     DataRetainFragment dataRetainFragment;
+    Vibrator vibrator;
 
 
     public SignUpFragment() {
@@ -50,6 +53,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+            vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         btSignUp = (Button) view.findViewById(R.id.btSignup);
         etName = (EditText) view.findViewById(R.id.etName);
         etPass = (EditText) view.findViewById(R.id.etPass);
@@ -60,18 +64,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         cursor = db.query(UserTable.TABLE, new String[]{UserTable.Columns.NAME}, null, null, null, null, null);
         recNumber = cursor.getCount();
         if (recNumber > 0) {
-                names = new String[recNumber];
-                cursor.moveToFirst();
-                for (int i = 0; i < recNumber; i++) {
-                    names[i] = cursor.getString(0);
-                    Log.d(TAG,"name " + names[i]+ " cursor " + cursor.getString(0) );
-                    cursor.moveToNext();
+            names = new String[recNumber];
+            cursor.moveToFirst();
+            for (int i = 0; i < recNumber; i++) {
+                names[i] = cursor.getString(0);
 
-                }
+                cursor.moveToNext();
+
+            }
         }
         db.close();
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){
+        if (dataRetainFragment != null) {
             dataRetainFragment.setCurrFragTag(MainActivity.SIGN_UP_FRAGMENT_TAG);
         }
     }
@@ -79,6 +83,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        doVibrate(isVibraEnabled());
         switch (v.getId()) {
             case R.id.btSignup:
                 validateCredentials(v);
@@ -92,9 +97,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         Editable name = etName.getText();
         Editable pass = etPass.getText();
         Editable passCheck = etPassCheck.getText();
-        hashCodeOne = String.valueOf(etPass.getText()).hashCode();
-        hashCodeTwo = String.valueOf(etPassCheck.getText()).hashCode();
-
 
         if (TextUtils.isEmpty(name)) {
 
@@ -119,10 +121,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         } else if (String.valueOf(etPass.getText()).hashCode() != String.valueOf(etPassCheck.getText()).hashCode()) {
             Toast.makeText(v.getContext(), getString(R.string.tPassMisMatch), Toast.LENGTH_SHORT).show();
             etPassCheck.setError(getString(R.string.tError));
-        } else if (isNameDubbed(name)){
+        } else if (isNameDubbed(name)) {
             Toast.makeText(getActivity(), getString(R.string.tDubbedUser), Toast.LENGTH_SHORT).show();
 
-        }else{
+        } else {
 
             addUser();
             //Toast.makeText(v.getContext(),getString(R.string.btnSignup)+ " "+ getString(R.string.tOK),Toast.LENGTH_SHORT).show();
@@ -174,13 +176,28 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     public boolean isNameDubbed(Editable name) {
         boolean isDubbed = false;
         for (int i = 0; i < recNumber; i++) {
-            Log.d(TAG,"name " + names[i]+ " cursor " + String.valueOf(name) );
+
             if (names[i].equals(String.valueOf(name))) {
                 isDubbed = true;
                 break;
             }
         }
-        Log.d(TAG,"dubbed? " + isDubbed );
+
         return isDubbed;
+    }
+
+    private boolean isVibraEnabled(){
+
+        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
+        boolean enb= PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
+
+        return  enb;
+
+    }
+
+    private void doVibrate(boolean doVibrate){
+        if(doVibrate){
+            vibrator.vibrate(PrefKeys.VIB_LENGTH);
+        }
     }
 }

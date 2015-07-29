@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +25,10 @@ import android.widget.TextView;
 
 import org.home.d2e.numbersprinter.Core.GameField;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
-import org.home.d2e.numbersprinter.Core.MyApp;
 import org.home.d2e.numbersprinter.Core.OnBackPressedListener;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.Person;
+import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.TickerService;
 import org.home.d2e.numbersprinter.adapter.GameFieldAdapter;
 
@@ -57,6 +60,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     boolean saveData;
     boolean isTickerON;
     private int maxScore;
+    Vibrator vibrator;
+    GameFieldAdapter gfAdapter;
 
 
     public GameFragment() {
@@ -76,8 +81,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
-
-        //call fragment keeping data
+        vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+              //call fragment keeping data
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
 
 
@@ -93,7 +98,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         gameFields = getGameFields();
-        gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
+        gfAdapter=new GameFieldAdapter(view.getContext(), gameFields);
+        gvGameField.setAdapter(gfAdapter);
         //set listener on gridview
         gvGameField.setOnItemClickListener(this);
     }
@@ -136,7 +142,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
         //resume transmitting ticks
-       // tickerService.SendTick(true);
+        // tickerService.SendTick(true);
 
 
     }
@@ -177,7 +183,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         Log.d(TAG, "backIsPressed");
         //stop Chrono
         tickerService.stopTick();
-        //set flag tick is stopped
+         //set flag tick is stopped
         isTickerON = false;
         //clear game fields data
         gameFields = null;
@@ -203,8 +209,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             gameField.setFieldTextColor(Color.rgb(0, 0, 0));
             //insert updated field to data set
             gameFields.set(position, gameField);
-            //give new data to adapter
-            gvGameField.setAdapter(new GameFieldAdapter(view.getContext(), gameFields));
+            //update adapter
+            gfAdapter.notifyDataSetChanged();
+            doVibrate(isVibraEnabled());
             //if the field is last
             if (fieldCounter == 25) {
                 //send STOP to chrono
@@ -215,6 +222,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 gameFields = null;
                 //clear counter data
                 fieldCounter = 1;
+                doVibrate(isVibraEnabled());
                 //increase number of games played
                 person.setGamesPlayed(person.getGamesPlayed() + 1);
                 //update calculated scores for person
@@ -273,12 +281,12 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         int s;
         int ms;
         m = num / 600;
-        timeNumToText = " " + Integer.toString(m) + "\" ";
+        timeNumToText = " " + Integer.toString(m) + "' ";
         s = (num - m * 600) / 10;
         timeNumToText = timeNumToText + Integer.toString(s) + ".";
         //Log.d(TAG, "" + num);
         ms = num - m * 600 - s * 10;
-        timeNumToText = timeNumToText + ms + "'";
+        timeNumToText = timeNumToText + ms + "\"";
         return timeNumToText;
     }
 
@@ -289,10 +297,27 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tvElapsedTime.setText(getString(R.string.tElapsedTime)+timeNumToText(counterG));
+                    tvElapsedTime.setText(timeNumToText(counterG));
                 }
             });
 
         }
     };
+
+    private boolean isVibraEnabled() {
+
+        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
+        boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
+        Log.d(TAG, "Vibra enabled: " + enb);
+        return enb;
+
+    }
+
+    private void doVibrate(boolean doVibrate) {
+        if (doVibrate) {
+            Log.d(TAG, "vibra_called");
+            vibrator.vibrate(PrefKeys.VIB_LENGTH);
+        }
+
+    }
 }

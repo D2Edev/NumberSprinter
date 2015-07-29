@@ -3,8 +3,11 @@ package org.home.d2e.numbersprinter;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.Person;
+import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 import java.util.ArrayList;
@@ -24,15 +28,13 @@ import java.util.List;
 
 
 public class StartFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = "TAG_StartFragment_";
+    private static final String TAG = "TAG_"+MainActivity.START_FRAGMENT_TAG;
     OnFragmentListener listener;
     private Button btnRules;
     private Button btnResult;
     private Button btnPlay;
-    private List<Person> persons;
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    DataRetainFragment dataRetainFragment;
+    private DataRetainFragment dataRetainFragment;
+    private Vibrator vibrator;
 
 
     public StartFragment() {
@@ -42,7 +44,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
+        //Log.d(TAG, "onCreate");
     }
 
     @Nullable
@@ -50,7 +52,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d(TAG, "onCreateView");
+        //Log.d(TAG, "onCreateView");
         return inflater.inflate(R.layout.fragment_start, container, false);
     }
 
@@ -58,7 +60,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(TAG, "onAttach");
+        //Log.d(TAG, "onAttach");
         if (activity instanceof OnFragmentListener) {
             //setting interface for activity
             listener = (OnFragmentListener) activity;
@@ -72,19 +74,20 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
+        //Log.d(TAG, "onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, "onDetach");
+        //Log.d(TAG, "onDetach");
 
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         //as buttons created, defining them
         btnRules = (Button) view.findViewById(R.id.btnRules);
         btnResult = (Button) view.findViewById(R.id.btnResults);
@@ -94,7 +97,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         btnRules.setOnClickListener(StartFragment.this);
         btnResult.setOnClickListener(StartFragment.this);
         btnPlay.setOnClickListener(StartFragment.this);
-        Log.d(TAG, "onViewCreated");
+        //Log.d(TAG, "onViewCreated");
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if(dataRetainFragment!=null){
             dataRetainFragment.setCurrFragTag(MainActivity.START_FRAGMENT_TAG);
@@ -103,6 +106,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
     //processing clicks
     public void onClick(View v) {
+        doVibrate(isVibraEnabled());
         switch (v.getId()) {
             case R.id.btnRules:
                 listener.startRulesFragment();
@@ -123,6 +127,18 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
 
     }
+    private boolean isVibraEnabled(){
 
+        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
+        boolean enb= PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
+        return  enb;
+
+    }
+
+    private void doVibrate(boolean doVibrate){
+        if(doVibrate){
+            vibrator.vibrate(PrefKeys.VIB_LENGTH);
+        }
+    }
 
 }

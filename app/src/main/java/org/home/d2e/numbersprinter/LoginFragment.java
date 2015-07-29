@@ -2,10 +2,13 @@ package org.home.d2e.numbersprinter;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
 import org.home.d2e.numbersprinter.Core.Person;
+import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.UserTable;
 import org.home.d2e.numbersprinter.adapter.UserCursorAdapter;
 
@@ -45,6 +49,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     private Person person;
     private DataRetainFragment dataRetainFragment;
     private CheckBox cbHard;
+    private Vibrator vibrator;
 
     OnFragmentListener listener;
 
@@ -55,8 +60,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated");
-
+       // Log.d(TAG, "onViewCreated");
+            vibrator= (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnOK.setEnabled(false);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
@@ -97,6 +102,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
                     person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
                     tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + person.getName());
                     btnOK.setEnabled(true);
+                    doVibrate(isVibraEnabled());
 
                 }
             });
@@ -106,14 +112,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
 
     @Override
     public void onClick(View v) {
+        doVibrate(isVibraEnabled());
         switch (v.getId()) {
+
             case R.id.btnPlayerOK:
                 if (passOK(v, person)) {
+
                     retainUserData();
                     listener.startGameFragment();
                 }
                 break;
             case R.id.btnPlayerNew:
+
                 listener.startSignUpFragment();
                 break;
         }
@@ -137,7 +147,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(TAG, "onAttach");
+       // Log.d(TAG, "onAttach");
         if (activity instanceof OnFragmentListener) {
             listener = (OnFragmentListener) activity;
 
@@ -164,7 +174,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
         boolean passOK = false;
 
         Editable pass = etPass.getText();
-        Log.d(TAG, "" + person.getPassword() + " " + String.valueOf(pass).hashCode());
+        //Log.d(TAG, "" + person.getPassword() + " " + String.valueOf(pass).hashCode());
         if (person.getPassword() != String.valueOf(pass).hashCode()) {
             Toast.makeText(v.getContext(), getString(R.string.tPassWrong), Toast.LENGTH_SHORT).show();
             //etPass.setError("Error!");
@@ -181,5 +191,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 dataRetainFragment.setHardMode(isChecked);
     }
+
+    private boolean isVibraEnabled(){
+
+        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
+        boolean enb=PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
+        return  enb;
+
+    }
+
+private void doVibrate(boolean doVibrate){
+    if(doVibrate){
+        vibrator.vibrate(PrefKeys.VIB_LENGTH);
+    }
+}
 }
 

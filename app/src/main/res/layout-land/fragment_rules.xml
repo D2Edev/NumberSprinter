@@ -6,22 +6,40 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="horizontal"
+    android:baselineAligned="false"
     tools:context="org.home.d2e.numbersprinter.RulesFragment">
 
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/ivLogo"
-        android:src="@drawable/logo01"
-        android:layout_margin="20dp" />
-
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/tRules"
-        android:id="@+id/tvRules"
-        android:layout_margin="10dp"
-        android:gravity="center" />
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivLogo"
+            android:src="@drawable/logo01" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/tRules"
+            android:id="@+id/tvRules"
+            android:layout_margin="10dp"
+            android:gravity="center" />
+    </LinearLayout>
+
 </LinearLayout>
