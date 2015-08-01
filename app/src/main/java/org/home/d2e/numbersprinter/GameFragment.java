@@ -127,7 +127,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         //defime max possible score for game based on complexity
         maxScore = 600;
         if (dataRetainFragment.getHardMode()) {
-            maxScore = maxScore * 2;
+            maxScore = 900;
         }
         // check if previously counter was used
         fieldCounter = 1;

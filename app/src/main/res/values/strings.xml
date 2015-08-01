@@ -25,6 +25,8 @@
     <string name="tElapsedTime">Elapsed Time: </string>
     <string name="tPrsNewToEnterNew">(press New Player to enter new one)</string>
     <string name="tSelected">Selected:</string>
+    <string name="tGamesPlayed">Total games played: </string>
+    <string name="tAverageScore">Average score: </string>
     <string name="btnNewPlr">New</string>
     <string name="title_activity_game">Number Sprinter</string>
     <string name="tDefaultPlayer">Default Player</string>

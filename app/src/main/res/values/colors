@@ -1,5 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <color name="shadow_grey_10">#14141400</color>
+    <color name="shadow_grey_10">#0a0a0a0a</color>
+    <color name="shadow_grey_20">#14141400</color>
+    <color name="shadow_grey_40">#28282828</color>
 
 </resources>
