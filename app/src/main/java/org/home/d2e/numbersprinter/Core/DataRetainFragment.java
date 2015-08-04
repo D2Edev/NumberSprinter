@@ -5,9 +5,6 @@ import android.os.Bundle;
 
 import java.util.List;
 
-/**
- * Created by druzhyni on 05.07.2015.
- */
 public class DataRetainFragment extends Fragment {
 
     // data object we want to retain
@@ -17,30 +14,10 @@ public class DataRetainFragment extends Fragment {
     private boolean hardMode;
     private boolean tickerON;
     private int counter;
-    private boolean firstLaunch = true;
     private String currFragTag;
-    private boolean doVibrate;
+    MyApp.OnTickListener listener;
 
-    public boolean isDoVibrate() {
-        return doVibrate;
-    }
-
-    public void setDoVibrate(boolean doVibrate) {
-        this.doVibrate = doVibrate;
-    }
-
-    public boolean isFirstLaunch() {
-        return firstLaunch;
-    }
-
-    public void setFirstLaunch(boolean firstLaunch) {
-        this.firstLaunch = firstLaunch;
-    }
-
-    public String getCurrFragTag() {
-
-        return currFragTag;
-    }
+    public String getCurrFragTag() {       return currFragTag;    }
 
     public void setCurrFragTag(String currFragTag) {
         this.currFragTag = currFragTag;
@@ -62,8 +39,6 @@ public class DataRetainFragment extends Fragment {
         this.tickerON = tickerON;
     }
 
-    MyApp.OnTickListener listener;
-
     public MyApp.OnTickListener getListener() {
         return listener;
     }
@@ -76,20 +51,11 @@ public class DataRetainFragment extends Fragment {
         this.person = person;
     }
 
-    public Person getPerson() {
+    public Person getPerson() {        return person;    }
 
-        return person;
-    }
+    public void setGameFields(List<GameField> gameFields) {        this.gameFields = gameFields;    }
 
-    public void setGameFields(List<GameField> gameFields) {
-
-        this.gameFields = gameFields;
-    }
-
-    public List<GameField> getGameFields() {
-
-        return gameFields;
-    }
+    public List<GameField> getGameFields() {        return gameFields;    }
 
     public boolean getHardMode() {
         return hardMode;
