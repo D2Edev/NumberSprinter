@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/tEnterNewPlayer"
             android:id="@+id/tvNewPlayer"
+
             android:layout_gravity="center_horizontal" />
 
         <EditText
@@ -48,6 +49,7 @@
             android:hint="@string/tEnterYourName"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
+
             android:layout_marginTop="20dp" />
 
         <EditText
@@ -57,6 +59,7 @@
             android:ems="10"
             android:id="@+id/etPass"
             android:hint="@string/tEnterPassword"
+
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp" />
 
@@ -67,6 +70,7 @@
             android:ems="10"
             android:id="@+id/etPassCheck"
             android:hint="@string/tRetypePassword"
+
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp" />
 
@@ -75,6 +79,7 @@
             android:layout_height="wrap_content"
             android:text="@string/btnSignup"
             android:id="@+id/btSignup"
+            android:background="@drawable/button_design"
             android:layout_marginTop="10dp" />
     </LinearLayout>
 

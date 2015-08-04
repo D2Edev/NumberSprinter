@@ -1,9 +1,9 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,20 +13,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvNameInList"
         android:checked="false"
-        android:layout_gravity="center_vertical"
         android:textSize="20sp"
-         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/tvScoreInList"
-        android:layout_toLeftOf="@+id/tvScoreInList"  />
+        android:layout_weight="1" />
 
     <TextView
-        android:layout_width="70dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvScoreInList"
         android:checked="false"
         android:textSize="20sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_weight="3" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -96,15 +96,16 @@
         android:id="@+id/tvInstrGO"
         android:text="@string/tInstrGO"
         android:gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnNewGame"
+        android:background="@drawable/button_design"
         android:text="@string/btnNewGame" />
 
 </LinearLayout>

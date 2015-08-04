@@ -23,8 +23,7 @@
             android:id="@+id/ivLogo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/logo01"
-            android:layout_weight="3" />
+            android:src="@drawable/logo01" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,6 +38,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/button_design"
             android:text="@string/btnPlay" />
 
         <Button
@@ -46,6 +46,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:background="@drawable/button_design"
             android:text="@string/btnRules" />
 
         <Button
@@ -53,6 +54,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:background="@drawable/button_design"
             android:text="@string/btnResults" />
 
     </LinearLayout>

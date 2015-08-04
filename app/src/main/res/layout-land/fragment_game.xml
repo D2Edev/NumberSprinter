@@ -38,6 +38,7 @@
             android:id="@+id/tvElapsedTime"
             android:gravity="center"
             android:layout_margin="15dp"
+            android:background="@drawable/timefield_design"
             android:layout_gravity="center_horizontal"
             style="@style/Mega" />
 

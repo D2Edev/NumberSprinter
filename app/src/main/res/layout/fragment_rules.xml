@@ -35,7 +35,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/tRules"
             android:id="@+id/tvRules"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
+
             android:gravity="center" />
     </LinearLayout>
 

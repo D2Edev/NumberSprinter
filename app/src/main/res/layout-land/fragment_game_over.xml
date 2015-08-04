@@ -117,6 +117,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btnNewGame"
             android:text="@string/btnNewGame"
+            android:background="@drawable/button_design"
             android:layout_margin="10dp" />
 
     </LinearLayout>

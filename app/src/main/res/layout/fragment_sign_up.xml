@@ -73,6 +73,7 @@
             android:layout_height="wrap_content"
             android:text="@string/btnSignup"
             android:id="@+id/btSignup"
+            android:background="@drawable/button_design"
             android:layout_marginTop="10dp" />
     </LinearLayout>
 

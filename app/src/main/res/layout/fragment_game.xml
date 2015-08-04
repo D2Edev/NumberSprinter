@@ -37,9 +37,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+
             android:id="@+id/tvElapsedTime"
             android:gravity="center"
+            android:background="@drawable/timefield_design"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"

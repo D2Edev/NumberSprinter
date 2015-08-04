@@ -84,7 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tOK"
-            android:id="@+id/btnPlayerOK" />
+            android:background="@drawable/button_design"
+            android:id="@+id/btnPlayerOK"
+            android:layout_marginRight="10dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -92,6 +94,7 @@
             android:text="@string/btnNewPlr"
             android:id="@+id/btnPlayerNew"
             android:clickable="false"
+            android:background="@drawable/button_design"
             android:elegantTextHeight="false"
             android:enabled="true" />
 

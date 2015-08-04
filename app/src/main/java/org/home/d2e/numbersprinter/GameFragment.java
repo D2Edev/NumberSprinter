@@ -82,7 +82,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated");
         vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-              //call fragment keeping data
+        //call fragment keeping data
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
 
 
@@ -98,7 +98,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         gameFields = getGameFields();
-        gfAdapter=new GameFieldAdapter(view.getContext(), gameFields);
+        gfAdapter = new GameFieldAdapter(view.getContext(), gameFields);
         gvGameField.setAdapter(gfAdapter);
         //set listener on gridview
         gvGameField.setOnItemClickListener(this);
@@ -149,7 +149,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     @Override
     public void onPause() {
-        super.onPause();
+
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(tickReceiver);
         this.getActivity().unbindService(connection);
         dataRetainFragment.setTickerON(isTickerON);
@@ -161,6 +161,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         dataRetainFragment.setPerson(person);
         //release listener
         ((MainActivity) getActivity()).setOnBackPressedListener(null);
+        super.onPause();
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -183,7 +184,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         Log.d(TAG, "backIsPressed");
         //stop Chrono
         tickerService.stopTick();
-         //set flag tick is stopped
+        //set flag tick is stopped
         isTickerON = false;
         //clear game fields data
         gameFields = null;
@@ -294,12 +295,15 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         @Override
         public void onReceive(Context context, Intent intent) {
             counterG = intent.getIntExtra("counter", 1);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    tvElapsedTime.setText(timeNumToText(counterG));
-                }
-            });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tvElapsedTime.setText(timeNumToText(counterG));
+                    }
+                });
+            }
+
 
         }
     };
