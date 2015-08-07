@@ -49,7 +49,7 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
         ivLogo.setOnClickListener(RulesFragment.this);
         tvRules.setOnClickListener(RulesFragment.this);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){
+        if (dataRetainFragment != null) {
             dataRetainFragment.setCurrFragTag(MainActivity.RULES_FRAGMENT_TAG);
         }
     }
@@ -69,19 +69,22 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        dbHelper = new DBHelper(getActivity());
-        switch (v.getId()) {
-            case R.id.ivLogo:
-                db = dbHelper.getWritableDatabase();
-                db.execSQL("DELETE FROM " + UserTable.TABLE);
-                db.close();
-                Toast.makeText(getActivity(), "Records deleted!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.tvRules:
-                dbStub();
-                Toast.makeText(getActivity(), "Stub generated!", Toast.LENGTH_SHORT).show();
-                break;
+        if (BuildConfig.DEBUG) {
+            switch (v.getId()) {
+
+                case R.id.ivLogo:
+                    db = dbHelper.getWritableDatabase();
+                    db.execSQL("DELETE FROM " + UserTable.TABLE);
+                    db.close();
+                    Toast.makeText(getActivity(), "Records deleted!", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.tvRules:
+                    dbStub();
+                    Toast.makeText(getActivity(), "Stub generated!", Toast.LENGTH_SHORT).show();
+                    break;
+            }
         }
+
     }
 
     private void dbStub() {

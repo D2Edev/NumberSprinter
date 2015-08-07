@@ -42,18 +42,16 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private GridView gvGameField;
     private List<GameField> gameFields;
     private GameField gameField;
-    private int clr_r;
-    private int clr_g;
-    private int clr_b;
-    private int clr_r1;
-    private int clr_g1;
-    private int clr_b1;
     private DataRetainFragment dataRetainFragment;
     private Person person;
     private TextView tvPlayer;
     private TextView tvElapsedTime;
     private int counterG;
     private int fieldCounter;
+    private final int BLACK=0;
+    private final int WHITE=1;
+    private final int RANDOM=2;
+
     OnFragmentListener onFragmentListener;
     TickerService tickerService;
     boolean isBound;
@@ -134,7 +132,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         if (dataRetainFragment.getCounter() > 1) {
             fieldCounter = dataRetainFragment.getCounter();
         }
-
+//extract current person
         if (dataRetainFragment != null) {
             person = dataRetainFragment.getPerson();
             tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
@@ -182,7 +180,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     @Override
     public void backIsPressed() {
         Log.d(TAG, "backIsPressed");
-        //stop Chrono
+        //stop tick
         tickerService.stopTick();
         //set flag tick is stopped
         isTickerON = false;
@@ -240,28 +238,22 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
 
     private List<GameField> getGameFields() {
-        //restore GameField from DataRetainFragment if exists
+        
 
         List<GameField> tempGFs = new ArrayList<>();
-
+        //restore GameField from DataRetainFragment if exists
         if (dataRetainFragment == null) {
 
         } else {
             if (dataRetainFragment.getGameFields() == null) {
                 if (dataRetainFragment.getHardMode()) {
+                    //generate random colored fields
                     for (int i = 1; i < 26; i++) {
-                        clr_r = (int) (Math.random() * 235 + 20);
-                        clr_g = (int) (Math.random() * 235 + 20);
-                        clr_b = (int) (Math.random() * 235 + 20);
-                        clr_r1 = (int) (Math.random() * 235 + 20);
-                        clr_g1 = (int) (Math.random() * 235 + 20);
-                        clr_b1 = (int) (Math.random() * 235 + 20);
-                        Log.d(TAG, "" + clr_r + " " + clr_g + " " + clr_b + " " + Integer.toHexString(Color.rgb(clr_r, clr_g, clr_b)));
-                        tempGFs.add(new GameField(i, Color.rgb(clr_r, clr_g, clr_b), Color.rgb(clr_r1, clr_g1, clr_b1)));
+                        tempGFs.add(new GameField(i, generateRGB(RANDOM), generateRGB(RANDOM)));
                     }
                 } else {
                     for (int i = 1; i < 26; i++) {
-                        tempGFs.add(new GameField(i, Color.rgb(255, 255, 255), Color.rgb(0, 0, 0)));
+                        tempGFs.add(new GameField(i, generateRGB(WHITE), generateRGB(BLACK)));
                     }
                 }
 
@@ -323,5 +315,24 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             vibrator.vibrate(PrefKeys.VIB_LENGTH);
         }
 
+    }
+
+    private int generateRGB(int which){
+        int colour;
+        switch (which){
+            case BLACK:
+                colour=Color.rgb(0, 0, 0);
+                break;
+            case WHITE:
+                colour=Color.rgb(255, 255, 255);
+                break;
+            case RANDOM:
+                colour=Color.rgb((int) (Math.random() * 235 + 20),(int) (Math.random() * 235 + 20),(int) (Math.random() * 235 + 20));
+                break;
+            default:
+                colour=Color.rgb(0, 0, 0);
+                break;
+        }
+        return  colour;
     }
 }

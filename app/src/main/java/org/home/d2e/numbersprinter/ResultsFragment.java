@@ -49,6 +49,7 @@ public class ResultsFragment extends Fragment {
             // attach listview to adapter
             lvAchievers.setAdapter(userCursorAdapter);
             //setting onFragmentListener on item in listview
+           /***
             lvAchievers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -60,7 +61,7 @@ public class ResultsFragment extends Fragment {
 
                 }
             });
-
+            */
         }
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if(dataRetainFragment!=null){

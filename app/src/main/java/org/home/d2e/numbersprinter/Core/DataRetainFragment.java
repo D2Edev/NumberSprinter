@@ -15,7 +15,6 @@ public class DataRetainFragment extends Fragment {
     private boolean tickerON;
     private int counter;
     private String currFragTag;
-    MyApp.OnTickListener listener;
 
     public String getCurrFragTag() {       return currFragTag;    }
 
@@ -37,14 +36,6 @@ public class DataRetainFragment extends Fragment {
 
     public void setTickerON(boolean tickerON) {
         this.tickerON = tickerON;
-    }
-
-    public MyApp.OnTickListener getListener() {
-        return listener;
-    }
-
-    public void setListener(MyApp.OnTickListener listener) {
-        this.listener = listener;
     }
 
     public void setPerson(Person person) {
