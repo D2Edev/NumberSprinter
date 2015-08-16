@@ -47,29 +47,17 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvSelectedPlayer"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/etPass"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/tEnterPassword"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:textSize="12sp"
-            android:textIsSelectable="false"
-            android:layout_marginTop="5dp" />
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tHardMode"
             android:id="@+id/cbHard"
-            android:layout_gravity="center_horizontal"
-            android:checked="false" />
+            android:checked="false"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 
     <LinearLayout

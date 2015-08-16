@@ -38,7 +38,6 @@ import org.home.d2e.numbersprinter.adapter.UserCursorAdapter;
 public class LoginFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "TAG_LogintFragment_";
     private ListView lvPlayers;
-    private EditText etPass;
     private Button btnOK;
     private Button btnNew;
     private TextView tvSelectedPlayer;
@@ -60,18 +59,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       // Log.d(TAG, "onViewCreated");
-            vibrator= (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+        // Log.d(TAG, "onViewCreated");
+        vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnOK.setEnabled(false);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
         btnOK.setOnClickListener(LoginFragment.this);
         btnNew.setOnClickListener(LoginFragment.this);
-        etPass = (EditText) view.findViewById(R.id.etPass);
         tvSelectedPlayer = (TextView) view.findViewById(R.id.tvSelectedPlayer);
         cbHard = (CheckBox) view.findViewById(R.id.cbHard);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){
+        if (dataRetainFragment != null) {
             cbHard.setChecked(dataRetainFragment.getHardMode());
             dataRetainFragment.setCurrFragTag(MainActivity.LOGIN_FRAGMENT_TAG);
         }
@@ -96,7 +94,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
                     //on click - getting info from cursor
                     Cursor cursor = (Cursor) lvPlayers.getItemAtPosition(position);
                     person.setName(cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
-                    person.setPassword(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.PASSWORD)));
                     person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
                     person.setScoreMax(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX)));
                     person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
@@ -116,14 +113,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
         switch (v.getId()) {
 
             case R.id.btnPlayerOK:
-                if (passOK(v, person)) {
-
-                    retainUserData();
-                    listener.startGameFragment();
-                }
+                retainUserData();
+                listener.startGameFragment();
                 break;
             case R.id.btnPlayerNew:
-
                 listener.startSignUpFragment();
                 break;
         }
@@ -147,7 +140,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-       // Log.d(TAG, "onAttach");
+        // Log.d(TAG, "onAttach");
         if (activity instanceof OnFragmentListener) {
             listener = (OnFragmentListener) activity;
 
@@ -160,7 +153,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onStop() {
         super.onStop();
-        etPass.setText("");
         db.close();
     }
 
@@ -169,41 +161,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
         super.onDetach();
     }
 
-    private boolean passOK(View v, Person person) {
-        this.person = person;
-        boolean passOK = false;
-
-        Editable pass = etPass.getText();
-        //Log.d(TAG, "" + person.getPassword() + " " + String.valueOf(pass).hashCode());
-        if (person.getPassword() != String.valueOf(pass).hashCode()) {
-            Toast.makeText(v.getContext(), getString(R.string.tPassWrong), Toast.LENGTH_SHORT).show();
-            //etPass.setError("Error!");
-        } else {
-            //Toast.makeText(v.getContext(), getString(R.string.tLoginOK), Toast.LENGTH_SHORT).show();
-            passOK = true;
-
-        }
-        return passOK;
-    }
-
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-dataRetainFragment.setHardMode(isChecked);
+        dataRetainFragment.setHardMode(isChecked);
     }
 
-    private boolean isVibraEnabled(){
+    private boolean isVibraEnabled() {
 
         //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
-        boolean enb=PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
-        return  enb;
+        boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
+        return enb;
 
     }
 
-private void doVibrate(boolean doVibrate){
-    if(doVibrate){
-        vibrator.vibrate(PrefKeys.VIB_LENGTH);
+    private void doVibrate(boolean doVibrate) {
+        if (doVibrate) {
+            vibrator.vibrate(PrefKeys.VIB_LENGTH);
+        }
     }
-}
 }
 

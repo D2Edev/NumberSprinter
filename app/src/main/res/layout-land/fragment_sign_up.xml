@@ -52,28 +52,6 @@
 
             android:layout_marginTop="20dp" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/etPass"
-            android:hint="@string/tEnterPassword"
-
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/etPassCheck"
-            android:hint="@string/tRetypePassword"
-
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp" />
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -4,9 +4,6 @@
 
     <string name="wtf">WTF??????</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_result_list">Hall of Fame</string>
-    <string name="title_activity_player">Select Player!</string>
-    <string name="title_activity_new_player">Enter new player!</string>
     <string name="tWelcome">Welcome to the GAME!</string>
     <string name="tRules">Rules are simple: You\'ll get numbers from 1 to 25 located randomly in 5x5 matrix. Your target is to to select them in acsending order. Upon completion your time is fixed. The one with smallest time is the winner!!! (Hard level: numbers and background will be ramdomly coloured as well). Good luck!</string>
     <string name="btnPlay">Play</string>
@@ -28,19 +25,14 @@
     <string name="tGamesPlayed">Total games played: </string>
     <string name="tAverageScore">Average score: </string>
     <string name="btnNewPlr">New</string>
-    <string name="title_activity_game">Number Sprinter</string>
     <string name="tDefaultPlayer">Default Player</string>
-    <string name="title_activity_game_end">Round Result</string>
-    <string name="btnNewGame">New Game</string>
-    <string name="btnGoMainScreen">Main Menu</string>
-    <string name="btnStop">STOP</string>
-    <string name="btnRules">Rules</string>
+    <string name="btnNewGame">New game</string>
+    <string name="btnStop">Stop</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="tLetsStart">Let\'s start!</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tLogin">Login</string>
     <string name="tEnterYourName">Enter your NAME</string>
     <string name="tPlsSelectPlayer">Pls select player from list and press OK or press NEW to enter new one. You\'ll be asked for password</string>
@@ -48,7 +40,7 @@
     <string name="tEnterPassword">Enter PASSWORD</string>
     <string name="tRetypePassword">Retype PASSWORD</string>
     <string name="tError">Error!</string>
-    <string name="btnSignup">SIGN UP</string>
+    <string name="btnSignup">Sign up</string>
     <string name="tHardMode">Play hard mode</string>
     <string name="tPassMisMatch">Passwords doesn\'t match!</string>
     <string name="tPassWrong">Wrong password. Please try again.</string>
@@ -60,19 +52,21 @@
     <string name="tTotalScore">Total score is: </string>
     <string name="tDubbedUser">User with this name already exists!</string>
     <string name="tCantChangeSettings">Can\'t change settings during the game!</string>
-    <string name="VIBRATE">vbr</string>
+    <string name="VIBRATE" translatable="false">vbr</string>
     <string name="sVIBRATE">Should device vibrate at key game events</string>
     <string name="tVIBRATE">Vibrate</string>
-    <string name="HARD_MODE">h_mode</string>
+    <string name="HARD_MODE" translatable="false">h_mode</string>
     <string name="sHARD_MODE">Makes gaming harder</string>
     <string name="tHARD_MODE">HARD mode</string>
 
-    <string name="CLR_NUMS">cnums</string>
+    <string name="CLR_NUMS" translatable="false">cnums</string>
     <string name="sCLR_NUMS">Numbers will be randomly coloured</string>
     <string name="tCLR_NUMS">Random NUMBER colors</string>
-    <string name="CLR_FLDS">cfields</string>
+    <string name="CLR_FLDS" translatable="false">cfields</string>
     <string name="sCLR_FLDS">Fields will be randomly coloured</string>
     <string name="tCLR_FLDS">Random FIELD colors</string>
+    <string name="btnGoMainScreen">Main</string>
+    <string name="btnRules">Rules</string>
 
 
 </resources>

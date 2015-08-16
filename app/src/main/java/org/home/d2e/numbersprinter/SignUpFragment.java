@@ -34,8 +34,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     OnFragmentListener listener;
     private Button btSignUp;
     private EditText etName;
-    private EditText etPassCheck;
-    private EditText etPass;
     private String[] names;
     private Cursor cursor;
     private DBHelper dbHelper;
@@ -56,8 +54,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         btSignUp = (Button) view.findViewById(R.id.btSignup);
         etName = (EditText) view.findViewById(R.id.etName);
-        etPass = (EditText) view.findViewById(R.id.etPass);
-        etPassCheck = (EditText) view.findViewById(R.id.etPassCheck);
         btSignUp.setOnClickListener(SignUpFragment.this);
         dbHelper = new DBHelper(getActivity());
         db = dbHelper.getReadableDatabase();
@@ -95,33 +91,14 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private void validateCredentials(View v) {
         Editable name = etName.getText();
-        Editable pass = etPass.getText();
-        Editable passCheck = etPassCheck.getText();
+
 
         if (TextUtils.isEmpty(name)) {
 
             Toast.makeText(v.getContext(), getString(R.string.tEmptyName), Toast.LENGTH_SHORT).show();
             etName.setError(getString(R.string.tError));
 
-        } else if (TextUtils.isEmpty(pass)) {
-
-            Toast.makeText(v.getContext(), getString(R.string.tEmptyPass), Toast.LENGTH_SHORT).show();
-            etPass.setError(getString(R.string.tError));
-
-        } else if (pass.length() < 6) {
-
-            Toast.makeText(v.getContext(), getString(R.string.tShortPass), Toast.LENGTH_SHORT).show();
-            etPass.setError(getString(R.string.tError));
-
-        } else if (TextUtils.isEmpty(passCheck)) {
-
-            Toast.makeText(v.getContext(), getString(R.string.tPlsRetypePass), Toast.LENGTH_SHORT).show();
-            etPassCheck.setError(getString(R.string.tError));
-
-        } else if (String.valueOf(etPass.getText()).hashCode() != String.valueOf(etPassCheck.getText()).hashCode()) {
-            Toast.makeText(v.getContext(), getString(R.string.tPassMisMatch), Toast.LENGTH_SHORT).show();
-            etPassCheck.setError(getString(R.string.tError));
-        } else if (isNameDubbed(name)) {
+        }  else if (isNameDubbed(name)) {
             Toast.makeText(getActivity(), getString(R.string.tDubbedUser), Toast.LENGTH_SHORT).show();
 
         } else {
@@ -140,7 +117,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(UserTable.Columns.NAME, String.valueOf(etName.getText()));
-        cv.put(UserTable.Columns.PASSWORD, String.valueOf(etPass.getText()).hashCode());
         cv.put(UserTable.Columns.SCORE_TOTAL, 0);
         cv.put(UserTable.Columns.SCORE_MAX, 0);
         cv.put(UserTable.Columns.GAMES_PLAYED, 0);

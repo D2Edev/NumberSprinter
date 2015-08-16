@@ -73,6 +73,7 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
             switch (v.getId()) {
 
                 case R.id.ivLogo:
+                    dbHelper = new DBHelper(getActivity());
                     db = dbHelper.getWritableDatabase();
                     db.execSQL("DELETE FROM " + UserTable.TABLE);
                     db.close();

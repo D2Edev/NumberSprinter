@@ -30,6 +30,7 @@ import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentListener {
+    //no passwd version
     private final String TAG = "TAG_MainActivity ";
     private DataRetainFragment dataRetainFragment;
     private FragmentManager manager;
