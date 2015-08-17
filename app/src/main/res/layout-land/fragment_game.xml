@@ -55,9 +55,7 @@
             android:layout_height="match_parent"
             android:id="@+id/gvGameField"
             android:gravity="center"
-            android:orientation="vertical"
-            android:numColumns="5"
-            android:layout_margin="10dp" />
+            android:orientation="vertical" />
     </LinearLayout>
 
 </LinearLayout>

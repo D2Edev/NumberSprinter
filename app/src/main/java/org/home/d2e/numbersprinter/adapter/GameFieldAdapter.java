@@ -1,5 +1,6 @@
 package org.home.d2e.numbersprinter.adapter;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.home.d2e.numbersprinter.Core.GameField;
@@ -24,15 +26,17 @@ public class GameFieldAdapter extends BaseAdapter {
     private Context context;
     private GameField gameField;
     private GradientDrawable drawable;
+    private int unitSize;
 
 
     private String TAG = "TAG_MyFieldAdapter_";
 
 
-    public GameFieldAdapter(Context context, @NonNull List<GameField> gameFields){
-        this.context=context;
-        this.gameFields=gameFields;
-        this.inflater=LayoutInflater.from(context);
+    public GameFieldAdapter(Context context, @NonNull List<GameField> gameFields, int unitSize) {
+        this.context = context;
+        this.gameFields = gameFields;
+        this.inflater = LayoutInflater.from(context);
+        this.unitSize = unitSize;
     }
 
 
@@ -56,24 +60,29 @@ public class GameFieldAdapter extends BaseAdapter {
         View view = convertView;
         ViewHolder holder = new ViewHolder();
 
-        if (view==null){
-            view=inflater.inflate(R.layout.item_grid_element,null, false);
+        if (view == null) {
+            view = inflater.inflate(R.layout.item_grid_element, null, false);
             holder.tvGameField = (TextView) view.findViewById(R.id.tvField);
+            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            llp.setMargins(unitSize, unitSize*2, unitSize, unitSize*2);
+            holder.tvGameField.setLayoutParams(llp);
+            holder.tvGameField.setTextSize(unitSize*3);
+
             view.setTag(holder);
-        }else{
-            holder= (ViewHolder) view.getTag();
+        } else {
+            holder = (ViewHolder) view.getTag();
         }
         gameField = (GameField) getItem(position);
         holder.tvGameField.setBackgroundResource(R.drawable.gamefield_design);
         holder.tvGameField.setText(Integer.toString(gameField.getFieldNumber()));
         holder.tvGameField.setTextColor(gameField.getFieldTextColor());
-        drawable= (GradientDrawable) holder.tvGameField.getBackground();
+        drawable = (GradientDrawable) holder.tvGameField.getBackground();
         drawable.setColor(gameField.getFieldColor());
 
         return view;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView tvGameField;
     }
 }

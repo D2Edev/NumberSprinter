@@ -53,6 +53,7 @@
     <string name="tDubbedUser">User with this name already exists!</string>
     <string name="tCantChangeSettings">Can\'t change settings during the game!</string>
     <string name="VIBRATE" translatable="false">vbr</string>
+    <string name="MATRIX_SIZE" translatable="false">mxsize</string>
     <string name="sVIBRATE">Should device vibrate at key game events</string>
     <string name="tVIBRATE">Vibrate</string>
     <string name="HARD_MODE" translatable="false">h_mode</string>

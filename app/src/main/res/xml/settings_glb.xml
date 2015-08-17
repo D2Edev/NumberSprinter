@@ -5,5 +5,12 @@
         android:key="@string/VIBRATE"
         android:summary="@string/sVIBRATE"
         android:title="@string/tVIBRATE" />
+    <ListPreference
+        android:key="@string/MATRIX_SIZE"
+        android:defaultValue="5"
+        android:title="Complexity"
+        android:summary="Define game field size"
+        android:entries="@array/listEntries"
+        android:entryValues="@array/listValues" />
 
 </PreferenceScreen>

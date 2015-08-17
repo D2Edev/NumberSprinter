@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         //hideActBarInLandscape();
         startRetainFragment();
         firstStart();
+        displayMetrics();
 
 
     }
@@ -293,6 +295,18 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(PrefKeys.VIB_LENGTH);
         }
+
+    }
+
+    private void displayMetrics(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d(TAG, "height " + metrics.heightPixels);
+        Log.d(TAG, "width " + metrics.widthPixels);
+        Log.d(TAG, "xdpi " + metrics.xdpi);
+        Log.d(TAG, "ydpi " + metrics.ydpi);
+        Log.d(TAG, "density " + metrics.density);
+        Log.d(TAG,"densityDpi " + metrics.densityDpi);
 
     }
 }

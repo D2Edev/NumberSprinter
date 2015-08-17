@@ -15,6 +15,15 @@ public class DataRetainFragment extends Fragment {
     private boolean tickerON;
     private int counter;
     private String currFragTag;
+    private int gridSizePx;
+
+    public int getGridSizePx() {
+        return gridSizePx;
+    }
+
+    public void setGridSizePx(int gridSizePx) {
+        this.gridSizePx = gridSizePx;
+    }
 
     public String getCurrFragTag() {       return currFragTag;    }
 

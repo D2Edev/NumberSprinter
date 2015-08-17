@@ -9,6 +9,7 @@ public class PrefKeys {
     public static final String HARD_MODE="h_mode";
     public static final String CLR_MUMS="cnums";
     public static final String CLR_FLDS="cfields";
+    public static final String MATRIX_SIZE="mxsize";
     public static final long VIB_LENGTH=100;
 
 }

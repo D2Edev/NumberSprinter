@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listEntries">
+        <item>Matrix 2x2</item>
+        <item>Matrix 3x3</item>
+        <item>Matrix 4x4</item>
+        <item>Matrix 5x5</item>
+        <item>Matrix 6x6</item>
+        <item>Matrix 7x7</item>
+
+    </string-array>
+
+    <string-array name="listValues">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+</resources>

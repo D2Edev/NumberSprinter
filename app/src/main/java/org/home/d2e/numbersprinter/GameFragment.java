@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,9 +49,11 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private TextView tvElapsedTime;
     private int counterG;
     private int fieldCounter;
-    private final int BLACK=0;
-    private final int WHITE=1;
-    private final int RANDOM=2;
+    private final int BLACK = 0;
+    private final int WHITE = 1;
+    private final int RANDOM = 2;
+    private int mxSize;
+    private int unitSize;
 
     OnFragmentListener onFragmentListener;
     TickerService tickerService;
@@ -95,8 +98,11 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
+        mxSize = getMatrixSize();
+        gvGameField.setNumColumns(mxSize);
         gameFields = getGameFields();
-        gfAdapter = new GameFieldAdapter(view.getContext(), gameFields);
+        unitSize = activeDPWidth() / (3 * (4 * mxSize + 1));
+        gfAdapter = new GameFieldAdapter(view.getContext(), gameFields, unitSize);
         gvGameField.setAdapter(gfAdapter);
         //set listener on gridview
         gvGameField.setOnItemClickListener(this);
@@ -212,7 +218,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             gfAdapter.notifyDataSetChanged();
             doVibrate(isVibraEnabled());
             //if the field is last
-            if (fieldCounter == 25) {
+            if (fieldCounter == mxSize*mxSize) {
                 //send STOP to chrono
                 tickerService.stopTick();
                 //set flag ticker is stopped
@@ -238,7 +244,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
 
     private List<GameField> getGameFields() {
-        
+
 
         List<GameField> tempGFs = new ArrayList<>();
         //restore GameField from DataRetainFragment if exists
@@ -248,11 +254,11 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             if (dataRetainFragment.getGameFields() == null) {
                 if (dataRetainFragment.getHardMode()) {
                     //generate random colored fields
-                    for (int i = 1; i < 26; i++) {
+                    for (int i = 1; i < mxSize*mxSize + 1; i++) {
                         tempGFs.add(new GameField(i, generateRGB(RANDOM), generateRGB(RANDOM)));
                     }
                 } else {
-                    for (int i = 1; i < 26; i++) {
+                    for (int i = 1; i < mxSize*mxSize + 1; i++) {
                         tempGFs.add(new GameField(i, generateRGB(WHITE), generateRGB(BLACK)));
                     }
                 }
@@ -309,6 +315,11 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     }
 
+    private int getMatrixSize() {
+        int msize = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(PrefKeys.MATRIX_SIZE, "5"));
+        return msize;
+    }
+
     private void doVibrate(boolean doVibrate) {
         if (doVibrate) {
             Log.d(TAG, "vibra_called");
@@ -317,22 +328,33 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     }
 
-    private int generateRGB(int which){
+    private int activeDPWidth() {
+        int activeWidth;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        activeWidth = metrics.heightPixels;
+        if (activeWidth > metrics.widthPixels) {
+            activeWidth = metrics.widthPixels;
+        }
+        return activeWidth;
+    }
+
+    private int generateRGB(int which) {
         int colour;
-        switch (which){
+        switch (which) {
             case BLACK:
-                colour=Color.rgb(0, 0, 0);
+                colour = Color.rgb(0, 0, 0);
                 break;
             case WHITE:
-                colour=Color.rgb(255, 255, 255);
+                colour = Color.rgb(255, 255, 255);
                 break;
             case RANDOM:
-                colour=Color.rgb((int) (Math.random() * 235 + 20),(int) (Math.random() * 235 + 20),(int) (Math.random() * 235 + 20));
+                colour = Color.rgb((int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20));
                 break;
             default:
-                colour=Color.rgb(0, 0, 0);
+                colour = Color.rgb(0, 0, 0);
                 break;
         }
-        return  colour;
+        return colour;
     }
 }
