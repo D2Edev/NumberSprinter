@@ -6,7 +6,7 @@ package org.home.d2e.numbersprinter.Core;
 public class Person {
 
     private String name;
-    private int password;
+    private int roundTime;
     private int scoreMax;
     private int scoreTotal;
     private int gamesPlayed;
@@ -19,8 +19,8 @@ public class Person {
         this.name = name;
     }
 
-    public void setPassword(int password) {
-        this.password = password;
+    public void setRoundTime(int roundTime) {
+        this.roundTime = roundTime;
     }
 
     public void setScoreMax(int scoreMax) {
@@ -38,7 +38,7 @@ public class Person {
     public Person(String name) {
 
         this.name = name;
-        this.password=0;
+        this.roundTime =0;
         this.scoreMax =0;
         this.scoreTotal=0;
         this.gamesPlayed=0;
@@ -51,16 +51,16 @@ public class Person {
 
     }
 
-    public Person(String name, int password, int scoreMax, int scoreTotal, int gamesPlayed) {
+    public Person(String name, int roundTime, int scoreMax, int scoreTotal, int gamesPlayed) {
         this.name = name;
-        this.password = password;
+        this.roundTime = roundTime;
         this.scoreMax = scoreMax;
         this.scoreTotal = scoreTotal;
         this.gamesPlayed = gamesPlayed;
     }
 
-    public int getPassword() {
-        return password;
+    public int getRoundTime() {
+        return roundTime;
     }
 
     public int getScoreMax() {

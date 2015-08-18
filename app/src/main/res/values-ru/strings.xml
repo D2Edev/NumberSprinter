@@ -37,7 +37,7 @@
     <string name="tLogin">Вход</string>
     <string name="tLoginOK">Вход выполнен!</string>
     <string name="tNewName">Ввод имени</string>
-    <string name="tNoRecords">Извините, нет записей!</string>
+    <string name="tNoRecords">Извините, пока результатов нет!</string>
     <string name="tPassMisMatch">Пароли не соападают!</string>
     <string name="tPassWrong">Неправильный пароль. Повторите ввод, пожалуйста!</string>
     <string name="tPasss">Ввод пароля</string>
@@ -46,7 +46,7 @@
     <string name="tPrsNewToEnterNew">(нажмите Новый Игрок для ввода нового)</string>
     <string name="tRetypePassword">Повтор пароля</string>
     <string name="tRoundOver">Раунд закончен!</string>
-    <string name="tRules">Правила просты: В матрице 5x5 случайным образом расположены числа от 1 до 25. Ваша цель - выбрать их в порядке возрастания. По окончании время фиксируется. Игрок с минимальным временем побеждает!!! (Повышенная сложность: цифры и фон раскрашены случайным образом). Удачи!</string>
+    <string name="tRules">Правила просты: В матрице NxN случайным образом расположены числа от 1 до N^2. Ваша цель - выбрать их в порядке возрастания. По окончании время фиксируется. Игрок с минимальным временем побеждает!!! (Повышенная сложность: цифры и фон раскрашены случайным образом). Удачи!</string>
     <string name="tScore">Счет раунда:</string>
     <string name="tScoreRecord">Ваш новый рекорд!!!! Счет раунда:</string>
     <string name="tSelectPlayer">Выберите игрока</string>
@@ -57,4 +57,12 @@
     <string name="tWelcome">Добро пожаловать в игру!</string>
     <string name="tOK">ОК!</string>
     <string name="wtf">WTF??????</string>
+    <string name="tComplexity">Сложность</string>
+    <string name="tComplexityTitle">Все решает размер поля</string>
+    <string name="Matrix_2">Меняю подгузник (2x2)</string>
+    <string name="Matrix_3">Все еще дитя (3x3)</string>
+    <string name="Matrix_4">Расту (4x4)</string>
+    <string name="Matrix_5">По-взрослому (5x5)</string>
+    <string name="Matrix_6">Реально крут (6x6)</string>
+    <string name="Matrix_7">Гений или идиот :) (7x7)</string>
 </resources>

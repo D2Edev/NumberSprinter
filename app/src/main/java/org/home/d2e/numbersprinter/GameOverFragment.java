@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
     private Person person;
     private Cursor cursor;
     private DataRetainFragment dataRetainFragment;
-    private int max_score;
+    private int maxScore = 0;
     private TextView tvTotalScore;
     private TextView tvTime;
     private TextView tvScoreHeader;
@@ -73,13 +72,12 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         ((MainActivity) getActivity()).setOnBackPressedListener((OnBackPressedListener) this);
         super.onResume();
     }
+
     @Override
     public void onPause() {
         ((MainActivity) getActivity()).setOnBackPressedListener(null);
         super.onPause();
     }
-
-
 
 
     @Override
@@ -102,19 +100,12 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
             person = dataRetainFragment.getPerson();
             dataRetainFragment.setCurrFragTag(MainActivity.GAME_OVER_FRAGMENT_TAG);
             tvRoundOver.setText(person.getName() + ", " + getString(R.string.tRoundOver));
+            person.setScoreTotal(person.getScoreTotal()+person.getScoreMax());
             tvTotalScore.setText(getString(R.string.tTotalScore) + person.getScoreTotal());
-            if (dataRetainFragment.getHardMode()) {
-                tvTime.setText(getString(R.string.tElapsedTime) + timeNumToText(900 - person.getScoreMax()));
-            } else {
-                tvTime.setText(getString(R.string.tElapsedTime) + timeNumToText(600 - person.getScoreMax()));
-            }
-
-            tvScore.setText(Integer.toString(person.getScoreMax()));
-            tvTtlGamesPlayed.setText(getString(R.string.tGamesPlayed)+Integer.toString(person.getGamesPlayed()));
-            tvAvgScore.setText(getString(R.string.tAverageScore)+Float.toString(person.getScoreTotal()/person.getGamesPlayed()));
+            tvTime.setText(getString(R.string.tElapsedTime) + timeNumToText(person.getRoundTime()));
+            tvTtlGamesPlayed.setText(getString(R.string.tGamesPlayed) + Integer.toString(person.getGamesPlayed()));
+            tvAvgScore.setText(getString(R.string.tAverageScore) + Float.toString((float) (person.getScoreTotal() / person.getGamesPlayed())));
         }
-
-
 
         if (person != null) {
             dbHelper = new DBHelper(getActivity());
@@ -123,10 +114,12 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
 
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
-                max_score = cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX));
+                maxScore = cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX));
             }
-            if (max_score < person.getScoreMax()) {
-                max_score = person.getScoreMax();
+
+
+            if (maxScore < person.getScoreMax()) {
+                maxScore = person.getScoreMax();
                 tvScoreHeader.setText(getString(R.string.tScoreRecord));
             } else {
                 tvScoreHeader.setText(getString(R.string.tScore));
@@ -135,6 +128,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
             db.close();
 
         }
+        tvScore.setText(Integer.toString(person.getScoreMax()));
 
         if (dataRetainFragment != null) {
             dataRetainFragment.setPerson(person);
@@ -147,7 +141,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         //cv.put(UserTable.Columns.NAME, person.getName());
-        //cv.put(UserTable.Columns.PASSWORD, person.getPassword());
+        //cv.put(UserTable.Columns.PASSWORD, person.getRoundTime());
         cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
         cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
         cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
@@ -161,7 +155,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.btnNewGame:
                 doVibrate(isVibraEnabled());
-                person.setScoreMax(max_score);
+                person.setScoreMax(maxScore);
                 saveUserToDB();
                 listener.startGameFragment();
                 break;
@@ -201,7 +195,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void backIsPressed() {
-        person.setScoreMax(max_score);
+        person.setScoreMax(maxScore);
         saveUserToDB();
 
     }

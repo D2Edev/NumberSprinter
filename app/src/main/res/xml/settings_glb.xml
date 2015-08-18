@@ -8,8 +8,8 @@
     <ListPreference
         android:key="@string/MATRIX_SIZE"
         android:defaultValue="5"
-        android:title="Complexity"
-        android:summary="Define game field size"
+        android:title="@string/tComplexity"
+        android:summary="@string/tComplexityTitle"
         android:entries="@array/listEntries"
         android:entryValues="@array/listValues" />
 

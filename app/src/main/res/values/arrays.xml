@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="listEntries">
-        <item>Matrix 2x2</item>
-        <item>Matrix 3x3</item>
-        <item>Matrix 4x4</item>
-        <item>Matrix 5x5</item>
-        <item>Matrix 6x6</item>
-        <item>Matrix 7x7</item>
+        <item>@string/Matrix_2</item>
+        <item>@string/Matrix_3</item>
+        <item>@string/Matrix_4</item>
+        <item>@string/Matrix_5</item>
+        <item>@string/Matrix_6</item>
+        <item>@string/Matrix_7</item>
 
     </string-array>
 

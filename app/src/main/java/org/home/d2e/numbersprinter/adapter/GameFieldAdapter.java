@@ -64,9 +64,9 @@ public class GameFieldAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_grid_element, null, false);
             holder.tvGameField = (TextView) view.findViewById(R.id.tvField);
             LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            llp.setMargins(unitSize, unitSize*2, unitSize, unitSize*2);
+            llp.setMargins(unitSize, unitSize, unitSize, unitSize);
             holder.tvGameField.setLayoutParams(llp);
-            holder.tvGameField.setTextSize(unitSize*3);
+            holder.tvGameField.setTextSize((int)(unitSize*4.5));
 
             view.setTag(holder);
         } else {

@@ -1,13 +1,11 @@
 package org.home.d2e.numbersprinter;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -129,9 +127,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
 
         //defime max possible score for game based on complexity
-        maxScore = 600;
+        maxScore = (int) Math.pow(2,mxSize)*10;
         if (dataRetainFragment.getHardMode()) {
-            maxScore = 900;
+            maxScore = (int) (maxScore*1.5);
         }
         // check if previously counter was used
         fieldCounter = 1;
@@ -231,8 +229,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 //increase number of games played
                 person.setGamesPlayed(person.getGamesPlayed() + 1);
                 //update calculated scores for person
-                person.setScoreTotal(person.getScoreTotal() + maxScore - counterG);
-                person.setScoreMax(maxScore - counterG);
+                person.setScoreMax(calcRoundScore(maxScore, counterG));
+                person.setRoundTime(counterG);
                 //call GameOver fragment
                 onFragmentListener.startGameOverFragment();
                 return;
@@ -356,5 +354,16 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 break;
         }
         return colour;
+    }
+
+    private int calcRoundScore(int maxScore, int counterG){
+        int calcScore;
+        if(counterG>maxScore){
+            calcScore=0;
+        }else{
+            calcScore= (int) Math.sqrt(Math.pow(maxScore,2)-Math.pow(counterG,2));
+        }
+        return calcScore;
+
     }
 }
