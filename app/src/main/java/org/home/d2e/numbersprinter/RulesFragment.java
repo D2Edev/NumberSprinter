@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     DataRetainFragment dataRetainFragment;
+    private final static int SIZE_DIVIDER=20;
+
+    private int unitSize;
 
     public RulesFragment() {
         // Required empty public constructor
@@ -44,8 +48,11 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ivLogo = (ImageView) view.findViewById(R.id.ivLogo);
+        unitSize=((MainActivity)getActivity()).currSideLimit();
         tvRules = (TextView) view.findViewById(R.id.tvRules);
+        tvRules.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize/SIZE_DIVIDER);
+        ivLogo = (ImageView) view.findViewById(R.id.ivLogo);
+
         ivLogo.setOnClickListener(RulesFragment.this);
         tvRules.setOnClickListener(RulesFragment.this);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);

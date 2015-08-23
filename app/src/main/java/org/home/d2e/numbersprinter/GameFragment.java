@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;
@@ -15,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,11 +97,13 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         //init  controls
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
+
+        tvElapsedTime.setTextSize(((MainActivity)getActivity()).currSideLimit()/10);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         mxSize = getMatrixSize();
         gvGameField.setNumColumns(mxSize);
         gameFields = getGameFields();
-        unitSize = activeDPWidth() / (3 * (4 * mxSize + 1));
+        unitSize = ((MainActivity)getActivity()).currSideLimit() / (3 * (3 * mxSize + 1));
         gfAdapter = new GameFieldAdapter(view.getContext(), gameFields, unitSize);
         gvGameField.setAdapter(gfAdapter);
         //set listener on gridview
@@ -110,7 +114,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     public void onResume() {
 
         super.onResume();
-        //set interface from main activity - informing fragment in Back was pressed
+        //set interface from main activity - informing fragment Back was pressed
         ((MainActivity) getActivity()).setOnBackPressedListener(this);
         //will save data if fragment closed? default=true
         saveData = true;
@@ -326,18 +330,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     }
 
-    private int activeDPWidth() {
-        int activeWidth;
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        activeWidth = metrics.heightPixels;
-        if (activeWidth > metrics.widthPixels) {
-            activeWidth = metrics.widthPixels;
-        }
-        return activeWidth;
-    }
-
-    private int generateRGB(int which) {
+        private int generateRGB(int which) {
         int colour;
         switch (which) {
             case BLACK:

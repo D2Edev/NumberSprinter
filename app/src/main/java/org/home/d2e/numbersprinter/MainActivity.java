@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public static final String RETAIN_FRAGMENT_TAG = "RETAIN_FRAGMENT";
     public static final String PREF_FRAGMENT_TAG = "PREF_FRAGMENT";
     public static final String BACK_STACK_TAG = "BACK_STACK";
+
 
 
     OnBackPressedListener onBackPressedListener;
@@ -308,5 +311,35 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(TAG, "density " + metrics.density);
         Log.d(TAG,"densityDpi " + metrics.densityDpi);
 
+    }
+
+    public int currSideLimit() {
+        int sideLimit;
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        sideLimit = metrics.widthPixels;
+        if (sideLimit > metrics.heightPixels) {
+            sideLimit = metrics.heightPixels-getActionBarHeight();
+        }
+        //Log.d(TAG, " " + metrics.heightPixels + " "+ metrics.widthPixels);
+        Log.d(TAG, " " +sideLimit);
+        //Log.d(TAG, " " +getActionBarHeight());
+
+        return sideLimit;
+    }
+
+    private int getActionBarHeight() {
+        int actionBarHeight = 0;
+        TypedValue tv = new TypedValue();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv,
+                    true))
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(
+                        tv.data, getResources().getDisplayMetrics());
+        } else {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,
+                    getResources().getDisplayMetrics());
+        }
+        return actionBarHeight;
     }
 }

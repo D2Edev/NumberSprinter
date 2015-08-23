@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,15 +65,17 @@ public class GameFieldAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(R.layout.item_grid_element, null, false);
             holder.tvGameField = (TextView) view.findViewById(R.id.tvField);
-            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            llp.setMargins(unitSize, unitSize, unitSize, unitSize);
-            holder.tvGameField.setLayoutParams(llp);
-            holder.tvGameField.setTextSize((int)(unitSize*4.5));
-
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
+
+        Log.d(TAG, "getView "+ unitSize);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        llp.setMargins(unitSize, unitSize, unitSize, unitSize);
+        holder.tvGameField.setLayoutParams(llp);
+        holder.tvGameField.setTextSize(TypedValue.COMPLEX_UNIT_PX,(unitSize*4));
+        //
         gameField = (GameField) getItem(position);
         holder.tvGameField.setBackgroundResource(R.drawable.gamefield_design);
         holder.tvGameField.setText(Integer.toString(gameField.getFieldNumber()));

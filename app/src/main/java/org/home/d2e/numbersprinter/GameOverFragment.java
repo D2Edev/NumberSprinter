@@ -6,10 +6,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +48,9 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
     private TextView tvTtlGamesPlayed;
     private TextView tvRoundOver;
     private Button btnNewGame;
+    private final static int SIZE_DIVIDER=20;
+
+    private int unitSize;
     Vibrator vibrator;
     boolean doVibrate = false;
 
@@ -84,13 +91,21 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+        unitSize=((MainActivity)getActivity()).currSideLimit()/SIZE_DIVIDER;
         tvTotalScore = (TextView) view.findViewById(R.id.tvTotalScoreGO);
+        tvTotalScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         tvTime = (TextView) view.findViewById(R.id.tvTimeGO);
+        tvTime.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         tvScoreHeader = (TextView) view.findViewById(R.id.tvScoreHeaderGO);
+        tvScoreHeader.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         tvScore = (TextView) view.findViewById(R.id.tvScoreGO);
+        tvScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize*4);
         tvAvgScore = (TextView) view.findViewById(R.id.tvAverageScore);
+        tvAvgScore.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         tvTtlGamesPlayed = (TextView) view.findViewById(R.id.tvTtlGamesPlayed);
+        tvTtlGamesPlayed.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         tvRoundOver = (TextView) view.findViewById(R.id.tvRoundOverGO);
+        tvRoundOver.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         btnNewGame = (Button) view.findViewById(R.id.btnNewGame);
         btnNewGame.setOnClickListener(GameOverFragment.this);
 
@@ -199,4 +214,6 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         saveUserToDB();
 
     }
+
+
 }
