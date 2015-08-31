@@ -5,6 +5,11 @@
         android:key="@string/VIBRATE"
         android:summary="@string/sVIBRATE"
         android:title="@string/tVIBRATE" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/NIGHT_MODE"
+        android:summary="@string/sNGHT_MD"
+        android:title="@string/tNGHT_MD" />
     <ListPreference
         android:key="@string/MATRIX_SIZE"
         android:defaultValue="5"

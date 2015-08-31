@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/shadow_grey_20"
     tools:context="org.home.d2e.numbersprinter.GameOverFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -35,7 +34,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Mega"
         android:id="@+id/tvScoreGO"
         android:gravity="center"
         android:layout_marginLeft="10dp"

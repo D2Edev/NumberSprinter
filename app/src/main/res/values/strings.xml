@@ -76,6 +76,9 @@
     <string name="Matrix_7">Genius or Idiot :) (7x7)</string>
     <string name="tComplexity">Complexity</string>
     <string name="tComplexityTitle">Game field decides all</string>
+    <string name="NIGHT_MODE" translatable="false">nmode</string>
+    <string name="sNGHT_MD">Dark theme to play at night</string>
+    <string name="tNGHT_MD">Night Mode</string>
 
 
 </resources>

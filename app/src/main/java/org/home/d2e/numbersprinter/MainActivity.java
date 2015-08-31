@@ -29,10 +29,11 @@ import org.home.d2e.numbersprinter.Core.DBHelper;
 import org.home.d2e.numbersprinter.Core.DataRetainFragment;
 import org.home.d2e.numbersprinter.Core.OnBackPressedListener;
 import org.home.d2e.numbersprinter.Core.OnFragmentListener;
+import org.home.d2e.numbersprinter.Core.OnUIModeChangeListener;
 import org.home.d2e.numbersprinter.Core.PrefKeys;
 import org.home.d2e.numbersprinter.Core.UserTable;
 
-public class MainActivity extends AppCompatActivity implements OnFragmentListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentListener, OnUIModeChangeListener {
     //no passwd version
     private final String TAG = "TAG_MainActivity ";
     private DataRetainFragment dataRetainFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     private SQLiteDatabase db;
     private Cursor userListCursor;
     private Vibrator vibrator;
+    private int themeID;
 
     public static final String GAME_FRAGMENT_TAG = "GAME_FRAGMENT";
     public static final String GAME_OVER_FRAGMENT_TAG = "GAME_OVER_FRAGMENT";
@@ -54,12 +56,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     public static final String BACK_STACK_TAG = "BACK_STACK";
 
 
-
     OnBackPressedListener onBackPressedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUIMode();
         setContentView(R.layout.activity_main);
         //Log.d(TAG, "onCreate");
         manager = getFragmentManager();
@@ -301,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     }
 
-    private void displayMetrics(){
+    private void displayMetrics() {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         Log.d(TAG, "height " + metrics.heightPixels);
@@ -309,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         Log.d(TAG, "xdpi " + metrics.xdpi);
         Log.d(TAG, "ydpi " + metrics.ydpi);
         Log.d(TAG, "density " + metrics.density);
-        Log.d(TAG,"densityDpi " + metrics.densityDpi);
+        Log.d(TAG, "densityDpi " + metrics.densityDpi);
 
     }
 
@@ -319,10 +321,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         sideLimit = metrics.widthPixels;
         if (sideLimit > metrics.heightPixels) {
-            sideLimit = metrics.heightPixels-getActionBarHeight();
+            sideLimit = metrics.heightPixels - getActionBarHeight();
         }
         //Log.d(TAG, " " + metrics.heightPixels + " "+ metrics.widthPixels);
-        Log.d(TAG, " " +sideLimit);
+        Log.d(TAG, " " + sideLimit);
         //Log.d(TAG, " " +getActionBarHeight());
 
         return sideLimit;
@@ -342,4 +344,24 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
         }
         return actionBarHeight;
     }
+
+    @Override
+    public void setUIMode() {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PrefKeys.NIGHT_MODE, false)) {
+            themeID = R.style.AppTheme_Dark;
+            Toast.makeText(this, "NIGHT", Toast.LENGTH_SHORT).show();
+        } else {
+            themeID = R.style.AppTheme_Light;
+            Toast.makeText(this, "DAY", Toast.LENGTH_SHORT).show();
+        }
+
+        this.setTheme(themeID);
+        if (dataRetainFragment != null) {
+            this.recreate();
+        }
+
+
+    }
+
+
 }

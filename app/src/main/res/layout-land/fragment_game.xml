@@ -1,59 +1,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.home.d2e.numbersprinter.GameFragment"
+    android:baselineAligned="false"
     android:orientation="horizontal"
-    android:baselineAligned="false">
+    tools:context="org.home.d2e.numbersprinter.GameFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/tvPlayer"
-            android:layout_margin="15dp"
-            android:gravity="center" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tElapsedTime"
-            android:id="@+id/tvElapsedTimeHeader"
-            android:layout_gravity="center_horizontal"
             android:layout_margin="15dp"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/tvElapsedTime"
             android:gravity="center"
-            android:layout_margin="15dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/tvElapsedTimeHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            style="@style/Mega" />
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:text="@string/tElapsedTime" />
+
+        <TextView
+            android:id="@+id/tvElapsedTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <GridView
+            android:id="@+id/gvGameField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/gvGameField"
             android:gravity="center"
             android:orientation="vertical" />
     </LinearLayout>
