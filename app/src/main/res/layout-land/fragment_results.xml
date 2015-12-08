@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.home.d2e.numbersprinter.ResultsFragment"
+    tools:context="io.github.d2edev.numbersprinter.ResultsFragment"
     android:orientation="horizontal"
     android:gravity="center"
     android:baselineAligned="false"

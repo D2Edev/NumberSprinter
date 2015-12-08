@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="org.home.d2e.numbersprinter.StartFragment"
+    tools:context="io.github.d2edev.numbersprinter.StartFragment"
     android:baselineAligned="false"
     android:gravity="center">
 

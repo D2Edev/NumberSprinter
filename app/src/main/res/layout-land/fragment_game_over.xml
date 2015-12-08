@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:gravity="center"
     android:baselineAligned="false"
-    tools:context="org.home.d2e.numbersprinter.GameOverFragment">
+    tools:context="io.github.d2edev.numbersprinter.GameOverFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

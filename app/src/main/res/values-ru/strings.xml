@@ -65,4 +65,6 @@
     <string name="Matrix_5">По-взрослому (5x5)</string>
     <string name="Matrix_6">Реально крут (6x6)</string>
     <string name="Matrix_7">Гений или идиот :) (7x7)</string>
+    <string name="sNGHT_MD">Темная тема для ночной игры</string>
+    <string name="tNGHT_MD">Ночной режим</string>
 </resources>

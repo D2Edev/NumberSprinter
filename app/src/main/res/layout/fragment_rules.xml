@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="org.home.d2e.numbersprinter.RulesFragment">
+    tools:context="io.github.d2edev.numbersprinter.RulesFragment">
 
 
     <LinearLayout
