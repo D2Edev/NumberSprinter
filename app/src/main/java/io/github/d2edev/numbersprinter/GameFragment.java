@@ -14,6 +14,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +96,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
 
-        tvElapsedTime.setTextSize(((MainActivity)getActivity()).currSideLimit()/10);
+        tvElapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_PX,((MainActivity) getActivity()).currSideLimit()/5);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         mxSize = getMatrixSize();
         gvGameField.setNumColumns(mxSize);
@@ -337,7 +338,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 colour = Color.rgb(255, 255, 255);
                 break;
             case RANDOM:
-                colour = Color.rgb((int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20));
+//                colour = Color.rgb((int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20));
+//                use "safe" colors
+                colour = Color.rgb(51+(int) (Math.random() * 5)*51, 51+(int) (Math.random() * 5)*51, 51+(int) (Math.random() * 5)*51);
                 break;
             default:
                 colour = Color.rgb(0, 0, 0);

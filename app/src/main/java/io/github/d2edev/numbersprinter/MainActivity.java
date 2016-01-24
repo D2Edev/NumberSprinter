@@ -1,9 +1,11 @@
 package io.github.d2edev.numbersprinter;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -282,10 +284,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
                     transaction.commit();
                 }
                 return true;
+            case R.id.action_about:
+                showAboutInfo();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     private boolean isVibraEnabled() {
 
@@ -295,10 +301,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
 
     }
 
+    private void showAboutInfo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(getString(R.string.action_about))
+                .setMessage(getString(R.string.action_about_info))
+                .setIcon(R.drawable.logo_small)
+                .setCancelable(false)
+                .setNegativeButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private void doVibrate(boolean doVibrate) {
         if (doVibrate) {
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(PrefKeys.VIB_LENGTH);
+           vibrator.vibrate(PrefKeys.VIB_LENGTH);
         }
 
     }

@@ -42,11 +42,11 @@
     <string name="tPassWrong">Неправильный пароль. Повторите ввод, пожалуйста!</string>
     <string name="tPasss">Ввод пароля</string>
     <string name="tPlsRetypePass">Пожалуйста, повторите ввод пароля!</string>
-    <string name="tPlsSelectPlayer">Пожалуйста, выберите игрока из списка и нажмите ОК или нажмите НОВЫЙ для ввода нового. Потребуется подтверждение паролем.</string>
+    <string name="tPlsSelectPlayer">Пожалуйста, выберите игрока из списка и нажмите ОК или нажмите НОВЫЙ для ввода нового.</string>
     <string name="tPrsNewToEnterNew">(нажмите Новый Игрок для ввода нового)</string>
     <string name="tRetypePassword">Повтор пароля</string>
     <string name="tRoundOver">раунд закончен!</string>
-    <string name="tRules">Правила просты: В матрице NxN случайным образом расположены числа от 1 до N^2. Ваша цель - выбрать их в порядке возрастания. По окончании время фиксируется. Игрок с минимальным временем побеждает!!! (Повышенная сложность: цифры и фон раскрашены случайным образом). Удачи!</string>
+    <string name="tRules">Правила просты: В матрице случайным образом расположены числа. Ваша цель - выбрать их в порядке возрастания. По окончании время фиксируется. Игрок с минимальным временем побеждает!!! (Повышенная сложность: цифры и фон раскрашены случайным образом). Удачи!</string>
     <string name="tScore">Счет раунда:</string>
     <string name="tScoreRecord">Ваш новый рекорд!!!! Счет раунда:</string>
     <string name="tSelectPlayer">Выберите игрока</string>
@@ -67,4 +67,6 @@
     <string name="Matrix_7">Гений или идиот :) (7x7)</string>
     <string name="sNGHT_MD">Темная тема для ночной игры</string>
     <string name="tNGHT_MD">Ночной режим</string>
+    <string name="action_about">О программе</string>
+    <string name="action_about_info">NUMBER SPRINTER GAME\nd2e DEVELOPMENT ©2015\посетите нас: d2edev.github.io</string>
 </resources>

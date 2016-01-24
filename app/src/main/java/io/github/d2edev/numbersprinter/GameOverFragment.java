@@ -104,6 +104,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         tvRoundOver = (TextView) view.findViewById(R.id.tvRoundOverGO);
         tvRoundOver.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         btnNewGame = (Button) view.findViewById(R.id.btnNewGame);
+        btnNewGame.setTextSize(TypedValue.COMPLEX_UNIT_PX,unitSize);
         btnNewGame.setOnClickListener(GameOverFragment.this);
 
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);

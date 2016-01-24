@@ -8,7 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
- * Created by druzhyni on 13.07.2015.
+ * Created by druzhyni on 13.07.2015
  */
 public class TickerService extends IntentService {
     /**
