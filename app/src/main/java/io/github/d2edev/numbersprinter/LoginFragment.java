@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Vibrator;
@@ -62,7 +64,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
         btnOK.setOnClickListener(LoginFragment.this);
         btnNew.setOnClickListener(LoginFragment.this);
-        tvSelectedPlayer = (TextView) view.findViewById(R.id.tvSelectedPlayer);
         cbHard = (CheckBox) view.findViewById(R.id.cbHard);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if (dataRetainFragment != null) {
@@ -93,7 +94,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
                     person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
                     person.setScoreMax(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX)));
                     person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
-                    tvSelectedPlayer.setText(getString(R.string.tSelected) + " " + person.getName());
                     btnOK.setEnabled(true);
                     doVibrate(isVibraEnabled());
 

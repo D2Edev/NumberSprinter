@@ -2,6 +2,7 @@ package io.github.d2edev.numbersprinter.Core;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.List;
 
@@ -15,6 +16,16 @@ public class DataRetainFragment extends Fragment {
     private boolean tickerON;
     private int counter;
     private String currFragTag;
+    private List<Person> persons;
+
+
+    public List<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
+    }
 
     public String getCurrFragTag() {       return currFragTag;    }
 
@@ -55,6 +66,9 @@ public class DataRetainFragment extends Fragment {
     public void setHardMode(boolean hardMode) {
             this.hardMode = hardMode;
     }
+
+
+
 
     // this method is only called once for this fragment
     @Override

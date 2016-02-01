@@ -2,11 +2,13 @@ package io.github.d2edev.numbersprinter;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import io.github.d2edev.numbersprinter.Core.PrefKeys;
 
 
 public class StartFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = "TAG_"+MainActivity.START_FRAGMENT_TAG;
+    private static final String TAG = "TAG_" + MainActivity.START_FRAGMENT_TAG;
     OnFragmentListener listener;
     private Button btnRules;
     private Button btnResult;
@@ -51,16 +53,14 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //Log.d(TAG, "onAttach");
+
         if (activity instanceof OnFragmentListener) {
-            //setting interface for activity
             listener = (OnFragmentListener) activity;
         } else {
             throw new IllegalStateException("Activity not OnMainFragmentListener! ");
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
 
     @Override
     public void onDestroy() {
@@ -88,12 +88,13 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         btnRules.setOnClickListener(StartFragment.this);
         btnResult.setOnClickListener(StartFragment.this);
         btnPlay.setOnClickListener(StartFragment.this);
-        //Log.d(TAG, "onViewCreated");
+
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){
+        if (dataRetainFragment != null) {
             dataRetainFragment.setCurrFragTag(MainActivity.START_FRAGMENT_TAG);
         }
     }
+
 
     //processing clicks
     public void onClick(View v) {
@@ -118,16 +119,17 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
 
     }
-    private boolean isVibraEnabled(){
+
+    private boolean isVibraEnabled() {
 
         //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
-        boolean enb= PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
-        return  enb;
+        boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
+        return enb;
 
     }
 
-    private void doVibrate(boolean doVibrate){
-        if(doVibrate){
+    private void doVibrate(boolean doVibrate) {
+        if (doVibrate) {
             vibrator.vibrate(PrefKeys.VIB_LENGTH);
         }
     }

@@ -154,7 +154,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
         db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         //cv.put(UserTable.Columns.NAME, person.getName());
-        //cv.put(UserTable.Columns.PASSWORD, person.getRoundTime());
+        //cv.put(UserTable.Columns.LAST_SCORE, person.getRoundTime());
         cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
         cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
         cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());

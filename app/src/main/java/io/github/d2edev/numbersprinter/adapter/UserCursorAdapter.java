@@ -2,6 +2,7 @@ package io.github.d2edev.numbersprinter.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,13 @@ public class UserCursorAdapter extends CursorAdapter {
     private TextView tvName;
     private TextView tvScore;
 
+
     public UserCursorAdapter(Context context, Cursor c) {
         super(context, c, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         INDEX_ID=c.getColumnIndex(UserTable.Columns.ID);
         INDEX_NAME=c.getColumnIndex(UserTable.Columns.NAME);
-        INDEX_PASSWORD=c.getColumnIndex(UserTable.Columns.PASSWORD);
+        INDEX_PASSWORD=c.getColumnIndex(UserTable.Columns.LAST_SCORE);
         INDEX_SCORE_TOTAL=c.getColumnIndex(UserTable.Columns.SCORE_TOTAL);
         INDEX_SCORE_LAST=c.getColumnIndex(UserTable.Columns.SCORE_MAX);
         INDEX_GAMES_PLAYED=c.getColumnIndex(UserTable.Columns.GAMES_PLAYED);
@@ -50,5 +52,13 @@ public class UserCursorAdapter extends CursorAdapter {
         tvScore= (TextView) view.findViewById(io.github.d2edev.numbersprinter.R.id.tvScoreInList);
         tvName.setText(cursor.getString(INDEX_NAME));
         tvScore.setText(cursor.getString(INDEX_SCORE_TOTAL));
+        Log.d("TAG_adapter", "bind view");
+
     }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
+    }
+
 }

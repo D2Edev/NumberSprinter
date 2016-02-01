@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import io.github.d2edev.numbersprinter.R;
-
 import io.github.d2edev.numbersprinter.Core.DBHelper;
 import io.github.d2edev.numbersprinter.Core.DataRetainFragment;
 import io.github.d2edev.numbersprinter.Core.Person;
@@ -119,7 +117,7 @@ public class RulesFragment extends Fragment implements View.OnClickListener {
         for (Person person : persons) {
             ContentValues cv = new ContentValues();
             cv.put(UserTable.Columns.NAME, person.getName());
-            cv.put(UserTable.Columns.PASSWORD, person.getRoundTime());
+            cv.put(UserTable.Columns.LAST_SCORE, person.getRoundTime());
             cv.put(UserTable.Columns.SCORE_TOTAL, person.getScoreTotal());
             cv.put(UserTable.Columns.SCORE_MAX, person.getScoreMax());
             cv.put(UserTable.Columns.GAMES_PLAYED, person.getGamesPlayed());
