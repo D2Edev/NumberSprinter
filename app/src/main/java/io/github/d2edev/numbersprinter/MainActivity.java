@@ -1,5 +1,6 @@
 package io.github.d2edev.numbersprinter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 
@@ -41,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     //no passwd version
     private final String TAG = "TAG_MainActivity ";
     private DataRetainFragment dataRetainFragment;
-
 
 
 

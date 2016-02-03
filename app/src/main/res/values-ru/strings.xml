@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Number Sprinter</string>
+    <string name="app_name">Бегущий по цифрам</string>
     <string name="action_settings">Настройки</string>
     <string name="btnGoMainScreen">Главный</string>
     <string name="btnNewGame">Новая игра</string>
@@ -14,7 +14,7 @@
     <string name="sCLR_NUMS">Случайный цвет текста</string>
     <string name="sHARD_MODE">Повышенная сложность</string>
     <string name="sVIBRATE">Вибрация при основных событиях</string>
-    <string name="tAchievers">Результаты:</string>
+    <string name="tAchievers">Зал славы:</string>
     <string name="tAverageScore">Средний счет:</string>
     <string name="tCLR_FLDS">Случайный цвет поля</string>
     <string name="tCLR_NUMS">Случайный цвет цифр</string>
@@ -65,8 +65,8 @@
     <string name="Matrix_5">По-взрослому (5x5)</string>
     <string name="Matrix_6">Реально крут (6x6)</string>
     <string name="Matrix_7">Гений или идиот :) (7x7)</string>
-    <string name="sNGHT_MD">Темная тема для ночной игры</string>
+    <string name="sNGHT_MD">Темная тема для игры ночью</string>
     <string name="tNGHT_MD">Ночной режим</string>
     <string name="action_about">О программе</string>
-    <string name="action_about_info">NUMBER SPRINTER GAME\nd2e DEVELOPMENT ©2015\посетите нас: d2edev.github.io</string>
+    <string name="action_about_info">БЕГУЩИЙ ПО ЦИФРАМ\nd2e DEVELOPMENT ©2015\посетите нас: d2edev.github.io</string>
 </resources>

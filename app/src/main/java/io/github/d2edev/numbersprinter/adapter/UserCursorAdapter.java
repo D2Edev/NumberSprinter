@@ -52,7 +52,7 @@ public class UserCursorAdapter extends CursorAdapter {
         tvScore= (TextView) view.findViewById(io.github.d2edev.numbersprinter.R.id.tvScoreInList);
         tvName.setText(cursor.getString(INDEX_NAME));
         tvScore.setText(cursor.getString(INDEX_SCORE_TOTAL));
-        Log.d("TAG_adapter", "bind view");
+//        Log.d("TAG_adapter", "bind view");
 
     }
 

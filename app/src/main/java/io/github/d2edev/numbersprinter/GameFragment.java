@@ -143,6 +143,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             person = dataRetainFragment.getPerson();
             tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
             dataRetainFragment.setCurrFragTag(MainActivity.GAME_FRAGMENT_TAG);
+
+
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
         //resume transmitting ticks
