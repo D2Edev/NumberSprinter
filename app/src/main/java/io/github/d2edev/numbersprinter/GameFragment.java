@@ -257,6 +257,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 if (dataRetainFragment.getHardMode()) {
                     //generate random colored fields
                     for (int i = 1; i < mxSize*mxSize + 1; i++) {
+                        int colorBck = generateRGB(RANDOM);
+                        int colorFore =0;
+                        do{colorFore=generateRGB(RANDOM);}while(colorFore!=colorBck);
                         tempGFs.add(new GameField(i, generateRGB(RANDOM), generateRGB(RANDOM)));
                     }
                 } else {
