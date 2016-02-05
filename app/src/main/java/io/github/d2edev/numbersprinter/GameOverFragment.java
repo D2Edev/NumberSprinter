@@ -135,7 +135,7 @@ public class GameOverFragment extends Fragment implements View.OnClickListener, 
                 maxScore = person.getScoreMax();
                 tvScoreHeader.setText(getString(R.string.tScoreRecord));
             } else {
-                tvScoreHeader.setText(getString(R.string.tScore));
+                tvScoreHeader.setText(getString(R.string.tRoundScore));
             }
 
             db.close();

@@ -30,11 +30,7 @@
     <string name="tDefaultPlayer">Default Player</string>
     <string name="btnNewGame"> New game </string>
     <string name="btnStop">Stop</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="tLetsStart">Let\'s start!</string>
-
-<!-- TODO: Remove or change this placeholder text -->
     <string name="tLogin">Login</string>
     <string name="tEnterYourName">Enter your NAME</string>
     <string name="tPlsSelectPlayer">Pls select player from list and press OK or press NEW to enter new one.</string>
@@ -46,12 +42,13 @@
     <string name="tHardMode">Play hard mode</string>
     <string name="tPassMisMatch">Passwords doesn\'t match!</string>
     <string name="tPassWrong">Wrong roundTime. Please try again.</string>
-    <string name="tCurrentPlayer">Player:</string>
+    <string name="tPlayer">Player:</string>
     <string name="tInstrGO">Press NEW GAME for a new round or press back for main screen.</string>
     <string name="tRoundOver">round is over!</string>
-    <string name="tScoreRecord">Your new record!!!!! Round score is: </string>
-    <string name="tScore">Round score is: </string>
-    <string name="tTotalScore">Total score is: </string>
+    <string name="tScoreRecord">Your new record!!!!! Round score: </string>
+    <string name="tRoundScore">Round score: </string>
+    <string name="tTotalScore">Total score: </string>
+    <string name="tMaxScore">Max round score: </string>
     <string name="tDubbedUser">User with this name already exists!</string>
     <string name="tCantChangeSettings">Can\'t change settings during the game!</string>
     <string name="VIBRATE" translatable="false">vbr</string>
@@ -61,7 +58,6 @@
     <string name="HARD_MODE" translatable="false">h_mode</string>
     <string name="sHARD_MODE">Makes gaming harder</string>
     <string name="tHARD_MODE">HARD mode</string>
-
     <string name="CLR_NUMS" translatable="false">cnums</string>
     <string name="sCLR_NUMS">Numbers will be randomly coloured</string>
     <string name="tCLR_NUMS">Random NUMBER colors</string>

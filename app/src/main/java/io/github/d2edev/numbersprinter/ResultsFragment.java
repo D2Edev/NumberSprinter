@@ -2,28 +2,30 @@ package io.github.d2edev.numbersprinter;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import io.github.d2edev.numbersprinter.Core.DBHelper;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import io.github.d2edev.numbersprinter.Core.DataRetainFragment;
-import io.github.d2edev.numbersprinter.Core.UserTable;
-import io.github.d2edev.numbersprinter.adapter.UserCursorAdapter;
+import io.github.d2edev.numbersprinter.Core.Person;
+import io.github.d2edev.numbersprinter.adapter.MyListNameScoreAdapter;
 
 
 public class ResultsFragment extends Fragment {
     private final String TAG = "TAG_ResultListFragemnt ";
     private ListView lvAchievers;
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    private Cursor userListCursor;
-    private UserCursorAdapter userCursorAdapter;
-    DataRetainFragment dataRetainFragment;
+    private List<Person> persons;
+    private DataRetainFragment dataRetainFragment;
 
     public ResultsFragment() {
         // Required empty public constructor
@@ -33,37 +35,48 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //init db
-        dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getReadableDatabase();
-        //get user list from db
-        userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.SCORE_TOTAL + " DESC;");
-        //if there are any users
-        if (userListCursor.getCount() > 0) {
-            // build adapter
-            userCursorAdapter = new UserCursorAdapter(getActivity(), userListCursor);
-            lvAchievers = (ListView) view.findViewById(R.id.lvAchievers);
-            // attach listview to adapter
-            lvAchievers.setAdapter(userCursorAdapter);
-            //setting onFragmentListener on item in listview
-           /***
-            lvAchievers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //on click - getting info from cursor
-                    Cursor cursor = (Cursor) lvAchievers.getItemAtPosition(position);
-                    String name = cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME));
-                    Toast.makeText(parent.getContext(), "Click to " + name, Toast.LENGTH_SHORT).show();
-
-
-                }
-            });
-            */
-        }
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-        if(dataRetainFragment!=null){
+        if (dataRetainFragment != null) {
             dataRetainFragment.setCurrFragTag(MainActivity.RESULTS_FRAGMENT_TAG);
+            if (dataRetainFragment.getPersons() != null) {
+                persons = dataRetainFragment.getPersons();
+                Collections.sort(persons, new Comparator<Person>() {
+                    @Override
+                    public int compare(Person first, Person second) {
+                        return second.getScoreTotal() - first.getScoreTotal();
+                    }
+                });
+                final MyListNameScoreAdapter adapter = new MyListNameScoreAdapter(getActivity().getBaseContext(), persons);
+                adapter.setSelectionColor(Color.BLUE);
+                lvAchievers = (ListView) getActivity().findViewById(R.id.lvAchievers);
+                lvAchievers.setAdapter(adapter);
+                lvAchievers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (!adapter.isBckColorDEFINED()) {
+                            adapter.setDefaultColor(((ColorDrawable) view.getBackground()).getColor());
+                        }
+                        if(adapter.getSelectedID()!=position){
+                            if(adapter.getPrevView()!=null){
+                                adapter.getPrevView().setBackgroundColor(adapter.getDefaultColor());
+                            }
+                            view.setBackgroundColor(adapter.getSelectionColor());
+                            adapter.setSelectedID(position);
+                            adapter.setPrevView(view);
+                        }
+                        Person person = persons.get(position);
+                        Toast.makeText(getActivity().getBaseContext(),
+                                getString(R.string.tPlayer)+ person.getName() + "\n"+
+                                getString(R.string.tGamesPlayed) + person.getGamesPlayed()+"\n"+
+                                getString(R.string.tMaxScore) + person.getScoreMax()
+                                ,Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
         }
+
+
     }
 
     @Override

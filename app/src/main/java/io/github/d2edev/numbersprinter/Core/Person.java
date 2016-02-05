@@ -81,4 +81,31 @@ public class Person {
                 ", gamesPlayed=" + gamesPlayed +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (roundTime != person.roundTime) return false;
+        if (scoreMax != person.scoreMax) return false;
+        if (scoreTotal != person.scoreTotal) return false;
+        if (scoreLast != person.scoreLast) return false;
+        if (gamesPlayed != person.gamesPlayed) return false;
+        return name.equals(person.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + roundTime;
+        result = 31 * result + scoreMax;
+        result = 31 * result + scoreTotal;
+        result = 31 * result + scoreLast;
+        result = 31 * result + gamesPlayed;
+        return result;
+    }
 }

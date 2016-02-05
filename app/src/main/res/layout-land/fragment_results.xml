@@ -45,8 +45,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/lvAchievers"
             android:layout_gravity="center_horizontal"
-            android:choiceMode="none"
-
             />
     </LinearLayout>
 

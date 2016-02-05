@@ -3,7 +3,6 @@ package io.github.d2edev.numbersprinter;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,25 +17,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.d2edev.numbersprinter.Core.DBHelper;
 import io.github.d2edev.numbersprinter.Core.DataRetainFragment;
 import io.github.d2edev.numbersprinter.Core.OnFragmentListener;
+import io.github.d2edev.numbersprinter.Core.Person;
 import io.github.d2edev.numbersprinter.Core.PrefKeys;
 import io.github.d2edev.numbersprinter.Core.UserTable;
 
 
-public class SignUpFragment extends Fragment implements View.OnClickListener {
+public class SignUpFragment extends Fragment {
     private static final String TAG = "TAG_SignUpFragment_";
-    OnFragmentListener listener;
+    private OnFragmentListener listener;
     private Button btSignUp;
     private EditText etName;
-    private String[] names;
-    private Cursor cursor;
     private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    private int recNumber;
-    DataRetainFragment dataRetainFragment;
-    Vibrator vibrator;
+    private DataRetainFragment dataRetainFragment;
+    private Vibrator vibrator;
+    private List<Person> persons;
 
 
     public SignUpFragment() {
@@ -47,70 +47,62 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-        btSignUp = (Button) view.findViewById(R.id.btSignup);
-        etName = (EditText) view.findViewById(R.id.etName);
-        btSignUp.setOnClickListener(SignUpFragment.this);
         dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getReadableDatabase();
-        cursor = db.query(UserTable.TABLE, new String[]{UserTable.Columns.NAME}, null, null, null, null, null);
-        recNumber = cursor.getCount();
-        if (recNumber > 0) {
-            names = new String[recNumber];
-            cursor.moveToFirst();
-            for (int i = 0; i < recNumber; i++) {
-                names[i] = cursor.getString(0);
-
-                cursor.moveToNext();
-
+        vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+        btSignUp = (Button) view.findViewById(R.id.btSignup);
+        btSignUp.setEnabled(false);
+        btSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(credentialsValidated()){
+                    if(persons==null){
+                        persons=new ArrayList<Person>();
+                        dataRetainFragment.setPersons(persons);
+                    }
+                    addUser();
+                    listener.startLoginFragment();
+                }
             }
-        }
-        db.close();
+        });
+        etName = (EditText) view.findViewById(R.id.etName);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if (dataRetainFragment != null) {
             dataRetainFragment.setCurrFragTag(MainActivity.SIGN_UP_FRAGMENT_TAG);
+            btSignUp.setEnabled(true);
+            if (dataRetainFragment.getPersons() != null) {
+                persons=dataRetainFragment.getPersons();
+
+            }
         }
     }
 
 
-    @Override
-    public void onClick(View v) {
-        doVibrate(isVibraEnabled());
-        switch (v.getId()) {
-            case R.id.btSignup:
-                validateCredentials(v);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void validateCredentials(View v) {
+    private boolean credentialsValidated() {
+        boolean validated=false;
         Editable name = etName.getText();
 
 
         if (TextUtils.isEmpty(name)) {
 
-            Toast.makeText(v.getContext(), getString(R.string.tEmptyName), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.tEmptyName), Toast.LENGTH_SHORT).show();
             etName.setError(getString(R.string.tError));
 
-        }  else if (isNameDubbed(name)) {
+        } else if (persons!=null&&nameAlreadyUsed(name.toString())) {
             Toast.makeText(getActivity(), getString(R.string.tDubbedUser), Toast.LENGTH_SHORT).show();
 
         } else {
+            validated=true;
 
-            addUser();
-            //Toast.makeText(v.getContext(),getString(R.string.btnSignup)+ " "+ getString(R.string.tOK),Toast.LENGTH_SHORT).show();
-            listener.startLoginFragment();
+
 
         }
 
-
+        return validated;
     }
 
     private void addUser() {
 
-        db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(UserTable.Columns.NAME, String.valueOf(etName.getText()));
         cv.put(UserTable.Columns.SCORE_TOTAL, 0);
@@ -118,6 +110,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         cv.put(UserTable.Columns.GAMES_PLAYED, 0);
         db.insert(UserTable.TABLE, null, cv);
         db.close();
+        persons.add(new Person(String.valueOf(etName.getText())));
     }
 
     @Override
@@ -127,7 +120,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_sign_up, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
 
 
     @Override
@@ -145,30 +137,28 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public boolean isNameDubbed(Editable name) {
-        boolean isDubbed = false;
-        for (int i = 0; i < recNumber; i++) {
+    private boolean isVibraEnabled() {
 
-            if (names[i].equals(String.valueOf(name))) {
-                isDubbed = true;
+        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
+        boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
+
+        return enb;
+
+    }
+
+    private boolean nameAlreadyUsed(String name){
+        boolean used=false;
+        for (Person p :persons) {
+            if(p.getName().equals(name)){
+                used=true;
                 break;
             }
         }
-
-        return isDubbed;
+        return used;
     }
 
-    private boolean isVibraEnabled(){
-
-        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
-        boolean enb= PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE,false);
-
-        return  enb;
-
-    }
-
-    private void doVibrate(boolean doVibrate){
-        if(doVibrate){
+    private void doVibrate(boolean doVibrate) {
+        if (doVibrate) {
             vibrator.vibrate(PrefKeys.VIB_LENGTH);
         }
     }

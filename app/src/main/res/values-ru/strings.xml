@@ -19,7 +19,7 @@
     <string name="tCLR_FLDS">Случайный цвет поля</string>
     <string name="tCLR_NUMS">Случайный цвет цифр</string>
     <string name="tCantChangeSettings">Во время игры настройки изменить нельзя!</string>
-    <string name="tCurrentPlayer">Игрок:</string>
+    <string name="tPlayer">Игрок:</string>
     <string name="tDefaultPlayer">Игрок по умолчанию</string>
     <string name="tDubbedUser">Пользователь с таким именем уже существует!</string>
     <string name="tElapsedTime">Прошло времени:</string>
@@ -47,7 +47,7 @@
     <string name="tRetypePassword">Повтор пароля</string>
     <string name="tRoundOver">раунд закончен!</string>
     <string name="tRules">Правила просты: В матрице случайным образом расположены числа. Ваша цель - выбрать их в порядке возрастания. По окончании время фиксируется. Игрок с минимальным временем побеждает!!! (Повышенная сложность: цифры и фон раскрашены случайным образом). Удачи!</string>
-    <string name="tScore">Счет раунда:</string>
+    <string name="tRoundScore">Счет раунда:</string>
     <string name="tScoreRecord">Ваш новый рекорд!!!! Счет раунда:</string>
     <string name="tSelectPlayer">Выберите игрока</string>
     <string name="tSelected">Выбран:</string>

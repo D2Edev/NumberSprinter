@@ -21,29 +21,30 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import io.github.d2edev.numbersprinter.Core.DBHelper;
 import io.github.d2edev.numbersprinter.Core.DataRetainFragment;
 import io.github.d2edev.numbersprinter.Core.OnFragmentListener;
 import io.github.d2edev.numbersprinter.Core.Person;
 import io.github.d2edev.numbersprinter.Core.PrefKeys;
 import io.github.d2edev.numbersprinter.Core.UserTable;
+import io.github.d2edev.numbersprinter.adapter.MyListNameScoreAdapter;
 import io.github.d2edev.numbersprinter.adapter.UserCursorAdapter;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class LoginFragment extends Fragment{
     private static final String TAG = "TAG_LogintFragment_";
     private ListView lvPlayers;
     private Button btnOK;
     private Button btnNew;
-    private TextView tvSelectedPlayer;
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    private Cursor userListCursor;
-    private UserCursorAdapter userCursorAdapter;
     private Person person;
+    private List<Person> persons;
     private DataRetainFragment dataRetainFragment;
     private CheckBox cbHard;
     private Vibrator vibrator;
@@ -57,65 +58,70 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Log.d(TAG, "onViewCreated");
         vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         btnOK = (Button) view.findViewById(R.id.btnPlayerOK);
         btnOK.setEnabled(false);
         btnNew = (Button) view.findViewById(R.id.btnPlayerNew);
-        btnOK.setOnClickListener(LoginFragment.this);
-        btnNew.setOnClickListener(LoginFragment.this);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retainUserData();
+                listener.startGameFragment();
+            }
+        });
+        btnNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.startSignUpFragment();
+            }
+        });
         cbHard = (CheckBox) view.findViewById(R.id.cbHard);
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
         if (dataRetainFragment != null) {
             cbHard.setChecked(dataRetainFragment.getHardMode());
             dataRetainFragment.setCurrFragTag(MainActivity.LOGIN_FRAGMENT_TAG);
+            if (dataRetainFragment.getPersons() != null) {
+                persons = dataRetainFragment.getPersons();
+                Collections.sort(persons, new Comparator<Person>() {
+                    @Override
+                    public int compare(Person first, Person second) {
+                        return first.getName().compareTo(second.getName());
+                    }
+                });
+                final MyListNameScoreAdapter adapter = new MyListNameScoreAdapter(getActivity().getBaseContext(), persons);
+                lvPlayers = (ListView) view.findViewById(R.id.lvPlayers);
+                lvPlayers.setAdapter(adapter);
+                adapter.setSelectionColor(Color.BLUE);
+                lvPlayers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (!adapter.isBckColorDEFINED()) {
+                            adapter.setDefaultColor(((ColorDrawable) view.getBackground()).getColor());
+                        }
+                        if(adapter.getSelectedID()!=position){
+                            if(adapter.getPrevView()!=null){
+                                adapter.getPrevView().setBackgroundColor(adapter.getDefaultColor());
+                            }
+                            view.setBackgroundColor(adapter.getSelectionColor());
+                            adapter.setSelectedID(position);
+                            adapter.setPrevView(view);
+                        }
+                        person=adapter.getItem(position);
+                        btnOK.setEnabled(true);
+                        doVibrate(isVibraEnabled());
+                    }
+                });
+            }
+
+
         }
-        cbHard.setOnCheckedChangeListener(LoginFragment.this);
+        cbHard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                dataRetainFragment.setHardMode(isChecked);
+            }
+        });
 
-        dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getReadableDatabase();
-        userListCursor = db.query(UserTable.TABLE, null, null, null, null, null, UserTable.Columns.NAME);
-
-        person = new Person();
-        // создаем адаптер
-        if (userListCursor.getCount() > 0) {
-            // build adapter
-            userCursorAdapter = new UserCursorAdapter(getActivity(), userListCursor);
-            lvPlayers = (ListView) view.findViewById(R.id.lvPlayers);
-            // attach listview to adapter
-            lvPlayers.setAdapter(userCursorAdapter);
-            //setting onFragmentListener on item in listview
-            lvPlayers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //on click - getting info from cursor
-                    Cursor cursor = (Cursor) lvPlayers.getItemAtPosition(position);
-                    person.setName(cursor.getString(cursor.getColumnIndex(UserTable.Columns.NAME)));
-                    person.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.GAMES_PLAYED)));
-                    person.setScoreMax(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_MAX)));
-                    person.setScoreTotal(cursor.getInt(cursor.getColumnIndex(UserTable.Columns.SCORE_TOTAL)));
-                    btnOK.setEnabled(true);
-                    doVibrate(isVibraEnabled());
-
-                }
-            });
-        }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        doVibrate(isVibraEnabled());
-        switch (v.getId()) {
-
-            case R.id.btnPlayerOK:
-                retainUserData();
-                listener.startGameFragment();
-                break;
-            case R.id.btnPlayerNew:
-                listener.startSignUpFragment();
-                break;
-        }
 
     }
 
@@ -149,7 +155,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     @Override
     public void onStop() {
         super.onStop();
-        db.close();
     }
 
     @Override
@@ -158,10 +163,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Com
     }
 
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        dataRetainFragment.setHardMode(isChecked);
-    }
 
     private boolean isVibraEnabled() {
 

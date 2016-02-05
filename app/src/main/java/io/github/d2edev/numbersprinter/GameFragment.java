@@ -141,7 +141,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 //extract current person
         if (dataRetainFragment != null) {
             person = dataRetainFragment.getPerson();
-            tvPlayer.setText(getString(R.string.tCurrentPlayer) + " " + person.getName());
+            tvPlayer.setText(getString(R.string.tPlayer) + " " + person.getName());
             dataRetainFragment.setCurrFragTag(MainActivity.GAME_FRAGMENT_TAG);
 
 
