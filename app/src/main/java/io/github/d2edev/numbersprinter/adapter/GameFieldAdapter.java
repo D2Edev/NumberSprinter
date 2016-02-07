@@ -23,9 +23,7 @@ public class GameFieldAdapter extends BaseAdapter {
 
     private List<GameField> gameFields;
     private LayoutInflater inflater;
-    private Context context;
-    private GameField gameField;
-    private GradientDrawable drawable;
+
     private int unitSize;
 
 
@@ -33,7 +31,6 @@ public class GameFieldAdapter extends BaseAdapter {
 
 
     public GameFieldAdapter(Context context, @NonNull List<GameField> gameFields, int unitSize) {
-        this.context = context;
         this.gameFields = gameFields;
         this.inflater = LayoutInflater.from(context);
         this.unitSize = unitSize;
@@ -57,10 +54,13 @@ public class GameFieldAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        GameField gameField;
+        GradientDrawable drawable;
         View view = convertView;
-        ViewHolder holder = new ViewHolder();
+        ViewHolder holder;
 
         if (view == null) {
+            holder = new ViewHolder();
             view = inflater.inflate(io.github.d2edev.numbersprinter.R.layout.item_grid_element, null, false);
             holder.tvGameField = (TextView) view.findViewById(io.github.d2edev.numbersprinter.R.id.tvField);
             view.setTag(holder);
@@ -68,14 +68,15 @@ public class GameFieldAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        Log.d(TAG, "getView "+ unitSize);
+        Log.d(TAG, "getView " + unitSize);
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        llp.setMargins(unitSize, unitSize, unitSize, unitSize);
+        llp.setMargins(0, unitSize, 0, 0);
+        llp.width=unitSize*8;
+        llp.height=unitSize*8;
         holder.tvGameField.setLayoutParams(llp);
         holder.tvGameField.setTextSize(TypedValue.COMPLEX_UNIT_PX,(unitSize*4));
-        //
         gameField = (GameField) getItem(position);
-        holder.tvGameField.setBackgroundResource(io.github.d2edev.numbersprinter.R.drawable.gamefield_design);
+//        holder.tvGameField.setBackgroundResource(io.github.d2edev.numbersprinter.R.drawable.gamefield_design);
         holder.tvGameField.setText(Integer.toString(gameField.getFieldNumber()));
         holder.tvGameField.setTextColor(gameField.getFieldTextColor());
         drawable = (GradientDrawable) holder.tvGameField.getBackground();

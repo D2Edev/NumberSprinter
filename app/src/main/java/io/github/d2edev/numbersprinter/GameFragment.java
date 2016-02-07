@@ -50,6 +50,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private final int BLACK = 0;
     private final int WHITE = 1;
     private final int RANDOM = 2;
+    private final int RANDOM_LOW = 3;
+    private final int RANDOM_HIGH = 4;
     private int mxSize;
     private int unitSize;
 
@@ -96,12 +98,12 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
 
-        tvElapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_PX,((MainActivity) getActivity()).currSideLimit()/5);
+        tvElapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_PX, ((MainActivity) getActivity()).currSideLimit() / 5);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         mxSize = getMatrixSize();
         gvGameField.setNumColumns(mxSize);
         gameFields = getGameFields();
-        unitSize = ((MainActivity)getActivity()).currSideLimit() / (3 * (3 * mxSize + 1));
+        unitSize = ((MainActivity) getActivity()).currSideLimit() / (3 * (3 * mxSize + 1));
         gfAdapter = new GameFieldAdapter(view.getContext(), gameFields, unitSize);
         gvGameField.setAdapter(gfAdapter);
         //set listener on gridview
@@ -129,9 +131,9 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
 
         //defime max possible score for game based on complexity
-        maxScore = (int) Math.pow(2,mxSize)*10;
+        maxScore = (int) Math.pow(2, mxSize) * 10;
         if (dataRetainFragment.getHardMode()) {
-            maxScore = (int) (maxScore*1.5);
+            maxScore = (int) (maxScore * 1.5);
         }
         // check if previously counter was used
         fieldCounter = 1;
@@ -220,7 +222,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             gfAdapter.notifyDataSetChanged();
             doVibrate(isVibraEnabled());
             //if the field is last
-            if (fieldCounter == mxSize*mxSize) {
+            if (fieldCounter == mxSize * mxSize) {
                 //send STOP to chrono
                 tickerService.stopTick();
                 //set flag ticker is stopped
@@ -246,8 +248,6 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
 
     private List<GameField> getGameFields() {
-
-
         List<GameField> tempGFs = new ArrayList<>();
         //restore GameField from DataRetainFragment if exists
         if (dataRetainFragment == null) {
@@ -256,14 +256,16 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             if (dataRetainFragment.getGameFields() == null) {
                 if (dataRetainFragment.getHardMode()) {
                     //generate random colored fields
-                    for (int i = 1; i < mxSize*mxSize + 1; i++) {
+                    for (int i = 1; i < mxSize * mxSize + 1; i++) {
                         int colorBck = generateRGB(RANDOM);
-                        int colorFore =0;
-                        do{colorFore=generateRGB(RANDOM);}while(colorFore!=colorBck);
-                        tempGFs.add(new GameField(i, generateRGB(RANDOM), generateRGB(RANDOM)));
+                        int colorFore = generateRGB(RANDOM);
+                        while (colorFore == colorBck){
+                            colorFore = generateRGB(RANDOM);
+                        } ;
+                        tempGFs.add(new GameField(i, colorBck, colorFore));
                     }
                 } else {
-                    for (int i = 1; i < mxSize*mxSize + 1; i++) {
+                    for (int i = 1; i < mxSize * mxSize + 1; i++) {
                         tempGFs.add(new GameField(i, generateRGB(WHITE), generateRGB(BLACK)));
                     }
                 }
@@ -333,7 +335,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     }
 
-        private int generateRGB(int which) {
+    private int generateRGB(int which) {
         int colour;
         switch (which) {
             case BLACK:
@@ -342,10 +344,15 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             case WHITE:
                 colour = Color.rgb(255, 255, 255);
                 break;
+//              use "safe" colors
             case RANDOM:
-//                colour = Color.rgb((int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20), (int) (Math.random() * 235 + 20));
-//                use "safe" colors
-                colour = Color.rgb(51+(int) (Math.random() * 5)*51, 51+(int) (Math.random() * 5)*51, 51+(int) (Math.random() * 5)*51);
+                colour = Color.rgb(51 + (int) (Math.random() * 5) * 51, 51 + (int) (Math.random() * 5) * 51, 51 + (int) (Math.random() * 5) * 51);
+                break;
+            case RANDOM_LOW:
+                colour = Color.rgb((int) (Math.random() * 3) * 51, (int) (Math.random() * 3) * 51, (int) (Math.random() * 3) * 51);
+                break;
+            case RANDOM_HIGH:
+                colour = Color.rgb(153 + (int) (Math.random() * 3) * 51, 153 + (int) (Math.random() * 3) * 51, 153 + (int) (Math.random() * 3) * 51);
                 break;
             default:
                 colour = Color.rgb(0, 0, 0);
@@ -354,12 +361,12 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         return colour;
     }
 
-    private int calcRoundScore(int maxScore, int counterG){
+    private int calcRoundScore(int maxScore, int counterG) {
         int calcScore;
-        if(counterG>maxScore){
-            calcScore=0;
-        }else{
-            calcScore= (int) Math.sqrt(Math.pow(maxScore,2)-Math.pow(counterG,2));
+        if (counterG > maxScore) {
+            calcScore = 0;
+        } else {
+            calcScore = (int) Math.sqrt(Math.pow(maxScore, 2) - Math.pow(counterG, 2));
         }
         return calcScore;
 

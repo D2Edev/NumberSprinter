@@ -54,6 +54,7 @@ public class SignUpFragment extends Fragment {
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                doVibrate(isVibraEnabled());
                 if(credentialsValidated()){
                     if(persons==null){
                         persons=new ArrayList<Person>();
@@ -80,23 +81,14 @@ public class SignUpFragment extends Fragment {
     private boolean credentialsValidated() {
         boolean validated=false;
         Editable name = etName.getText();
-
-
         if (TextUtils.isEmpty(name)) {
-
             Toast.makeText(getActivity(), getString(R.string.tEmptyName), Toast.LENGTH_SHORT).show();
             etName.setError(getString(R.string.tError));
-
         } else if (persons!=null&&nameAlreadyUsed(name.toString())) {
             Toast.makeText(getActivity(), getString(R.string.tDubbedUser), Toast.LENGTH_SHORT).show();
-
         } else {
             validated=true;
-
-
-
         }
-
         return validated;
     }
 
@@ -129,19 +121,9 @@ public class SignUpFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-
-    }
-
 
     private boolean isVibraEnabled() {
-
-        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
         boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
-
         return enb;
 
     }
