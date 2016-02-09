@@ -26,6 +26,7 @@ import io.github.d2edev.numbersprinter.Core.GameField;
 import io.github.d2edev.numbersprinter.Core.DataRetainFragment;
 import io.github.d2edev.numbersprinter.Core.OnBackPressedListener;
 import io.github.d2edev.numbersprinter.Core.OnFragmentListener;
+import io.github.d2edev.numbersprinter.Core.OnTickListener;
 import io.github.d2edev.numbersprinter.Core.Person;
 import io.github.d2edev.numbersprinter.Core.PrefKeys;
 import io.github.d2edev.numbersprinter.Core.TickerService;
@@ -36,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class GameFragment extends Fragment implements OnBackPressedListener, AdapterView.OnItemClickListener {
+public class GameFragment extends Fragment implements OnBackPressedListener, AdapterView.OnItemClickListener, OnTickListener {
     private final String TAG = "TAG_GameFragment ";
     private GridView gvGameField;
     private List<GameField> gameFields;
@@ -55,14 +56,28 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private int mxSize;
     private int unitSize;
 
-    OnFragmentListener onFragmentListener;
-    TickerService tickerService;
+    private OnFragmentListener onFragmentListener;
+    private TickerService tickerService;
     boolean isBound;
     boolean saveData;
     boolean isTickerON;
     private int maxScore;
-    Vibrator vibrator;
-    GameFieldAdapter gfAdapter;
+    private Vibrator vibrator;
+    private GameFieldAdapter gfAdapter;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TickerService.TickBinder binder = (TickerService.TickBinder) service;
+            tickerService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
 
     public GameFragment() {
@@ -113,7 +128,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     @Override
     public void onResume() {
 
-        super.onResume();
+
         //set interface from main activity - informing fragment Back was pressed
         ((MainActivity) getActivity()).setOnBackPressedListener(this);
         //will save data if fragment closed? default=true
@@ -129,6 +144,10 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         //bind to tick service
         Intent intent = new Intent(this.getActivity(), TickerService.class);
         getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
+        if(tickerService!=null){
+            Log.d(TAG,"Ticker service "+tickerService);
+            tickerService.setOnTickListener(this);
+        }
 
         //defime max possible score for game based on complexity
         maxScore = (int) Math.pow(2, mxSize) * 10;
@@ -151,13 +170,14 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
         //resume transmitting ticks
         // tickerService.SendTick(true);
-
+        super.onResume();
 
     }
 
     @Override
     public void onPause() {
 
+        tickerService.setOnTickListener(null);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(tickReceiver);
         this.getActivity().unbindService(connection);
         dataRetainFragment.setTickerON(isTickerON);
@@ -172,19 +192,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         super.onPause();
     }
 
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            TickerService.TickBinder binder = (TickerService.TickBinder) service;
-            tickerService = binder.getService();
-            isBound = true;
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
-        }
-    };
 
 
     @Override
@@ -304,7 +312,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvElapsedTime.setText(timeNumToText(counterG));
+                       tvElapsedTime.setText(timeNumToText(counterG));
                     }
                 });
             }
@@ -370,5 +378,18 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         }
         return calcScore;
 
+    }
+
+    @Override
+    public void sendTick(int value) {
+        counterG=value;
+//        if (getActivity() != null) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    tvElapsedTime.setText(timeNumToText(counterG));
+//                }
+//            });
+//        }
     }
 }
