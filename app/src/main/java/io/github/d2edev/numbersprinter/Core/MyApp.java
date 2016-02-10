@@ -9,4 +9,13 @@ public class MyApp extends Application {
         super.onCreate();
     }
 
+    private OnTickListener tickListener;
+
+    public OnTickListener getTickListener() {
+        return tickListener;
+    }
+
+    public void setTickListener(OnTickListener tickListener) {
+        this.tickListener = tickListener;
+    }
 }

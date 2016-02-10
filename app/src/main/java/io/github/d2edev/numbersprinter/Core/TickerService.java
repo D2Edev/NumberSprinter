@@ -39,12 +39,16 @@ public class TickerService extends IntentService {
         super.onCreate();
         doTick = true;
         doSendTick = true;
+         if(((MyApp)getApplication())!=null){
+            onTickListener= ((MyApp)getApplication()).getTickListener();
+         }
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         doSendTick = false;
         Log.d(TAG, "Unbound");
+        onTickListener=null;
         return true;
     }
 
@@ -52,6 +56,9 @@ public class TickerService extends IntentService {
     public void onRebind(Intent intent) {
         doSendTick = true;
         Log.d(TAG, "Rebound");
+        if(((MyApp)getApplication())!=null){
+            onTickListener= ((MyApp)getApplication()).getTickListener();
+        }
         super.onRebind(intent);
     }
 
@@ -79,9 +86,6 @@ public class TickerService extends IntentService {
         Log.d(TAG, "stop received! ");
     }
 
-public void SendTick(boolean doSendTick){
-    this.doSendTick=doSendTick;
-}
 
     public class TickBinder extends Binder{
         public TickerService getService(){
@@ -92,7 +96,7 @@ public void SendTick(boolean doSendTick){
     private void sendNewTick(int counter){
         if(onTickListener!=null){
             Log.d(TAG,""+counter);
-            onTickListener.sendTick(counter);
+            onTickListener.sendTick();
         }
         Intent intent = new Intent("new_tick");
         intent.putExtra("counter", counter);
