@@ -101,19 +101,10 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         vibrator = (Vibrator) getActivity().getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         //call fragment keeping data
         dataRetainFragment = (DataRetainFragment) getFragmentManager().findFragmentByTag(MainActivity.RETAIN_FRAGMENT_TAG);
-
-
-        if (getActivity() instanceof OnFragmentListener) {
-            //set interface to main activity - to call further actions
-            onFragmentListener = (OnFragmentListener) getActivity();
-
-        } else {
-            throw new IllegalStateException("Activity not OnMainFragmentListener! ");
-        }
+        onFragmentListener = (OnFragmentListener) getActivity();
         //init  controls
         tvPlayer = (TextView) view.findViewById(R.id.tvPlayer);
         tvElapsedTime = (TextView) view.findViewById(R.id.tvElapsedTime);
-
         tvElapsedTime.setTextSize(TypedValue.COMPLEX_UNIT_PX, ((MainActivity) getActivity()).currSideLimit() / 5);
         gvGameField = (GridView) view.findViewById(R.id.gvGameField);
         mxSize = getMatrixSize();
@@ -132,69 +123,64 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
         //set interface from main activity - informing fragment Back was pressed
         ((MainActivity) getActivity()).setOnBackPressedListener(this);
-        //will save data if fragment closed? default=true
-        saveData = true;
-        //if flag for ticker is FALSE
-        if (!dataRetainFragment.isTickerON()) {
-            //then start tick service
-            Intent intentStartTickerService = new Intent(this.getActivity().getApplication(), TickerService.class);
-            this.getActivity().startService(intentStartTickerService);
-            //set tick flag TRUE
-            isTickerON = true;
-        }
 
-        //bind to tick service
-        Intent intent = new Intent(this.getActivity(), TickerService.class);
-        getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
-        ((MyApp)getActivity().getApplication()).setTickListener(this);
 
-        //defime max possible score for game based on complexity
-        maxScore = (int) Math.pow(2, mxSize) * 10;
-        if (dataRetainFragment.getHardMode()) {
-            maxScore = (int) (maxScore * 1.5);
-        }
-        // check if previously counter was used
-
-        if (dataRetainFragment.getCounter() > 1) {
-            fieldCounter = dataRetainFragment.getCounter();
-        }else{
-            fieldCounter = 1;
-        }
-//extract current person
         if (dataRetainFragment != null) {
+            //will save data if fragment closed? default=true
+            saveData = true;
+            //extract current person
             person = dataRetainFragment.getPerson();
             tvPlayer.setText(getString(R.string.tPlayer) + " " + person.getName());
             dataRetainFragment.setCurrFragTag(MainActivity.GAME_FRAGMENT_TAG);
-
-
+            // check if previously counter was used
+            if (dataRetainFragment.getCounter() > 1) {
+                fieldCounter = dataRetainFragment.getCounter();
+            } else {
+                fieldCounter = 1;
+            }
+            //defime max possible score for game based on complexity
+            maxScore = (int) Math.pow(2, mxSize) * 10;
+            if (dataRetainFragment.getHardMode()) {
+                maxScore = (int) (maxScore * 1.5);
+            }
+            //if flag for ticker is FALSE
+            if (!dataRetainFragment.isTickerON()) {
+                //then start tick service
+                Intent intentStartTickerService = new Intent(this.getActivity().getApplication(), TickerService.class);
+                this.getActivity().startService(intentStartTickerService);
+                //set tick flag TRUE
+                isTickerON = true;
+            }
+            //bind to tick service
+            Intent intent = new Intent(this.getActivity(), TickerService.class);
+            getActivity().bindService(intent, connection, getActivity().getBaseContext().BIND_AUTO_CREATE);
+            ((MyApp) getActivity().getApplication()).setTickListener(this);
         }
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
+//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(tickReceiver, new IntentFilter("new_tick"));
 
-        //resume transmitting ticks
-        // tickerService.SendTick(true);
         super.onResume();
 
     }
 
     @Override
     public void onPause() {
-
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(tickReceiver);
-        ((MyApp)getActivity().getApplication()).setTickListener(null);
-        this.getActivity().unbindService(connection);
-        dataRetainFragment.setTickerON(isTickerON);
-        //clear game fields data
-        dataRetainFragment.setGameFields(gameFields);
-        //clear counter data in fragment
-        dataRetainFragment.setCounter(fieldCounter);
-        //copy person data to retain fragment
-        dataRetainFragment.setPerson(person);
-        //release listener
+//        release listener for Back pressed
         ((MainActivity) getActivity()).setOnBackPressedListener(null);
+//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(tickReceiver);
+//        release Tick listener
+        ((MyApp) getActivity().getApplication()).setTickListener(null);
+        this.getActivity().unbindService(connection);
+        if (dataRetainFragment != null) {
+            dataRetainFragment.setTickerON(isTickerON);
+            //clear game fields data
+            dataRetainFragment.setGameFields(gameFields);
+            //clear counter data in fragment
+            dataRetainFragment.setCounter(fieldCounter);
+            //copy person data to retain fragment
+            dataRetainFragment.setPerson(person);
+        }
         super.onPause();
     }
-
-
 
 
     @Override
@@ -260,18 +246,17 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private List<GameField> getGameFields() {
         List<GameField> tempGFs = new ArrayList<>();
         //restore GameField from DataRetainFragment if exists
-        if (dataRetainFragment == null) {
-
-        } else {
+        if (dataRetainFragment != null) {
             if (dataRetainFragment.getGameFields() == null) {
                 if (dataRetainFragment.getHardMode()) {
                     //generate random colored fields
                     for (int i = 1; i < mxSize * mxSize + 1; i++) {
                         int colorBck = generateRGB(RANDOM);
                         int colorFore = generateRGB(RANDOM);
-                        while (colorFore == colorBck){
+                        while (colorFore == colorBck) {
                             colorFore = generateRGB(RANDOM);
-                        } ;
+                        }
+                        ;
                         tempGFs.add(new GameField(i, colorBck, colorFore));
                     }
                 } else {
@@ -279,8 +264,6 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                         tempGFs.add(new GameField(i, generateRGB(WHITE), generateRGB(BLACK)));
                     }
                 }
-
-
                 Collections.shuffle(tempGFs);
                 dataRetainFragment.setGameFields(tempGFs);
             } else {
@@ -306,26 +289,22 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         return timeNumToText;
     }
 
-    private BroadcastReceiver tickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            counterG = intent.getIntExtra("counter", 1);
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                       tvElapsedTime.setText(timeNumToText(counterG));
-                    }
-                });
-            }
-
-
-        }
-    };
+//    private BroadcastReceiver tickReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            counterG = intent.getIntExtra("counter", 1);
+//            if (getActivity() != null) {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                      tvElapsedTime.setText(timeNumToText(counterG));
+//                    }
+//                });
+//            }
+//        }
+//    };
 
     private boolean isVibraEnabled() {
-
-        //boolean enb=getActivity().getSharedPreferences(PrefKeys.NAME, Context.MODE_PRIVATE).getBoolean(PrefKeys.VIBRATE,false);
         boolean enb = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(PrefKeys.VIBRATE, false);
         Log.d(TAG, "Vibra enabled: " + enb);
         return enb;
@@ -383,7 +362,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     }
 
     @Override
-    public void sendTick() {
+    public void nextTick() {
         counterG++;
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {

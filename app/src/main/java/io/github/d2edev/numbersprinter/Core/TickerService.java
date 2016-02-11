@@ -16,8 +16,8 @@ public class TickerService extends IntentService {
 
     private boolean doTick = true;
     private boolean doSendTick = true;
-    private final IBinder tickBinder =new TickBinder();
-    private int timeLimit= 6000;
+    private final IBinder tickBinder = new TickBinder();
+    private int timeLimit = 6000;
     private OnTickListener onTickListener;
 
     public TickerService() {
@@ -33,22 +33,21 @@ public class TickerService extends IntentService {
     }
 
 
-
-     @Override
+    @Override
     public void onCreate() {
         super.onCreate();
         doTick = true;
         doSendTick = true;
-         if(((MyApp)getApplication())!=null){
-            onTickListener= ((MyApp)getApplication()).getTickListener();
-         }
+        if (((MyApp) getApplication()) != null) {
+            onTickListener = ((MyApp) getApplication()).getTickListener();
+        }
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         doSendTick = false;
         Log.d(TAG, "Unbound");
-        onTickListener=null;
+        onTickListener = null;
         return true;
     }
 
@@ -56,8 +55,8 @@ public class TickerService extends IntentService {
     public void onRebind(Intent intent) {
         doSendTick = true;
         Log.d(TAG, "Rebound");
-        if(((MyApp)getApplication())!=null){
-            onTickListener= ((MyApp)getApplication()).getTickListener();
+        if (((MyApp) getApplication()) != null) {
+            onTickListener = ((MyApp) getApplication()).getTickListener();
         }
         super.onRebind(intent);
     }
@@ -67,7 +66,7 @@ public class TickerService extends IntentService {
         int counter;
         counter = 0;
 
-        while (doTick&&counter<timeLimit) {
+        while (doTick && counter < timeLimit) {
             try {
                 Thread.sleep(100L);
             } catch (InterruptedException e) {
@@ -75,10 +74,15 @@ public class TickerService extends IntentService {
             }
             counter++;
             //Log.d(TAG, "Tick generated");
-            if (doSendTick) {sendNewTick(counter);}
+            if (doSendTick) {
+                if (onTickListener != null) {
+                    Log.d(TAG, "" + counter);
+                    onTickListener.nextTick();
+                }
             }
-
         }
+
+    }
 
 
     public void stopTick() {
@@ -87,24 +91,21 @@ public class TickerService extends IntentService {
     }
 
 
-    public class TickBinder extends Binder{
-        public TickerService getService(){
+    public class TickBinder extends Binder {
+        public TickerService getService() {
             return TickerService.this;
         }
     }
 
-    private void sendNewTick(int counter){
-        if(onTickListener!=null){
-            Log.d(TAG,""+counter);
-            onTickListener.sendTick();
-        }
-        Intent intent = new Intent("new_tick");
-        intent.putExtra("counter", counter);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        //Log.d(TAG, "Tick sent");
-    }
+//    private void sendNewTick(int counter) {
+//        if (onTickListener != null) {
+//            Log.d(TAG, "" + counter);
+//            onTickListener.nextTick();
+//        }
+//        Intent intent = new Intent("new_tick");
+//        intent.putExtra("counter", counter);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//        Log.d(TAG, "Tick sent");
+//    }
 
-    public void setOnTickListener(OnTickListener onTickListener) {
-        this.onTickListener = onTickListener;
-    }
 }
