@@ -8,6 +8,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -318,7 +320,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
     private void showAboutInfo() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(getString(R.string.action_about))
-                .setMessage(getString(R.string.action_about_info))
+                .setMessage(getString(R.string.action_about_info)+
+                        " " + getAppVersion())
                 .setIcon(R.drawable.logo_small)
                 .setCancelable(false)
                 .setNegativeButton("ОК",
@@ -329,6 +332,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentListene
                         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private String getAppVersion() {
+        String version="undefined";
+        try {
+            version=getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            return  version;
+        }
     }
 
     private void doVibrate(boolean doVibrate) {

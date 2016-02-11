@@ -68,5 +68,5 @@
     <string name="sNGHT_MD">Темная тема для игры ночью</string>
     <string name="tNGHT_MD">Ночной режим</string>
     <string name="action_about">О программе</string>
-    <string name="action_about_info">БЕГУЩИЙ ПО ЦИФРАМ\nd2e DEVELOPMENT ©2015\nпосетите нас: d2edev.github.io</string>
+    <string name="action_about_info">БЕГУЩИЙ ПО ЦИФРАМ\nd2e DEVELOPMENT ©2015\nпосетите нас: d2edev.github.io\nверсия приложения:</string>
 </resources>
