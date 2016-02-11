@@ -69,4 +69,5 @@
     <string name="tNGHT_MD">Ночной режим</string>
     <string name="action_about">О программе</string>
     <string name="action_about_info">БЕГУЩИЙ ПО ЦИФРАМ\nd2e DEVELOPMENT ©2015\nпосетите нас: d2edev.github.io\nверсия приложения:</string>
+    <string name="tMaxScore">Максимальный счет:</string>
 </resources>
