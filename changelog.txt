@@ -1,0 +1,14 @@
+2016/02/11 - 1.002
+
+-уменьшен размер приложения
+-на экране списка результатов доступна более полная статистика (клик на интересующей строке)
+-улучшена генерация игрового поля
+-упрощен выбор игрока
+-добавлена информация о версии в "О программе"
+
+
+-application size reduced
+-more statistics at Results screen (click person you're interested in)
+-improved game field elements - both form and color generation
+-player selection simplofied
+-added version info in "About"
