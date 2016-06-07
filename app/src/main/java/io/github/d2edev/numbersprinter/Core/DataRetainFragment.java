@@ -2,7 +2,6 @@ package io.github.d2edev.numbersprinter.Core;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.List;
 
@@ -14,7 +13,8 @@ public class DataRetainFragment extends Fragment {
     private Person person;
     private boolean hardMode;
     private boolean tickerON;
-    private int counter;
+    private int nextNumberToClick;
+    private int msTimeCounter;
     private String currFragTag;
     private List<Person> persons;
 
@@ -33,12 +33,12 @@ public class DataRetainFragment extends Fragment {
         this.currFragTag = currFragTag;
     }
 
-    public int getCounter() {
-        return counter;
+    public int getNextNumberToClick() {
+        return nextNumberToClick;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setNextNumberToClick(int nextNumberToClick) {
+        this.nextNumberToClick = nextNumberToClick;
     }
 
     public boolean isTickerON() {
@@ -68,7 +68,13 @@ public class DataRetainFragment extends Fragment {
     }
 
 
+    public int getMsTimeCounter() {
+        return msTimeCounter;
+    }
 
+    public void setMsTimeCounter(int msTimeCounter) {
+        this.msTimeCounter = msTimeCounter;
+    }
 
     // this method is only called once for this fragment
     @Override

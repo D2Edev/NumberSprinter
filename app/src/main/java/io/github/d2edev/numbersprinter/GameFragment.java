@@ -1,10 +1,8 @@
 package io.github.d2edev.numbersprinter;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.app.Fragment;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -47,8 +44,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
     private Person person;
     private TextView tvPlayer;
     private TextView tvElapsedTime;
-    private int counterG;
-    private int fieldCounter;
+    private int msTimeCounter;
+    private int nextNumberToClick;
     private final int BLACK = 0;
     private final int WHITE = 1;
     private final int RANDOM = 2;
@@ -133,16 +130,18 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             tvPlayer.setText(getString(R.string.tPlayer) + " " + person.getName());
             dataRetainFragment.setCurrFragTag(MainActivity.GAME_FRAGMENT_TAG);
             // check if previously counter was used
-            if (dataRetainFragment.getCounter() > 1) {
-                fieldCounter = dataRetainFragment.getCounter();
+            if (dataRetainFragment.getNextNumberToClick() > 1) {
+                nextNumberToClick = dataRetainFragment.getNextNumberToClick();
             } else {
-                fieldCounter = 1;
+                nextNumberToClick = 1;
             }
             //defime max possible score for game based on complexity
             maxScore = (int) Math.pow(2, mxSize) * 10;
             if (dataRetainFragment.getHardMode()) {
                 maxScore = (int) (maxScore * 1.5);
             }
+            //retrieve counter value
+            msTimeCounter =dataRetainFragment.getMsTimeCounter();
             //if flag for ticker is FALSE
             if (!dataRetainFragment.isTickerON()) {
                 //then start tick service
@@ -172,12 +171,14 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         this.getActivity().unbindService(connection);
         if (dataRetainFragment != null) {
             dataRetainFragment.setTickerON(isTickerON);
-            //clear game fields data
+            //save game fields data
             dataRetainFragment.setGameFields(gameFields);
-            //clear counter data in fragment
-            dataRetainFragment.setCounter(fieldCounter);
-            //copy person data to retain fragment
+            //save counter data in fragment
+            dataRetainFragment.setNextNumberToClick(nextNumberToClick);
+            //save person data to retain fragment
             dataRetainFragment.setPerson(person);
+            //
+            dataRetainFragment.setMsTimeCounter(msTimeCounter);
         }
         super.onPause();
     }
@@ -195,7 +196,10 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         //increase number of games played
         person.setGamesPlayed(person.getGamesPlayed() + 1);
         //reset passed game field counter
-        fieldCounter = 1;
+        nextNumberToClick = 1;
+        //reset time counter
+        msTimeCounter=0;
+
 
         //onFragmentListener.startGameOverFragment();
 
@@ -207,8 +211,8 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
         //get clicked game field data
         gameField = (GameField) parent.getItemAtPosition(position);
         //check if correct game field is pressed
-        Log.d(TAG, "counter " + fieldCounter + " field " + gameField.getFieldNumber());
-        if (gameField.getFieldNumber() == fieldCounter) {
+        Log.d(TAG, "counter " + nextNumberToClick + " field " + gameField.getFieldNumber());
+        if (gameField.getFieldNumber() == nextNumberToClick) {
             //if condition ok - black the field
             gameField.setFieldColor(Color.rgb(0, 0, 0));
             gameField.setFieldTextColor(Color.rgb(0, 0, 0));
@@ -218,7 +222,7 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
             gfAdapter.notifyDataSetChanged();
             doVibrate(isVibraEnabled());
             //if the field is last
-            if (fieldCounter == mxSize * mxSize) {
+            if (nextNumberToClick == mxSize * mxSize) {
                 //send STOP to chrono
                 tickerService.stopTick();
                 //set flag ticker is stopped
@@ -226,19 +230,19 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
                 //clear game fields data
                 gameFields = null;
                 //clear counter data
-                fieldCounter = 1;
+                nextNumberToClick = 1;
                 doVibrate(isVibraEnabled());
                 //increase number of games played
                 person.setGamesPlayed(person.getGamesPlayed() + 1);
                 //update calculated scores for person
-                person.setScoreMax(calcRoundScore(maxScore, counterG));
-                person.setRoundTime(counterG);
+                person.setScoreMax(calcRoundScore(maxScore, msTimeCounter));
+                person.setRoundTime(msTimeCounter);
                 //call GameOver fragment
                 onFragmentListener.startGameOverFragment();
                 return;
             }
             //move to next field
-            fieldCounter++;
+            nextNumberToClick++;
         }
     }
 
@@ -292,12 +296,12 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 //    private BroadcastReceiver tickReceiver = new BroadcastReceiver() {
 //        @Override
 //        public void onReceive(Context context, Intent intent) {
-//            counterG = intent.getIntExtra("counter", 1);
+//            msTimeCounter = intent.getIntExtra("counter", 1);
 //            if (getActivity() != null) {
 //                getActivity().runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
-//                      tvElapsedTime.setText(timeNumToText(counterG));
+//                      tvElapsedTime.setText(timeNumToText(msTimeCounter));
 //                    }
 //                });
 //            }
@@ -363,12 +367,12 @@ public class GameFragment extends Fragment implements OnBackPressedListener, Ada
 
     @Override
     public void nextTick() {
-        counterG++;
+        msTimeCounter++;
         if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tvElapsedTime.setText(timeNumToText(counterG));
+                    tvElapsedTime.setText(timeNumToText(msTimeCounter));
                 }
             });
         }
